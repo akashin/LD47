@@ -5,5 +5,7 @@
     "sourceMap": true,
     "noImplicitAny": false,
     "strict": false
-  }
+  },
+  "typeRoots": ["./node_modules/@types", "./node_modules/phaser/types"],
+  "types": ["phaser"]
 }
