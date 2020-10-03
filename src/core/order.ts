@@ -1,8 +1,8 @@
 export class Order {
-    private startPosX: integer;
-    private startPosY: integer;
-    private endPosX: integer;
-    private endPosY: integer;
+    public startPosX: integer;
+    public startPosY: integer;
+    public endPosX: integer;
+    public endPosY: integer;
 
     // Creates Order objects.
     constructor(mapWidth: integer, mapHeight: integer) {
