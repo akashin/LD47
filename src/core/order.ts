@@ -28,7 +28,7 @@ export class OrderManager {
     private openOrders: Array<Order>;
     private stationSourceOrder: Map<integer, Order>; // For each station shows an open order starting in it (if exist).
     private stationSinkOrders: Array<Array<Order>>; // For each station lists open orders ending in this station.
-    private totalOrdersCount: integer;
+    private totalOrdersCount: integer; // Both closed and opened.
     private scene: Phaser.Scene;
 
     // Creates OrderManager objects.
@@ -47,23 +47,24 @@ export class OrderManager {
         }
         this.openOrders = [];
         this.stationSourceOrder = new Map();
-        this.totalOrdersCount = 0; // Both closed and opened.
+        this.totalOrdersCount = 0;
     }
 
     addOrder(): void {
         if (this.openOrders.length < this.stationLocations.length) {
-            let beginStation = randomInt(this.stationLocations.length);
-            while (this.stationSourceOrder.has(beginStation)) {
-                // Make sure source is not already used by some other order.
-                beginStation = randomInt(this.stationLocations.length);
+            let numStations = this.stationLocations.length;
+
+            let beginStation = randomInt(numStations);
+            // Make sure source statation is not already used by some other order.
+            while (beginStation in this.stationSourceOrder) {
+                beginStation = randomInt(numStations);
             }
-            let endStation = randomInt(this.stationLocations.length);
+
+            let endStation = randomInt(numStations);
+            // Make sure source and sink are distinct.
             while (beginStation == endStation) {
-              // Make sure source end sink are distinct.
-              endStation = randomInt(this.stationLocations.length);
+              endStation = randomInt(numStations);
             }
-            let source = this.stationLocations[beginStation];
-            let sink = this.stationLocations[endStation];
 
             var order = new Order(this.totalOrdersCount, beginStation, endStation);
             this.stationSourceOrder[beginStation] = order;
@@ -80,22 +81,23 @@ export class OrderManager {
     renderStationOrders(station: integer): void {
         // TODO: remove old sprites.
         let loc = this.stationLocations[station];
-        loc[0] *= CONST.tileSize;
-        loc[1] *= CONST.tileSize;
-        if (this.stationSourceOrder.has(station)) {
+        let locX = loc[0] * CONST.tileSize;
+        let locY = loc[1] * CONST.tileSize;
+        console.log(station, this.stationSourceOrder, station in this.stationSourceOrder)
+        if (station in this.stationSourceOrder) {
             let order = this.stationSourceOrder[station];
-            var orderSource = new Phaser.GameObjects.Image(this.scene, loc[0], loc[1], 'orderSource');
+            var orderSource = new Phaser.GameObjects.Image(this.scene, locX, locY, 'orderSource');
             orderSource.setScale(0.3, 0.3);
             this.scene.add.existing(orderSource);
-            this.scene.add.text(loc[0] - 20, loc[1] - 20, String(order.id))
+            this.scene.add.text(locX - 20, locY - 20, String(order.id))
         }
 
         for (let i = 0; i < this.stationSinkOrders[station].length; ++i) {
             let order = this.stationSinkOrders[station][i];
-            let orderSink = new Phaser.GameObjects.Image(this.scene, loc[0], loc[1], 'orderSink');
+            let orderSink = new Phaser.GameObjects.Image(this.scene, locX + 80 + i * 50, locY + 80, 'orderSink');
             orderSink.setScale(0.1, 0.1);
             this.scene.add.existing(orderSink);
-            this.scene.add.text(loc[0] - 20, loc[1] - 20, String(order.id))
+            this.scene.add.text(locX + 60 + i * 50, locY + 60, String(order.id))
         }
     }
 }
