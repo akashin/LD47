@@ -172,7 +172,8 @@ export class MainScene extends Phaser.Scene {
     updateStep(): void {
         if ((this.tickCounter % 30) == 1) {
             if (!this.orderManager.addOrder()) {
-                alert('You\'re dead!');
+                console.log('You\'re dead!')
+                // alert('You\'re dead!');
             }
         }
         if ((this.tickCounter % 30) == 1) {
