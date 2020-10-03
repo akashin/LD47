@@ -50,9 +50,8 @@ export class MainScene extends Phaser.Scene {
         // A useful image to draw squares.
         this.load.image("blank", "./assets/blank.png");
 
-
         // this.load.image("tiles", "all_tiles.png");
-        // this.load.tilemapTiledJSON("level", "./assets/maps/small_map.json");
+        this.load.tilemapTiledJSON("level", "./assets/maps/small_map.json");
     }
 
 

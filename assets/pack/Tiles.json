@@ -4,7 +4,7 @@
      "export":
         {
          "format":"json",
-         "target":"Tiles..json"
+         "target":""
         }
     },
  "grid":
@@ -14,7 +14,7 @@
      "width":1
     },
  "margin":0,
- "name":"Tiles",
+ "name":"tiles",
  "spacing":0,
  "tilecount":8,
  "tiledversion":"1.4.2",
