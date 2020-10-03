@@ -1,4 +1,4 @@
 export let CONST = {
-    tickLen: 100,
+    tickDelta: 100,
     numNeighborhoods: 5,
-    }
+}
