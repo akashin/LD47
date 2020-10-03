@@ -13,6 +13,9 @@ export class MapView extends Phaser.GameObjects.Container {
             case GroundType.Sand:
                 return 'sand_tile';
                 break;
+            case GroundType.Station:
+                return 'station_tile';
+                break;
         }
         throw new Error('Unknown GroundType');
     }
@@ -27,11 +30,14 @@ export class MapView extends Phaser.GameObjects.Container {
             this.groundTiles.push(new Array<Phaser.GameObjects.Sprite>());
             for (let y = 0; y < CONST.mapHeight; ++y) {
                 let textureName = MapView.getTextureName(map.getGroundType(x, y));
-                let tileSprite = scene.add.sprite(x * CONST.tileSize, y * CONST.tileSize, textureName);
+                let tileSprite = new Phaser.GameObjects.Sprite(scene, x * CONST.tileSize, y * CONST.tileSize, textureName);
+                tileSprite.setOrigin(0, 0);
+                tileSprite.setDisplaySize(64, 64);
                 this.groundTiles[x].push(tileSprite);
 
                 this.add(tileSprite);
             }
         }
+        scene.add.existing(this);
     }
 }
