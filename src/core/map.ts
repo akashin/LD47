@@ -28,14 +28,18 @@ export class Tile extends Phaser.GameObjects.Sprite {
         super(scene, x, y, Tile.getTextureName(groundType));
 
         this.groundType = groundType;
+        this.updateOriginAndScale();
+    }
 
-        this.setOrigin(0, 0);
-        this.setDisplaySize(64, 64);
+    private updateOriginAndScale(): void {
+        this.setDisplayOrigin(0, 0);
+        this.setDisplaySize(CONST.tileSize / 2, CONST.tileSize / 2);
     }
 
     updateGroundType(groundType: GroundType): void {
         this.groundType = groundType;
         this.setTexture(Tile.getTextureName(groundType));
+        this.updateDisplayOrigin();
     }
 }
 
