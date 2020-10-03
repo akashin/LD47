@@ -19,7 +19,7 @@ export class MainScene extends Phaser.Scene {
 
   // Preloads game resources.
   preload(): void {
-    this.load.image("gameBackground", "./assets/bckgrnd_2.png");
+    this.load.image("gameBackground", "./assets/bckgrnd_4.png");
     this.load.image("orderSource", "../assets/orderSource.png");
     this.load.image("orderSink", "../assets/orderSink.png");
     // A useful image to draw squares.
