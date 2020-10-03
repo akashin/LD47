@@ -1,6 +1,9 @@
 export let CONST = {
     tickDelta: 100,
     numNeighborhoods: 5,
-    cellWidth: 10,
-    cellHeight: 10,
+
+    // Map
+    mapWidth: 20,
+    mapHeight: 20,
+    tileSize: 64,
 }
