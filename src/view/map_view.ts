@@ -13,6 +13,9 @@ export class MapView extends Phaser.GameObjects.Container {
             case GroundType.Sand:
                 return 'sand_tile';
                 break;
+            case GroundType.Station:
+                return 'station_tile';
+                break;
         }
         throw new Error('Unknown GroundType');
     }

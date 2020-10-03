@@ -24,6 +24,7 @@ export class MainScene extends Phaser.Scene {
     this.load.image("orderSink", "./assets/orderSink.png");
     this.load.image('grass_tile', "./assets/grass.png");
     this.load.image('sand_tile', "./assets/sand.png");
+    this.load.image('station_tile', "./assets/station.png");
     // A useful image to draw squares.
     this.load.image("blank", "./assets/blank.png");
   }
@@ -88,10 +89,7 @@ export class MainScene extends Phaser.Scene {
 
   // Create a new order.
   addOrder(): void {
-    // TODO: change to real map params.
-    var mapW = 300;
-    var mapH = 500;
-    var order = new Order(mapW, mapH);
+    var order = new Order(CONST.mapWidth * CONST.tileSize, CONST.mapHeight * CONST.tileSize);
     this.orders.push(order);
     var orderSource = new Phaser.GameObjects.Image(this, order.startPosX, order.startPosY, 'orderSource');
     orderSource.setScale(0.3, 0.3);
