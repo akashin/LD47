@@ -8,7 +8,7 @@ export class MainScene extends Phaser.Scene {
   private orders: Order[];
   private orderSources: Phaser.GameObjects.Image[];
   private orderSinks: Phaser.GameObjects.Image[];
-  private startKey: Phaser.Input.Keyboard.Key;
+  private takeOrderKey: Phaser.Input.Keyboard.Key;
 
   constructor() {
     super({
@@ -45,7 +45,7 @@ export class MainScene extends Phaser.Scene {
 
   // Called periodically to update game state.
   update(time: number, delta: number): void {
-    if (this.startKey.isDown) {
+    if (this.takeOrderKey.isDown) {
       // TODO: Take order if possible.
       console.log("Space pressed.");
     }
