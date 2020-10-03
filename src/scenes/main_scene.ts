@@ -20,8 +20,10 @@ export class MainScene extends Phaser.Scene {
   // Preloads game resources.
   preload(): void {
     this.load.image("gameBackground", "./assets/bckgrnd_2.png");
-    this.load.image("orderSource", "../assets/orderSource.png");
-    this.load.image("orderSink", "../assets/orderSink.png");
+    this.load.image("orderSource", "./assets/orderSource.png");
+    this.load.image("orderSink", "./assets/orderSink.png");
+    this.load.image('grass_tile', "./assets/grass.png");
+    this.load.image('sand_tile', "./assets/sand.png");
     // A useful image to draw squares.
     this.load.image("blank", "./assets/blank.png");
   }
@@ -50,6 +52,8 @@ export class MainScene extends Phaser.Scene {
         gameHeight / this.backgroundSprite.height,
       );
     }
+
+    this.add.sprite(0, 0, 'grass_tile');
 
     this.orders = [];
     this.orderSources = [];
