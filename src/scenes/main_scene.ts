@@ -1,6 +1,6 @@
 import { CONST } from "../const";
 import { Order, OrderManager } from "../core/order";
-import { GroundType, GameMap } from "../core/map";
+import { GameMap, RailType } from "../core/map";
 import { randomInt } from "../utils/math";
 import { Station } from "../objects/station";
 
@@ -80,6 +80,16 @@ export class MainScene extends Phaser.Scene {
     }
 
     generateMap(): void {
+        // Add rails
+        this.map.updateRail(4, 4, RailType.DownRight);
+        this.map.updateRail(5, 4, RailType.Horizontal);
+        this.map.updateRail(6, 4, RailType.DownLeft);
+        this.map.updateRail(6, 5, RailType.Vertical);
+        this.map.updateRail(6, 6, RailType.UpLeft);
+        this.map.updateRail(5, 6, RailType.Horizontal);
+        this.map.updateRail(4, 6, RailType.UpRight);
+        this.map.updateRail(4, 5, RailType.Vertical);
+
         // Add stations.
         this.addStation(3, 3);
         this.addStation(3, 6);
