@@ -105,8 +105,16 @@ export class GameMap extends Phaser.GameObjects.Container {
     private tiles: Array<Array<Tile>>;
     private rails: Array<Array<Rail>>;
 
+    private tilesContainer: Phaser.GameObjects.Container;
+    private railsContainer: Phaser.GameObjects.Container;
+
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y);
+
+        this.tilesContainer = new Phaser.GameObjects.Container(scene);
+        this.railsContainer = new Phaser.GameObjects.Container(scene);
+        this.add(this.tilesContainer);
+        this.add(this.railsContainer);
 
         this.tiles = new Array<Array<Tile>>();
         this.rails = new Array<Array<Rail>>();
@@ -116,10 +124,7 @@ export class GameMap extends Phaser.GameObjects.Container {
             this.rails.push(new Array<Rail>());
 
             for (let y = 0; y < CONST.mapHeight; ++y) {
-                let tile = new Tile(scene, x * CONST.tileSize, y * CONST.tileSize, GroundType.Grass);
-                this.tiles[x].push(tile);
-                this.add(tile);
-
+                this.tiles[x].push(null);
                 this.rails[x].push(null);
             }
         }
@@ -129,20 +134,33 @@ export class GameMap extends Phaser.GameObjects.Container {
         return this.tiles[x][y].groundType;
     }
 
-    updateGroundType(x: integer, y: integer, groundType: GroundType): void {
-        this.tiles[x][y].updateGroundType(groundType);
+    updateGround(x: integer, y: integer, groundType: GroundType): void {
+        if (groundType == null) {
+            if (this.tiles[x][y] != null) {
+                this.tilesContainer.remove(this.tiles[x][y]);
+                this.tiles[x][y] = null;
+            }
+        } else {
+            if (this.tiles[x][y] == null) {
+                let tile = new Tile(this.scene, x * CONST.tileSize, y * CONST.tileSize, GroundType.Grass);
+                this.tiles[x][y] = tile;
+                this.tilesContainer.add(tile);
+            } else {
+                this.tiles[x][y].updateGroundType(groundType);
+            }
+        }
     }
 
     updateRail(x: integer, y: integer, railType: RailType): void {
         if (this.rails[x][y] != null) {
-            this.remove(this.rails[x][y]);
+            this.railsContainer.remove(this.rails[x][y]);
             this.rails[x][y] = null;
         }
 
         if (railType != null) {
             let rail = new Rail(this.scene, x * CONST.tileSize, y * CONST.tileSize, railType);
             this.rails[x][y] = rail;
-            this.add(rail);
+            this.railsContainer.add(rail);
         }
     }
 }
