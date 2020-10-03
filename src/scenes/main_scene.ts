@@ -123,8 +123,11 @@ export class MainScene extends Phaser.Scene {
 
             let order = this.orderManager.stationSourceOrder[nearbyStations[0].index];
             if (order) {
-                console.log('Has order!', order);
-                this.orderManager.pickOrder(order);
+                if (this.orderManager.ordersInInventory.length < CONST.inventorySize) {
+                    this.orderManager.pickOrder(order);
+                } else {
+                    console.log('Inventory is too full!');
+                }
             } else {
                 console.log('No order');
             }
