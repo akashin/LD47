@@ -1,5 +1,5 @@
 import { CONST } from "../const";
-import { Order } from "../core/order";
+import { Order, OrderManager } from "../core/order";
 import { GroundType, GameMap } from "../core/map";
 import { randomInt } from "../utils/math";
 import { Station } from "../objects/station";
@@ -16,6 +16,7 @@ export class MainScene extends Phaser.Scene {
     private stationLocations: Array<Array<integer>>;
     private usedSourceStationIds: Array<integer>;
     private stations: Station[];
+    private orderManager: OrderManager;
 
     constructor() {
         super({
@@ -75,12 +76,7 @@ export class MainScene extends Phaser.Scene {
         this.add.existing(this.map);
         this.generateMap();
 
-        this.stationLocations = [];
-        for (let i = 0; i < this.stations.length; ++i) {
-          let station = [this.stations[i].column, this.stations[i].row];
-          this.stationLocations.push(station);
-        }
-        this.usedSourceStationIds = [];
+        this.orderManager = new OrderManager(this, this.stations);
     }
 
     generateMap(): void {
@@ -119,40 +115,7 @@ export class MainScene extends Phaser.Scene {
     // Called every N ticks to update game state.
     updateStep(): void {
         if ((this.tickCounter % 30) == 1) {
-            this.addOrder();
-        }
-    }
-
-    // Create a new order.
-    addOrder(): void {
-        console.log('hi', this.orders.length, this.stationLocations.length);
-        if (this.orders.length < this.stationLocations.length) {
-            let beginStation = randomInt(this.stationLocations.length);
-            while (this.usedSourceStationIds.indexOf(beginStation) > -1) {
-              // Make sure source is not already used by some other order.
-              beginStation = randomInt(this.stationLocations.length);
-            }
-            this.usedSourceStationIds.push(beginStation);
-            let endStation = randomInt(this.stationLocations.length);
-            while (beginStation == endStation) {
-              // Make sure source end sink are distinct.
-              endStation = randomInt(this.stationLocations.length);
-            }
-            let source = this.stationLocations[beginStation];
-            let sink = this.stationLocations[endStation];
-            var order = new Order(source[0] * CONST.tileSize, source[1] * CONST.tileSize, sink[0] * CONST.tileSize, sink[1] * CONST.tileSize);
-            this.orders.push(order);
-            let orderId = this.orders.length;
-            this.add.text(order.startPosX - 20, order.startPosY - 20, String(orderId))
-            var orderSource = new Phaser.GameObjects.Image(this, order.startPosX, order.startPosY, 'orderSource');
-            orderSource.setScale(0.3, 0.3);
-            var orderSink = new Phaser.GameObjects.Image(this, order.endPosX, order.endPosY, 'orderSink');
-            this.add.text(order.endPosX - 20, order.endPosY - 20, String(orderId))
-            orderSink.setScale(0.1, 0.1);
-            this.add.existing(orderSource);
-            this.add.existing(orderSink);
-            this.orderSources.push(orderSource);
-            this.orderSinks.push(orderSink);
+            this.orderManager.addOrder();
         }
     }
 }
