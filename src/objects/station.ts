@@ -1,8 +1,8 @@
 import { CONST } from "../const";
 
 export class Station extends Phaser.GameObjects.Sprite {
-  private column: integer;
-  private row: integer;
+  column: integer;
+  row: integer;
 
   constructor(scene, params) {
     super(scene, params.x, params.y, "station_tile");
