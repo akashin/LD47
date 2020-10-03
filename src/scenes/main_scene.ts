@@ -23,6 +23,12 @@ export class MainScene extends Phaser.Scene {
     private tmpPositionY: number;
     private tmpPositionText: Phaser.GameObjects.Text;
 
+    // Holds data about the actual map.
+    private tilemap: Phaser.Tilemaps.Tilemap;
+    // Stores tiles images.
+    private tileset: Phaser.Tilemaps.Tileset;
+    private backgroundLayer: Phaser.Tilemaps.StaticTilemapLayer;
+
     constructor() {
         super({
             key: "MainScene"
@@ -43,6 +49,10 @@ export class MainScene extends Phaser.Scene {
         this.load.image('rails_top_right', "./assets/rails_top_right.png");
         // A useful image to draw squares.
         this.load.image("blank", "./assets/blank.png");
+
+
+        // this.load.image("tiles", "all_tiles.png");
+        this.load.tilemapTiledJSON("level", "maps/small_map.json");
     }
 
 
@@ -75,6 +85,11 @@ export class MainScene extends Phaser.Scene {
         this.orders = [];
         this.orderSources = [];
         this.orderSinks = [];
+
+        this.tilemap = this.make.tilemap({ key: "level" });
+        // this.tileset = this.tilemap.addTilesetImage("_bloodnight", "tiles");
+
+        // this.backgroundLayer = this.tilemap.createStaticLayer("Background", this.tileset, 0, 0);
 
         // Map
         this.map = new GameMap(this, 0, 0);
