@@ -139,25 +139,18 @@ export class MainScene extends Phaser.Scene {
     // Called periodically to update game state.
     update(time: number, delta: number): void {
         if (this.takeOrderKey.isDown) {
-            var nearbyStations = [];
-            this.stations.forEach(station => {
-                if (station.isNearby(this.playerState.position.x, this.playerState.position.y)) {
-                  nearbyStations.push(station);
-                }
-            });
-            console.log("Found ", nearbyStations.length, " stations nearby.");
-            var assert = require('assert');
-            assert(nearbyStations.length <= 1);
-
-            let order = this.orderManager.stationSourceOrder[nearbyStations[0].index];
-            if (order) {
-                if (this.orderManager.ordersInInventory.length < CONST.inventorySize) {
-                    this.orderManager.pickOrder(order);
+            let nearbyStation = this.findNearbyStation();
+            if (nearbyStation) {
+                let order = this.orderManager.stationSourceOrder[nearbyStation.index];
+                if (order) {
+                    if (this.orderManager.ordersInInventory.length < CONST.inventorySize) {
+                        this.orderManager.pickOrder(order);
+                    } else {
+                        console.log('Inventory is too full!');
+                    }
                 } else {
-                    console.log('Inventory is too full!');
-                }
-            } else {
-                console.log('No order');
+                    console.log('No order');
+                }   
             }
         }
         this.msSinceLastTick += delta;
@@ -166,6 +159,26 @@ export class MainScene extends Phaser.Scene {
             this.tickCounter += 1;
             this.updateStep();
         }
+    }
+
+    findNearbyStation(): Station {
+        var nearbyStations = [];
+        this.stations.forEach(station => {
+            if (station.isNearby(this.playerState.position.x, this.playerState.position.y)) {
+              nearbyStations.push(station);
+            }
+        });
+        console.log("Found ", nearbyStations.length, " stations nearby.");
+        var assert = require('assert');
+        assert(nearbyStations.length <= 1);
+        if (nearbyStations.length == 1) {
+            return nearbyStations[0];
+        }
+    }
+
+
+    fulfulNearbyOrders(): void {
+        //TODO
     }
 
     // Called every N ticks to update game state.
@@ -184,6 +197,7 @@ export class MainScene extends Phaser.Scene {
                 this.playerState.position.x * CONST.tileSize,
                 this.playerState.position.y * CONST.tileSize
             );
+            this.fulfulNearbyOrders();
         }
     }
 }
