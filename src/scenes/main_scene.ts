@@ -71,9 +71,9 @@ export class MainScene extends Phaser.Scene {
         )
 
         // Map
-        this.map = new Map();
-        this.mapView = new MapView(this, 0, 0, this.map);
-      
+        this.map = new Map(this, 0, 0);
+        this.generateMap();
+
         this.stationLocations = [];
         for (let x = 0; x < CONST.mapWidth; ++x) {
             for (let y = 0; y < CONST.mapHeight; ++y) {
@@ -84,6 +84,14 @@ export class MainScene extends Phaser.Scene {
             } 
         }
         this.usedSourceStationIds = [];
+    }
+
+    generateMap(): void {
+        // Add stations.
+        this.map.updateGroundType(3, 3, GroundType.Station);
+        this.map.updateGroundType(3, 6, GroundType.Station);
+        this.map.updateGroundType(6, 3, GroundType.Station);
+        this.map.updateGroundType(6, 6, GroundType.Station);
     }
 
     // Called periodically to update game state.
