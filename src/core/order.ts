@@ -20,4 +20,4 @@ export class Order {
         this.endPosY = Math.floor(Math.random() * (mapHeight + 1));
         this.status = OrderStatus.offered;
     }
-  }
+}
