@@ -13,11 +13,11 @@ export class Order {
     public status: OrderStatus;
 
     // Creates Order objects.
-    constructor(mapWidth: integer, mapHeight: integer) {
-        this.startPosX = randomInt(mapWidth + 1);
-        this.startPosY = randomInt(mapHeight + 1);
-        this.endPosX = randomInt(mapWidth + 1);
-        this.endPosY = randomInt(mapHeight + 1);
+    constructor(startPosX: integer, startPosY: integer, endPosX: integer, endPosY: integer) {
+        this.startPosX = startPosX;
+        this.startPosY = startPosY;
+        this.endPosX = endPosX;
+        this.endPosY = endPosY;
         this.status = OrderStatus.offered;
     }
 }

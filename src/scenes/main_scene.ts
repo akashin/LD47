@@ -1,7 +1,8 @@
 import { CONST } from "../const";
 import { Order } from "../core/order";
-import { Map } from "../core/map";
+import { GroundType, Map } from "../core/map";
 import { MapView } from "../view/map_view";
+import { randomInt } from "../utils/math";
 
 export class MainScene extends Phaser.Scene {
     private backgroundSprite: Phaser.GameObjects.Sprite;
@@ -14,6 +15,8 @@ export class MainScene extends Phaser.Scene {
     private takeOrderKey: Phaser.Input.Keyboard.Key;
     private map: Map;
     private mapView: MapView;
+    private stationLocations: Array<Array<integer>>;
+    private usedSourceStationIds: Array<integer>;
 
     constructor() {
         super({
@@ -70,6 +73,17 @@ export class MainScene extends Phaser.Scene {
         // Map
         this.map = new Map();
         this.mapView = new MapView(this, 0, 0, this.map);
+      
+        this.stationLocations = [];
+        for (let x = 0; x < CONST.mapWidth; ++x) {
+            for (let y = 0; y < CONST.mapHeight; ++y) {
+              if (this.map.getGroundType(x, y) == GroundType.Station) {
+                let station = [x, y];
+                this.stationLocations.push(station);
+              }
+            } 
+        }
+        this.usedSourceStationIds = [];
     }
 
     // Called periodically to update game state.
@@ -88,7 +102,6 @@ export class MainScene extends Phaser.Scene {
 
     // Called every N ticks to update game state.
     updateStep(): void {
-        console.log(this.tickCounter);
         if ((this.tickCounter % 30) == 1) {
             this.addOrder();
         }
@@ -97,15 +110,31 @@ export class MainScene extends Phaser.Scene {
 
     // Create a new order.
     addOrder(): void {
-        var order = new Order(CONST.mapWidth * CONST.tileSize, CONST.mapHeight * CONST.tileSize);
-        this.orders.push(order);
-        var orderSource = new Phaser.GameObjects.Image(this, order.startPosX, order.startPosY, 'orderSource');
-        orderSource.setScale(0.3, 0.3);
-        var orderSink = new Phaser.GameObjects.Image(this, order.endPosX, order.endPosY, 'orderSink');
-        orderSink.setScale(0.1, 0.1);
-        this.add.existing(orderSource);
-        this.add.existing(orderSink);
-        this.orderSources.push(orderSource);
-        this.orderSources.push(orderSink);
+        console.log('hi', this.orders.length, this.stationLocations.length);
+        if (this.orders.length < this.stationLocations.length) {
+            let beginStation = randomInt(this.stationLocations.length);
+            while (this.usedSourceStationIds.indexOf(beginStation) > -1) {
+              // Make sure source is not already used by some other order.
+              beginStation = randomInt(this.stationLocations.length);
+            }
+            this.usedSourceStationIds.push(beginStation);
+            let endStation = randomInt(this.stationLocations.length);
+            while (beginStation == endStation) {
+              // Make sure source end sink are distinct.
+              endStation = randomInt(this.stationLocations.length);
+            }
+            let source = this.stationLocations[beginStation];
+            let sink = this.stationLocations[endStation];
+            var order = new Order(source[0] * CONST.tileSize, source[1] * CONST.tileSize, sink[0] * CONST.tileSize, sink[1] * CONST.tileSize);
+            this.orders.push(order);
+            var orderSource = new Phaser.GameObjects.Image(this, order.startPosX, order.startPosY, 'orderSource');
+            orderSource.setScale(0.3, 0.3);
+            var orderSink = new Phaser.GameObjects.Image(this, order.endPosX, order.endPosY, 'orderSink');
+            orderSink.setScale(0.1, 0.1);
+            this.add.existing(orderSource);
+            this.add.existing(orderSink);
+            this.orderSources.push(orderSource);
+            this.orderSinks.push(orderSink);
+        }
     }
 }
