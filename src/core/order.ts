@@ -9,14 +9,15 @@ export enum OrderStatus {
 }
 
 export class Order {
+    static orderCount: integer = 0;
     public id: integer;
     public sourceStation: integer;
     public sinkStation: integer;
     public status: OrderStatus;
 
     // Creates Order objects.
-    constructor(id: integer, sourceStation: integer, sinkStation: integer) {
-        this.id = id;
+    constructor(sourceStation: integer, sinkStation: integer) {
+        this.id = Order.orderCount++;
         this.sourceStation = sourceStation;
         this.sinkStation = sinkStation;
         this.status = OrderStatus.offered;
@@ -28,7 +29,6 @@ export class OrderManager {
     private openOrders: Array<Order>;
     private stationSourceOrder: Map<integer, Order>; // For each station shows an open order starting in it (if exist).
     private stationSinkOrders: Array<Array<Order>>; // For each station lists open orders ending in this station.
-    private totalOrdersCount: integer; // Both closed and opened.
     private scene: Phaser.Scene;
 
     // Creates OrderManager objects.
@@ -43,7 +43,6 @@ export class OrderManager {
         }
         this.openOrders = [];
         this.stationSourceOrder = new Map();
-        this.totalOrdersCount = 0;
     }
 
     addOrder(): void {
@@ -62,12 +61,10 @@ export class OrderManager {
               endStation = randomInt(numStations);
             }
 
-            var order = new Order(this.totalOrdersCount, beginStation, endStation);
+            var order = new Order(beginStation, endStation);
             this.stationSourceOrder[beginStation] = order;
             this.stationSinkOrders[endStation].push(order);
             this.openOrders.push(order);
-
-            this.totalOrdersCount += 1;
 
             this.renderStationOrders(beginStation);
             this.renderStationOrders(endStation);
