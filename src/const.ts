@@ -3,7 +3,7 @@ export let CONST = {
     numNeighborhoods: 5,
 
     // Map
-    mapWidth: 20,
-    mapHeight: 20,
+    mapWidth: 200,
+    mapHeight: 200,
     tileSize: 64,
 }

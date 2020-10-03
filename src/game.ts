@@ -1,5 +1,6 @@
 import "phaser";
 import { MainScene } from "./scenes/main_scene";
+import { TitleScene } from "./scenes/title_scene";
 
 // main game configuration
 const config: Phaser.Types.Core.GameConfig = {
@@ -7,7 +8,7 @@ const config: Phaser.Types.Core.GameConfig = {
   height: 600,
   type: Phaser.AUTO,
   parent: "game",
-  scene: [MainScene],
+  scene: [MainScene, TitleScene],
   input: {
     keyboard: true
   },
