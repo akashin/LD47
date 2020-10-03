@@ -177,7 +177,10 @@ export class MainScene extends Phaser.Scene {
 
 
     fulfulNearbyOrders(): void {
-        //TODO
+        let nearbyStation = this.findNearbyStation();
+        if (nearbyStation) {
+            this.orderManager.fulfulOrdersInStations(nearbyStation);
+        }
     }
 
     // Called every N ticks to update game state.
