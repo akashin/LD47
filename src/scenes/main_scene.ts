@@ -101,8 +101,13 @@ export class MainScene extends Phaser.Scene {
     // Called periodically to update game state.
     update(time: number, delta: number): void {
         if (this.takeOrderKey.isDown) {
-            // TODO: Take order if possible.
-            console.log("Space pressed.");
+            var nearbyStations = [];
+            this.stations.forEach(station => {
+                if (station.isNearby(0, 0)) {
+                  nearbyStations.push(station);
+                }
+            });
+            console.log("Found ", nearbyStations.length, " stations nearby.");
         }
         this.msSinceLastTick += delta;
         while (this.msSinceLastTick >= CONST.tickDelta) {
