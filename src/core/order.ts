@@ -1,4 +1,5 @@
 import { CONST } from "../const";
+import { OrderInventory } from "../hud/orderInventory";
 import { Station } from "../objects/station";
 import { randomInt } from "../utils/math";
 import { GroundType } from "./map";
@@ -28,10 +29,12 @@ export class Order {
 export class OrderManager {
     private stations: Array<Station>;
     private openOrders: Array<Order>;
+    private ordersInInventory: Array<Order>;
     public stationSourceOrder: Map<integer, Order>; // For each station shows an open order starting in it (if exist).
     private stationSinkOrders: Array<Array<Order>>; // For each station lists open orders ending in this station.
     private stationContainer: Array<Phaser.GameObjects.Container>; // For each station list of all images and texts.
     private scene: Phaser.Scene;
+    private orderInventory: OrderInventory;
 
     // Creates OrderManager objects.
     constructor(scene: Phaser.Scene, stations: Array<Station>) {
@@ -47,6 +50,9 @@ export class OrderManager {
             this.scene.add.existing(this.stationContainer[i]);
         }
         this.openOrders = [];
+        this.ordersInInventory = [];
+        this.orderInventory = new OrderInventory(scene, CONST.inventoryX, CONST.inventoryY, );
+        this.scene.add.existing(this.orderInventory);
         this.stationSourceOrder = new Map();
     }
 
@@ -91,6 +97,9 @@ export class OrderManager {
         
         idx = this.openOrders.indexOf(order);
         this.openOrders.splice(idx, 1);
+
+        this.ordersInInventory.push(order);
+        this.orderInventory.setOrders(this.ordersInInventory);
 
         this.renderStationOrders(order.sourceStation);
         this.renderStationOrders(order.sinkStation);   
