@@ -70,6 +70,7 @@ export class MainScene extends Phaser.Scene {
 
         // Map
         this.map = new Map(this, 0, 0);
+        this.add.existing(this.map);
         this.generateMap();
 
         this.stationLocations = [];
@@ -79,7 +80,7 @@ export class MainScene extends Phaser.Scene {
                 let station = [x, y];
                 this.stationLocations.push(station);
               }
-            } 
+            }
         }
         this.usedSourceStationIds = [];
     }
@@ -87,12 +88,12 @@ export class MainScene extends Phaser.Scene {
     generateMap(): void {
         // Add stations.
         this.map.updateGroundType(3, 3, GroundType.Station);
-        // this.map.updateGroundType(3, 6, GroundType.Station);
-        // this.map.updateGroundType(6, 3, GroundType.Station);
-        // this.map.updateGroundType(6, 6, GroundType.Station);
+        this.map.updateGroundType(3, 6, GroundType.Station);
+        this.map.updateGroundType(6, 3, GroundType.Station);
+        this.map.updateGroundType(6, 6, GroundType.Station);
 
-        let sprite = this.add.sprite(50, 50, 'station_tile');
-        sprite.setDisplaySize(32, 32);
+        // let sprite = this.add.sprite(50, 50, 'station_tile');
+        // sprite.setDisplaySize(32, 32);
     }
 
     // Called periodically to update game state.

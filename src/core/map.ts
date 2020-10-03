@@ -26,20 +26,22 @@ export class Tile extends Phaser.GameObjects.Sprite {
 
     constructor(scene: Phaser.Scene, x: number, y: number, groundType: GroundType) {
         super(scene, x, y, Tile.getTextureName(groundType));
+        this.setOrigin(0, 0);
 
         this.groundType = groundType;
-        this.updateOriginAndScale();
+        this.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        // this.updateOriginAndScale();
     }
 
-    private updateOriginAndScale(): void {
-        this.setDisplayOrigin(0, 0);
-        this.setDisplaySize(CONST.tileSize / 2, CONST.tileSize / 2);
-    }
+    // private updateOriginAndScale(): void {
+    //     this.setDisplaySize(CONST.tileSize, CONST.tileSize);
+    // }
 
     updateGroundType(groundType: GroundType): void {
         this.groundType = groundType;
         this.setTexture(Tile.getTextureName(groundType));
-        this.updateDisplayOrigin();
+        this.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        // this.updateDisplayOrigin();
     }
 }
 
@@ -60,8 +62,6 @@ export class Map extends Phaser.GameObjects.Container {
                 this.add(tile);
             }
         }
-
-        scene.add.existing(this);
     }
 
     getGroundType(x: integer, y: integer): GroundType {
