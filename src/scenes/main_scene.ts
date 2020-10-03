@@ -60,7 +60,7 @@ export class MainScene extends Phaser.Scene {
   // Called every N ticks to update game state.
   updateStep(): void {
     console.log(this.tickCounter);
-    if ((this.tickCounter % 10) == 0) {
+    if ((this.tickCounter % 30) == 1) {
       this.addOrder();
     }
     this.helloWorldText.setText("Hello, wor!" + String(this.tickCounter));
@@ -69,12 +69,14 @@ export class MainScene extends Phaser.Scene {
   // Called every N ticks to update game state.
   addOrder(): void {
     // TODO: change to real map params.
-    var mapW = 100;
-    var mapH = 100;
+    var mapW = 300;
+    var mapH = 500;
     var order = new Order(mapW, mapH);
     this.orders.push(order);
     var orderSource = new Phaser.GameObjects.Image(this, order.startPosX, order.startPosY, 'orderSource');
+    orderSource.setScale(0.3);
     var orderSink = new Phaser.GameObjects.Image(this, order.endPosX, order.endPosY, 'orderSink');
+    orderSink.setScale(0.1);
     this.add.existing(orderSource);
     this.add.existing(orderSink);
     this.orderSources.push(orderSource);
