@@ -86,7 +86,7 @@ export class MainScene extends Phaser.Scene {
     this.helloWorldText.setText("Hello, wor!" + String(this.tickCounter));
   }
 
-  // Called every N ticks to update game state.
+  // Create a new order.
   addOrder(): void {
     // TODO: change to real map params.
     var mapW = 300;
@@ -94,7 +94,7 @@ export class MainScene extends Phaser.Scene {
     var order = new Order(mapW, mapH);
     this.orders.push(order);
     var orderSource = new Phaser.GameObjects.Image(this, order.startPosX, order.startPosY, 'orderSource');
-    orderSource.setScale(0.1, 0.1);
+    orderSource.setScale(0.3, 0.3);
     var orderSink = new Phaser.GameObjects.Image(this, order.endPosX, order.endPosY, 'orderSink');
     orderSink.setScale(0.1, 0.1);
     this.add.existing(orderSource);
