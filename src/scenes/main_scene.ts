@@ -1,7 +1,6 @@
 import { CONST } from "../const";
 import { Order } from "../core/order";
 import { GroundType, Map } from "../core/map";
-import { MapView } from "../view/map_view";
 import { randomInt } from "../utils/math";
 
 export class MainScene extends Phaser.Scene {
@@ -14,7 +13,6 @@ export class MainScene extends Phaser.Scene {
     private orderSinks: Phaser.GameObjects.Image[];
     private takeOrderKey: Phaser.Input.Keyboard.Key;
     private map: Map;
-    private mapView: MapView;
     private stationLocations: Array<Array<integer>>;
     private usedSourceStationIds: Array<integer>;
 
