@@ -4,8 +4,9 @@ import { randomInt } from "../utils/math";
 import { GroundType } from "./map";
 
 export enum OrderStatus {
-    offered,
+    open,
     taken,
+    fulfiled,
 }
 
 export class Order {
@@ -20,14 +21,14 @@ export class Order {
         this.id = Order.orderCount++;
         this.sourceStation = sourceStation;
         this.sinkStation = sinkStation;
-        this.status = OrderStatus.offered;
+        this.status = OrderStatus.open;
     }
 }
 
 export class OrderManager {
     private stations: Array<Station>;
     private openOrders: Array<Order>;
-    private stationSourceOrder: Map<integer, Order>; // For each station shows an open order starting in it (if exist).
+    public stationSourceOrder: Map<integer, Order>; // For each station shows an open order starting in it (if exist).
     private stationSinkOrders: Array<Array<Order>>; // For each station lists open orders ending in this station.
     private scene: Phaser.Scene;
 
@@ -61,6 +62,10 @@ export class OrderManager {
               endStation = randomInt(numStations);
             }
 
+            var assert = require('assert');
+            assert(this.stations[beginStation].index == beginStation);
+            assert(this.stations[endStation].index == endStation);
+
             var order = new Order(beginStation, endStation);
             this.stationSourceOrder[beginStation] = order;
             this.stationSinkOrders[endStation].push(order);
@@ -71,7 +76,11 @@ export class OrderManager {
         }
     }
 
-    fulfilOrder(order: Order): void {
+    pickOrder(order: Order): void {        
+        var assert = require('assert');
+        assert(order.status == OrderStatus.open);
+        order.status = OrderStatus.taken;
+
         delete this.stationSourceOrder[order.sourceStation];
         var idx = -1;
         do {
@@ -84,9 +93,7 @@ export class OrderManager {
         this.openOrders.splice(idx, 1);
 
         this.renderStationOrders(order.sourceStation);
-        this.renderStationOrders(order.sinkStation);
-        
-        
+        this.renderStationOrders(order.sinkStation);   
     }
 
     renderStationOrders(station: integer): void {

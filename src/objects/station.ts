@@ -17,6 +17,6 @@ export class Station extends Phaser.GameObjects.Sprite {
   }
 
   isNearby(column: integer, row: integer): boolean {
-      return Math.abs(column - this.column) + Math.abs(row - this.row) < CONST.orderPickupDistance;
+      return Math.abs(column - this.column) + Math.abs(row - this.row) <= CONST.orderPickupDistance;
   }
 }

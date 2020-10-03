@@ -8,5 +8,5 @@ export let CONST = {
     tileSize: 64,
 
     // Stations.
-    orderPickupDistance: 6,
+    orderPickupDistance: 1,
 }

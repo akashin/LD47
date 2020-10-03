@@ -103,11 +103,21 @@ export class MainScene extends Phaser.Scene {
         if (this.takeOrderKey.isDown) {
             var nearbyStations = [];
             this.stations.forEach(station => {
-                if (station.isNearby(0, 0)) {
+                if (station.isNearby(3, 2)) {
                   nearbyStations.push(station);
                 }
             });
             console.log("Found ", nearbyStations.length, " stations nearby.");
+            var assert = require('assert');
+            assert(nearbyStations.length <= 1);
+
+            let order = this.orderManager.stationSourceOrder[nearbyStations[0].index];
+            if (order) {
+                console.log('Has order!', order);
+                this.orderManager.pickOrder(order);
+            } else {
+                console.log('No order');
+            }
         }
         this.msSinceLastTick += delta;
         while (this.msSinceLastTick >= CONST.tickDelta) {
