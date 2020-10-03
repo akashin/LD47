@@ -108,6 +108,12 @@ export class OrderManager {
         this.renderStationOrders(order.sinkStation);
     }
 
+    fulfulOrdersInStations(station): void {
+        this.ordersInInventory.forEach(el => {console.log(el.sinkStation, station.index, el.sinkStation != station.index)})
+        this.ordersInInventory = this.ordersInInventory.filter(order => order.sinkStation != station.index);
+        this.orderInventory.setOrders(this.ordersInInventory);
+    }
+
     renderStationOrders(station: integer): void {
         // Remove old sprites.
         this.stationContainer[station].removeAll();
