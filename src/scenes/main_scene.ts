@@ -2,6 +2,7 @@ import { CONST } from "../const";
 import { Order } from "../core/order";
 import { GroundType, Map } from "../core/map";
 import { randomInt } from "../utils/math";
+import { Station } from "../objects/station";
 
 export class MainScene extends Phaser.Scene {
     private backgroundSprite: Phaser.GameObjects.Sprite;
@@ -15,6 +16,7 @@ export class MainScene extends Phaser.Scene {
     private map: Map;
     private stationLocations: Array<Array<integer>>;
     private usedSourceStationIds: Array<integer>;
+    private stations: Station[];
 
     constructor() {
         super({
@@ -90,13 +92,21 @@ export class MainScene extends Phaser.Scene {
 
     generateMap(): void {
         // Add stations.
-        this.map.updateGroundType(3, 3, GroundType.Station);
-        this.map.updateGroundType(3, 6, GroundType.Station);
-        this.map.updateGroundType(6, 3, GroundType.Station);
-        this.map.updateGroundType(6, 6, GroundType.Station);
+        this.addStation(3, 3);
+        this.addStation(3, 6);
+        this.addStation(6, 3);
+        this.addStation(6, 6);
+    }
 
-        // let sprite = this.add.sprite(50, 50, 'station_tile');
-        // sprite.setDisplaySize(32, 32);
+    addStation(x: integer, y: integer): void {
+      let station = new Station(this, {
+        x: x * CONST.tileSize,
+        y: y * CONST.tileSize,
+        column: x,
+        row: y,
+      });
+      this.stations.push(station);
+      this.add.existing(station);
     }
 
     // Called periodically to update game state.
