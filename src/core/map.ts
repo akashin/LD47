@@ -29,19 +29,17 @@ export class Tile extends Phaser.GameObjects.Sprite {
         this.setOrigin(0, 0);
 
         this.groundType = groundType;
-        this.setDisplaySize(CONST.tileSize, CONST.tileSize);
-        // this.updateOriginAndScale();
+        this.updateScale();
     }
 
-    // private updateOriginAndScale(): void {
-    //     this.setDisplaySize(CONST.tileSize, CONST.tileSize);
-    // }
+    private updateScale(): void {
+        this.setDisplaySize(CONST.tileSize, CONST.tileSize);
+    }
 
     updateGroundType(groundType: GroundType): void {
         this.groundType = groundType;
         this.setTexture(Tile.getTextureName(groundType));
-        this.setDisplaySize(CONST.tileSize, CONST.tileSize);
-        // this.updateDisplayOrigin();
+        this.updateScale();
     }
 }
 
