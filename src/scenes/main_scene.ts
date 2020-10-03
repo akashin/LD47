@@ -67,7 +67,10 @@ export class MainScene extends Phaser.Scene {
 
         // Map
         this.map = new Map(this, 0, 0);
+        this.generateMap();
+    }
 
+    generateMap(): void {
         // Add stations.
         this.map.updateGroundType(3, 3, GroundType.Station);
         this.map.updateGroundType(3, 6, GroundType.Station);
