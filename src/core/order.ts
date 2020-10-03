@@ -30,6 +30,7 @@ export class OrderManager {
     private openOrders: Array<Order>;
     public stationSourceOrder: Map<integer, Order>; // For each station shows an open order starting in it (if exist).
     private stationSinkOrders: Array<Array<Order>>; // For each station lists open orders ending in this station.
+    private stationContainer: Array<Phaser.GameObjects.Container>; // For each station list of all images and texts.
     private scene: Phaser.Scene;
 
     // Creates OrderManager objects.
@@ -39,8 +40,11 @@ export class OrderManager {
         this.stations = stations;
 
         this.stationSinkOrders = [];
+        this.stationContainer = [];
         for (let i = 0; i < this.stations.length; ++i) {
             this.stationSinkOrders[i] = [];
+            this.stationContainer[i] = new Phaser.GameObjects.Container(scene);
+            this.scene.add.existing(this.stationContainer[i]);
         }
         this.openOrders = [];
         this.stationSourceOrder = new Map();
@@ -59,7 +63,7 @@ export class OrderManager {
             let endStation = randomInt(numStations);
             // Make sure source and sink are distinct.
             while (beginStation == endStation) {
-              endStation = randomInt(numStations);
+                endStation = randomInt(numStations);
             }
 
             var assert = require('assert');
@@ -82,12 +86,8 @@ export class OrderManager {
         order.status = OrderStatus.taken;
 
         delete this.stationSourceOrder[order.sourceStation];
-        var idx = -1;
-        do {
-            idx = this.stationSinkOrders[order.sinkStation].indexOf(order);
-            this.stationSinkOrders[order.sinkStation].splice(idx, 1);
-        }
-        while (idx > -1);
+        let idx = this.stationSinkOrders[order.sinkStation].indexOf(order);
+        this.stationSinkOrders[order.sinkStation].splice(idx, 1);
         
         idx = this.openOrders.indexOf(order);
         this.openOrders.splice(idx, 1);
@@ -97,23 +97,27 @@ export class OrderManager {
     }
 
     renderStationOrders(station: integer): void {
-        // TODO: remove old sprites.
+        // Remove old sprites.
+        this.stationContainer[station].removeAll();
+
         let locX = this.stations[station].column * CONST.tileSize;
         let locY = this.stations[station].row * CONST.tileSize;
         if (station in this.stationSourceOrder) {
             let order = this.stationSourceOrder[station];
             var orderSource = new Phaser.GameObjects.Image(this.scene, locX, locY, 'orderSource');
             orderSource.setScale(0.3, 0.3);
-            this.scene.add.existing(orderSource);
-            this.scene.add.text(locX - 20, locY - 20, String(order.id))
+            this.stationContainer[station].add(orderSource);
+            let text = new Phaser.GameObjects.Text(this.scene, locX - 20, locY - 20, String(order.id), {fontSize: "15pt", color: "#000"});
+            this.stationContainer[station].add(text);
         }
 
         for (let i = 0; i < this.stationSinkOrders[station].length; ++i) {
             let order = this.stationSinkOrders[station][i];
             let orderSink = new Phaser.GameObjects.Image(this.scene, locX + 80 + i * 50, locY + 80, 'orderSink');
             orderSink.setScale(0.1, 0.1);
-            this.scene.add.existing(orderSink);
-            this.scene.add.text(locX + 60 + i * 50, locY + 60, String(order.id))
+            this.stationContainer[station].add(orderSink);
+            let text = new Phaser.GameObjects.Text(this.scene, locX + 60 + i * 50, locY + 60, String(order.id), {fontSize: "15pt", color: "#000"});
+            this.stationContainer[station].add(text);
         }
     }
 }
