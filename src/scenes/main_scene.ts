@@ -133,9 +133,12 @@ export class MainScene extends Phaser.Scene {
             let sink = this.stationLocations[endStation];
             var order = new Order(source[0] * CONST.tileSize, source[1] * CONST.tileSize, sink[0] * CONST.tileSize, sink[1] * CONST.tileSize);
             this.orders.push(order);
+            let orderId = this.orders.length;
+            this.add.text(order.startPosX - 20, order.startPosY - 20, String(orderId))
             var orderSource = new Phaser.GameObjects.Image(this, order.startPosX, order.startPosY, 'orderSource');
             orderSource.setScale(0.3, 0.3);
             var orderSink = new Phaser.GameObjects.Image(this, order.endPosX, order.endPosY, 'orderSink');
+            this.add.text(order.endPosX - 20, order.endPosY - 20, String(orderId))
             orderSink.setScale(0.1, 0.1);
             this.add.existing(orderSource);
             this.add.existing(orderSink);
