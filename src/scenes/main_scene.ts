@@ -27,7 +27,7 @@ export class MainScene extends Phaser.Scene {
 
     // Preloads game resources.
     preload(): void {
-        this.load.image("gameBackground", "./assets/karta.png");
+        this.load.image("gameBackground", "./assets/karta1.png");
         this.load.image("orderSource", "./assets/orderSource.png");
         this.load.image("orderSink", "./assets/orderSink.png");
         this.load.image('grass_tile', "./assets/grass.png");
