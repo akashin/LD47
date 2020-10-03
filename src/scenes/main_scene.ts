@@ -18,6 +18,10 @@ export class MainScene extends Phaser.Scene {
     private stations: Station[];
     private orderManager: OrderManager;
 
+    private tmpStationIdx: number;
+    private tmpPositionX: number;
+    private tmpPositionY: number;
+
     constructor() {
         super({
             key: "MainScene"
@@ -77,6 +81,10 @@ export class MainScene extends Phaser.Scene {
         this.generateMap();
 
         this.orderManager = new OrderManager(this, this.stations);
+
+        this.tmpStationIdx = 0;
+        this.tmpPositionX = 0;
+        this.tmpPositionY = 0;
     }
 
     generateMap(): void {
@@ -116,7 +124,7 @@ export class MainScene extends Phaser.Scene {
         if (this.takeOrderKey.isDown) {
             var nearbyStations = [];
             this.stations.forEach(station => {
-                if (station.isNearby(3, 2)) {
+                if (station.isNearby(this.tmpPositionX, this.tmpPositionY)) {
                   nearbyStations.push(station);
                 }
             });
@@ -149,6 +157,12 @@ export class MainScene extends Phaser.Scene {
             if (!this.orderManager.addOrder()) {
                 alert('You\'re dead!');
             }
+        }
+        if ((this.tickCounter % 100) == 1) {
+            this.tmpPositionX = this.stations[this.tmpStationIdx].column;
+            this.tmpPositionY = this.stations[this.tmpStationIdx].row;
+            this.tmpStationIdx = (this.tmpStationIdx + 1) % 4;
+
         }
     }
 }
