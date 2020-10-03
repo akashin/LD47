@@ -29,7 +29,7 @@ export class Order {
 export class OrderManager {
     private stations: Array<Station>;
     private openOrders: Array<Order>;
-    private ordersInInventory: Array<Order>;
+    public ordersInInventory: Array<Order>;
     public stationSourceOrder: Map<integer, Order>; // For each station shows an open order starting in it (if exist).
     private stationSinkOrders: Array<Array<Order>>; // For each station lists open orders ending in this station.
     private stationContainer: Array<Phaser.GameObjects.Container>; // For each station list of all images and texts.
