@@ -6,7 +6,6 @@ import { Station } from "../objects/station";
 
 export class MainScene extends Phaser.Scene {
     private backgroundSprite: Phaser.GameObjects.Sprite;
-    private helloWorldText: Phaser.GameObjects.Text;
     private msSinceLastTick: number;
     private tickCounter: integer;
     private orders: Order[];
@@ -70,9 +69,6 @@ export class MainScene extends Phaser.Scene {
         this.orders = [];
         this.orderSources = [];
         this.orderSinks = [];
-        this.helloWorldText = this.add.text(
-            gameWidth / 2 - 50, gameHeight / 2 - 20, "Hello, world!"
-        )
 
         // Map
         this.map = new GameMap(this, 0, 0);
@@ -125,7 +121,6 @@ export class MainScene extends Phaser.Scene {
         if ((this.tickCounter % 30) == 1) {
             this.addOrder();
         }
-        this.helloWorldText.setText("Hello, wor!" + String(this.tickCounter));
     }
 
     // Create a new order.
