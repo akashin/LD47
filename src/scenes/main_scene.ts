@@ -143,7 +143,9 @@ export class MainScene extends Phaser.Scene {
     // Called every N ticks to update game state.
     updateStep(): void {
         if ((this.tickCounter % 30) == 1) {
-            this.orderManager.addOrder();
+            if (!this.orderManager.addOrder()) {
+                alert('You\'re dead!');
+            }
         }
     }
 }
