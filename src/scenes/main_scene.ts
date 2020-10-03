@@ -21,6 +21,7 @@ export class MainScene extends Phaser.Scene {
     private tmpStationIdx: number;
     private tmpPositionX: number;
     private tmpPositionY: number;
+    private tmpPositionText: Phaser.GameObjects.Text;
 
     constructor() {
         super({
@@ -85,6 +86,7 @@ export class MainScene extends Phaser.Scene {
         this.tmpStationIdx = 0;
         this.tmpPositionX = 0;
         this.tmpPositionY = 0;
+        this.tmpPositionText = this.add.text(this.tmpPositionX + 30, this.tmpPositionY + 30, '*');
     }
 
     generateMap(): void {
@@ -158,11 +160,11 @@ export class MainScene extends Phaser.Scene {
                 alert('You\'re dead!');
             }
         }
-        if ((this.tickCounter % 100) == 1) {
+        if ((this.tickCounter % 30) == 1) {
             this.tmpPositionX = this.stations[this.tmpStationIdx].column;
             this.tmpPositionY = this.stations[this.tmpStationIdx].row;
             this.tmpStationIdx = (this.tmpStationIdx + 1) % 4;
-
+            this.tmpPositionText.setPosition(this.tmpPositionX * CONST.tileSize, this.tmpPositionY * CONST.tileSize);
         }
     }
 }
