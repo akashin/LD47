@@ -3,6 +3,7 @@ import { CONST } from "../const";
 export enum GroundType {
     Grass,
     Sand,
+    Station,
 }
 
 export class Map {
@@ -17,7 +18,14 @@ export class Map {
                 this.ground[x].push(GroundType.Grass);
             }
         }
+
+        // Add stations.
+        this.ground[10][10] = GroundType.Station;
+        this.ground[10][100] = GroundType.Station;
+        this.ground[100][10] = GroundType.Station;
+        this.ground[100][100] = GroundType.Station;
     }
+
 
     getGroundType(x: integer, y: integer): GroundType {
         return this.ground[x][y];
