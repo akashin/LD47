@@ -52,7 +52,7 @@ export class MainScene extends Phaser.Scene {
 
 
         // this.load.image("tiles", "all_tiles.png");
-        this.load.tilemapTiledJSON("level", "maps/small_map.json");
+        // this.load.tilemapTiledJSON("level", "./assets/maps/small_map.json");
     }
 
 
@@ -88,7 +88,7 @@ export class MainScene extends Phaser.Scene {
         this.orderSources = [];
         this.orderSinks = [];
 
-        this.tilemap = this.make.tilemap({ key: "level" });
+        // this.tilemap = this.make.tilemap({ key: "level" });
         // this.tileset = this.tilemap.addTilesetImage("_bloodnight", "tiles");
 
         // this.backgroundLayer = this.tilemap.createStaticLayer("Background", this.tileset, 0, 0);
