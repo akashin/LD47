@@ -3,6 +3,7 @@ import { Order, OrderManager } from "../core/order";
 import { GameMap, GroundType, RailType } from "../core/map";
 import { randomInt } from "../utils/math";
 import { Station } from "../objects/station";
+import { PlayerState } from "../core/player_state";
 
 export class MainScene extends Phaser.Scene {
     private backgroundSprite: Phaser.GameObjects.Sprite;
@@ -17,10 +18,9 @@ export class MainScene extends Phaser.Scene {
     private usedSourceStationIds: Array<integer>;
     private stations: Station[];
     private orderManager: OrderManager;
+    private playerState: PlayerState;
 
     private tmpStationIdx: number;
-    private tmpPositionX: number;
-    private tmpPositionY: number;
     private tmpPositionText: Phaser.GameObjects.Text;
 
     // Holds data about the actual map.
@@ -71,6 +71,8 @@ export class MainScene extends Phaser.Scene {
         var gameWidth = this.game.config.width as number;
         var gameHeight = this.game.config.height as number;
 
+        this.playerState = new PlayerState();
+
         // Draw background image.
         {
             this.backgroundSprite = this.add.sprite(0, 0, "gameBackground");
@@ -99,9 +101,7 @@ export class MainScene extends Phaser.Scene {
         this.orderManager = new OrderManager(this, this.stations);
 
         this.tmpStationIdx = 0;
-        this.tmpPositionX = 0;
-        this.tmpPositionY = 0;
-        this.tmpPositionText = this.add.text(this.tmpPositionX + 30, this.tmpPositionY + 30, '*');
+        this.tmpPositionText = this.add.text(this.playerState.position.x + 30, this.playerState.position.y + 30, '*');
     }
 
     generateMap(): void {
@@ -141,7 +141,7 @@ export class MainScene extends Phaser.Scene {
         if (this.takeOrderKey.isDown) {
             var nearbyStations = [];
             this.stations.forEach(station => {
-                if (station.isNearby(this.tmpPositionX, this.tmpPositionY)) {
+                if (station.isNearby(this.playerState.position.x, this.playerState.position.y)) {
                   nearbyStations.push(station);
                 }
             });
@@ -176,10 +176,13 @@ export class MainScene extends Phaser.Scene {
             }
         }
         if ((this.tickCounter % 30) == 1) {
-            this.tmpPositionX = this.stations[this.tmpStationIdx].column;
-            this.tmpPositionY = this.stations[this.tmpStationIdx].row;
+            this.playerState.position.x = this.stations[this.tmpStationIdx].column;
+            this.playerState.position.y = this.stations[this.tmpStationIdx].row;
             this.tmpStationIdx = (this.tmpStationIdx + 1) % 4;
-            this.tmpPositionText.setPosition(this.tmpPositionX * CONST.tileSize, this.tmpPositionY * CONST.tileSize);
+            this.tmpPositionText.setPosition(
+                this.playerState.position.x * CONST.tileSize,
+                this.playerState.position.y * CONST.tileSize
+            );
         }
     }
 }
