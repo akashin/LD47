@@ -31,6 +31,9 @@ export class MainScene extends Phaser.Scene {
         this.load.image('grass_tile', "./assets/grass.png");
         this.load.image('sand_tile', "./assets/sand.png");
         this.load.image('station_tile', "./assets/station.png");
+        // Rails
+        this.load.image('rails_top_bottom', "./assets/rails_top_bottom.png");
+        this.load.image('rails_top_right', "./assets/rails_top_right.png");
         // A useful image to draw squares.
         this.load.image("blank", "./assets/blank.png");
     }
