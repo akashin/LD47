@@ -20,10 +20,10 @@ export class Map {
         }
 
         // Add stations.
-        this.ground[10][10] = GroundType.Station;
-        this.ground[10][100] = GroundType.Station;
-        this.ground[100][10] = GroundType.Station;
-        this.ground[100][100] = GroundType.Station;
+        this.ground[3][3] = GroundType.Station;
+        this.ground[3][6] = GroundType.Station;
+        this.ground[6][3] = GroundType.Station;
+        this.ground[6][6] = GroundType.Station;
     }
 
 
