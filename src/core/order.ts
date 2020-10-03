@@ -56,7 +56,7 @@ export class OrderManager {
         this.stationSourceOrder = new Map();
     }
 
-    addOrder(): void {
+    addOrder(): boolean {
         let numStations = this.stations.length;
         if (this.openOrders.length < numStations) {
 
@@ -83,6 +83,9 @@ export class OrderManager {
 
             this.renderStationOrders(beginStation);
             this.renderStationOrders(endStation);
+            return true;
+        } else {
+            return false;
         }
     }
 
