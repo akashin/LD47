@@ -1,5 +1,5 @@
 import { CONST } from "../const";
-import { OrderInventory } from "../hud/orderInventory";
+import { OrderInventory } from "../hud/order_inventory";
 import { Station } from "../objects/station";
 import { randomInt } from "../utils/math";
 import { GroundType } from "./map";
@@ -89,7 +89,7 @@ export class OrderManager {
         }
     }
 
-    pickOrder(order: Order): void {        
+    pickOrder(order: Order): void {
         var assert = require('assert');
         assert(order.status == OrderStatus.open);
         order.status = OrderStatus.taken;
@@ -97,7 +97,7 @@ export class OrderManager {
         delete this.stationSourceOrder[order.sourceStation];
         let idx = this.stationSinkOrders[order.sinkStation].indexOf(order);
         this.stationSinkOrders[order.sinkStation].splice(idx, 1);
-        
+
         idx = this.openOrders.indexOf(order);
         this.openOrders.splice(idx, 1);
 
@@ -105,7 +105,7 @@ export class OrderManager {
         this.orderInventory.setOrders(this.ordersInInventory);
 
         this.renderStationOrders(order.sourceStation);
-        this.renderStationOrders(order.sinkStation);   
+        this.renderStationOrders(order.sinkStation);
     }
 
     renderStationOrders(station: integer): void {
