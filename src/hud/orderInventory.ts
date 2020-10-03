@@ -16,5 +16,10 @@ export class OrderInventory extends Phaser.GameObjects.Container {
 
     setOrders(orders: Array<Order>): void {
         // TODO: Show orders in the HUD.
+        let status = 'Orders in inventory:\n';
+        orders.forEach(element => {
+            status += 'Wheat to station ' + String(element.sinkStation) + ';\n';
+        });
+        this.orderCountText.setText(status);
     }
 }

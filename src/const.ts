@@ -9,4 +9,8 @@ export let CONST = {
 
     // Stations.
     orderPickupDistance: 1,
+
+    // Inventory.
+    inventoryX: 10,
+    inventoryY: 10,
 }
