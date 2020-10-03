@@ -48,6 +48,7 @@ export class MainScene extends Phaser.Scene {
         );
         this.msSinceLastTick = 0;
         this.tickCounter = 0;
+        this.stations = [];
     }
 
     // Creates game objects.
@@ -79,13 +80,9 @@ export class MainScene extends Phaser.Scene {
         this.generateMap();
 
         this.stationLocations = [];
-        for (let x = 0; x < CONST.mapWidth; ++x) {
-            for (let y = 0; y < CONST.mapHeight; ++y) {
-              if (this.map.getGroundType(x, y) == GroundType.Station) {
-                let station = [x, y];
-                this.stationLocations.push(station);
-              }
-            }
+        for (let i = 0; i < this.stations.length; ++i) {
+          let station = [this.stations[i].column, this.stations[i].row];
+          this.stationLocations.push(station);
         }
         this.usedSourceStationIds = [];
     }

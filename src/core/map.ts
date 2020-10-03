@@ -3,7 +3,6 @@ import { CONST } from "../const";
 export enum GroundType {
     Grass,
     Sand,
-    Station,
 }
 
 export class Tile extends Phaser.GameObjects.Sprite {
@@ -16,9 +15,6 @@ export class Tile extends Phaser.GameObjects.Sprite {
                 break;
             case GroundType.Sand:
                 return 'sand_tile';
-                break;
-            case GroundType.Station:
-                return 'station_tile';
                 break;
         }
         throw new Error('Unknown GroundType');
