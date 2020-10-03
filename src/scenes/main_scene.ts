@@ -1,6 +1,6 @@
 import { CONST } from "../const";
 import { Order } from "../core/order";
-import { GroundType, Map } from "../core/map";
+import { GroundType, GameMap } from "../core/map";
 import { randomInt } from "../utils/math";
 import { Station } from "../objects/station";
 
@@ -13,7 +13,7 @@ export class MainScene extends Phaser.Scene {
     private orderSources: Phaser.GameObjects.Image[];
     private orderSinks: Phaser.GameObjects.Image[];
     private takeOrderKey: Phaser.Input.Keyboard.Key;
-    private map: Map;
+    private map: GameMap;
     private stationLocations: Array<Array<integer>>;
     private usedSourceStationIds: Array<integer>;
     private stations: Station[];
@@ -75,7 +75,7 @@ export class MainScene extends Phaser.Scene {
         )
 
         // Map
-        this.map = new Map(this, 0, 0);
+        this.map = new GameMap(this, 0, 0);
         this.add.existing(this.map);
         this.generateMap();
 

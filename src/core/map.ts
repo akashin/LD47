@@ -39,7 +39,7 @@ export class Tile extends Phaser.GameObjects.Sprite {
     }
 }
 
-export class Map extends Phaser.GameObjects.Container {
+export class GameMap extends Phaser.GameObjects.Container {
     private tiles: Array<Array<Tile>>;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
