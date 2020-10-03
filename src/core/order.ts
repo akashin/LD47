@@ -74,6 +74,24 @@ export class OrderManager {
         }
     }
 
+    fulfilOrder(order: Order): void {
+        delete this.stationSourceOrder[order.sourceStation];
+        var idx = -1;
+        do {
+            idx = this.stationSinkOrders[order.sinkStation].indexOf(order);
+            this.stationSinkOrders[order.sinkStation].splice(idx, 1);
+        }
+        while (idx > -1);
+        
+        idx = this.openOrders.indexOf(order);
+        this.openOrders.splice(idx, 1);
+
+        this.renderStationOrders(order.sourceStation);
+        this.renderStationOrders(order.sinkStation);
+        
+        
+    }
+
     renderStationOrders(station: integer): void {
         // TODO: remove old sprites.
         let locX = this.stations[station].column * CONST.tileSize;
