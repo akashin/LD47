@@ -1,7 +1,6 @@
 import { CONST } from "../const";
 import { Order } from "../core/order";
-import { Map } from "../core/map";
-import { MapView } from "../view/map_view";
+import { GroundType, Map } from "../core/map";
 
 export class MainScene extends Phaser.Scene {
     private backgroundSprite: Phaser.GameObjects.Sprite;
@@ -13,7 +12,6 @@ export class MainScene extends Phaser.Scene {
     private orderSinks: Phaser.GameObjects.Image[];
     private takeOrderKey: Phaser.Input.Keyboard.Key;
     private map: Map;
-    private mapView: MapView;
 
     constructor() {
         super({
@@ -68,8 +66,13 @@ export class MainScene extends Phaser.Scene {
         )
 
         // Map
-        this.map = new Map();
-        this.mapView = new MapView(this, 0, 0, this.map);
+        this.map = new Map(this, 0, 0);
+
+        // Add stations.
+        this.map.updateGroundType(3, 3, GroundType.Station);
+        this.map.updateGroundType(3, 6, GroundType.Station);
+        this.map.updateGroundType(6, 3, GroundType.Station);
+        this.map.updateGroundType(6, 6, GroundType.Station);
     }
 
     // Called periodically to update game state.
@@ -88,7 +91,7 @@ export class MainScene extends Phaser.Scene {
 
     // Called every N ticks to update game state.
     updateStep(): void {
-        console.log(this.tickCounter);
+        // console.log(this.tickCounter);
         if ((this.tickCounter % 30) == 1) {
             this.addOrder();
         }
