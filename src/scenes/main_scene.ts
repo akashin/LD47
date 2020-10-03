@@ -2,6 +2,7 @@ import { CONST } from "../const";
 import { Order } from "../core/order";
 
 export class MainScene extends Phaser.Scene {
+  private backgroundSprite: Phaser.GameObjects.Sprite;
   private helloWorldText: Phaser.GameObjects.Text;
   private msSinceLastTick: number;
   private tickCounter: integer;
@@ -18,8 +19,11 @@ export class MainScene extends Phaser.Scene {
 
   // Preloads game resources.
   preload(): void {
+    this.load.image("gameBackground", "./assets/bckgrnd_2.png");
     this.load.image("orderSource", "../assets/orderSource.png");
     this.load.image("orderSink", "../assets/orderSink.png");
+    // A useful image to draw squares.
+    this.load.image("blank", "./assets/blank.png");
   }
 
   // Initializes game state.
@@ -35,6 +39,18 @@ export class MainScene extends Phaser.Scene {
   create(): void {
     var gameWidth = this.game.config.width as number;
     var gameHeight = this.game.config.height as number;
+
+    // Draw background image.
+    {
+      this.backgroundSprite = this.add.sprite(0, 0, "gameBackground");
+      this.backgroundSprite.setOrigin(0, 0);
+      let ratio = this.backgroundSprite.width / this.backgroundSprite.height;
+      this.backgroundSprite.setScale(
+        gameWidth / this.backgroundSprite.height,
+        gameHeight / this.backgroundSprite.height,
+      );
+    }
+
     this.orders = [];
     this.orderSources = [];
     this.orderSinks = [];
