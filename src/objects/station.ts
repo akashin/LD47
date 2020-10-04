@@ -7,10 +7,27 @@ class InOrder extends Phaser.GameObjects.Container {
     constructor(scene, params) {
         super(scene, params.x, params.y);
 
+        this.order_sprite = scene.add.sprite(0, 0, "orderSink");
+        this.order_sprite.setOrigin(0, 0);
+        this.order_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        this.add(this.order_sprite);
+    }
+}
+
+class OutOrder extends Phaser.GameObjects.Container {
+    order_sprite: Phaser.GameObjects.Sprite;
+    order_destination_text: Phaser.GameObjects.Text;
+
+    constructor(scene, params) {
+        super(scene, params.x, params.y);
+
         this.order_sprite = scene.add.sprite(0, 0, "order_box");
         this.order_sprite.setOrigin(0, 0);
-        this.order_sprite.setDisplaySize(CONST.tileSize / 2, CONST.tileSize / 2);
+        this.order_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
         this.add(this.order_sprite);
+
+        this.order_destination_text = scene.add.text(0, 0, params.destination);
+        this.add(this.order_destination_text);
     }
 }
 
@@ -25,7 +42,7 @@ export class Station extends Phaser.GameObjects.Container {
     station_name_text: Phaser.GameObjects.Text;
 
     in_orders: Map<integer, InOrder>;
-    out_orders: Order[];
+    out_orders: Map<integer, OutOrder>;
 
     constructor(scene, params) {
         super(scene, params.x, params.y);
@@ -43,7 +60,7 @@ export class Station extends Phaser.GameObjects.Container {
         this.add(this.station_name_text);
 
         this.in_orders = new Map();
-        this.out_orders = [];
+        this.out_orders = new Map();
     }
 
     isNearby(column: integer, row: integer): boolean {
@@ -51,14 +68,38 @@ export class Station extends Phaser.GameObjects.Container {
     }
 
     addInOrder(order: Order): void {
-        let in_order = new InOrder(this.scene, { x: 0, y: 0 });
-        this.in_orders[order.id] = in_order;
+        let in_order = new InOrder(this.scene, { x: CONST.tileSize, y: CONST.tileSize });
+        this.in_orders.set(order.id, in_order);
         this.add(in_order);
     }
 
-    removeInOrder(order: Order): void {
-        let in_order = this.in_orders.get(order.id);
-        this.in_orders.delete(order.id);
+    removeInOrder(order_id: integer): void {
+        let in_order = this.in_orders.get(order_id);
+        this.in_orders.delete(order_id);
         this.remove(in_order);
+    }
+
+    tryFulfilInOrder(order_id: integer): boolean {
+        if (!this.in_orders.has(order_id)) {
+            return false;
+        }
+        // TODO: Do some fulfil animation.
+        this.removeInOrder(order_id);
+    }
+
+    addOutOrder(order: Order, destination: string): void {
+        let out_order = new OutOrder(this.scene, { x: CONST.tileSize, y: CONST.tileSize, destination: destination });
+        this.out_orders.set(order.id, out_order);
+        this.add(out_order);
+    }
+
+    removeOutOrder(order: Order): void {
+        let out_order = this.out_orders.get(order.id);
+        this.out_orders.delete(order.id);
+        this.remove(out_order);
+    }
+
+    hasOutOrders(): boolean {
+        return this.out_orders.size > 0;
     }
 }

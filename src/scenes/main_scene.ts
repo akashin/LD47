@@ -140,10 +140,10 @@ export class MainScene extends Phaser.Scene {
         // Reset station counter in case it's not our first game.
         Station.station_count = 0;
         // Add stations.
-        this.addStation(x0 + 1, y0 + 1, 'A');
-        this.addStation(x0 + 1, y1 - 1, 'B');
-        this.addStation(x1 - 1, y0 + 1, 'C');
-        this.addStation(x1 - 1, y1 - 1, 'D');
+        this.addStation(x0 + 1, y0 + 1, "0");
+        this.addStation(x0 + 1, y1 - 1, "1");
+        this.addStation(x1 - 1, y0 + 1, "2");
+        this.addStation(x1 - 1, y1 - 1, "3");
     }
 
     addStation(x: integer, y: integer, station_name: string): void {
@@ -168,7 +168,7 @@ export class MainScene extends Phaser.Scene {
             this.scoreBoard.increaseScore(numFulfilled);
 
             if (this.takeOrderKey.isDown) {
-                let order = this.orderManager.stationSourceOrder[nearbyStation.index];
+                let order = this.orderManager.getStationOpenOrder(nearbyStation.index);
                 if (order) {
                     if (this.orderManager.ordersInInventory.length < CONST.inventorySize) {
                         this.orderManager.pickOrder(order);

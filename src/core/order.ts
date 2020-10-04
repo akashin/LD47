@@ -31,9 +31,6 @@ export class OrderManager {
     private stations: Array<Station>;
     private openOrders: Array<Order>;
     public ordersInInventory: Array<Order>;
-    public stationSourceOrder: Map<integer, Order>; // For each station shows an open order starting in it (if exist).
-    private stationSinkOrders: Array<Array<Order>>; // For each station lists open orders ending in this station.
-    private stationContainer: Array<Phaser.GameObjects.Container>; // For each station list of all images and texts.
     private scene: Phaser.Scene;
     private orderInventory: OrderInventory;
 
@@ -43,18 +40,10 @@ export class OrderManager {
 
         this.stations = stations;
 
-        this.stationSinkOrders = [];
-        this.stationContainer = [];
-        for (let i = 0; i < this.stations.length; ++i) {
-            this.stationSinkOrders[i] = [];
-            this.stationContainer[i] = new Phaser.GameObjects.Container(scene);
-            this.scene.add.existing(this.stationContainer[i]);
-        }
         this.openOrders = [];
         this.ordersInInventory = [];
         this.orderInventory = new OrderInventory(scene, CONST.inventoryX, CONST.inventoryY,);
         this.scene.add.existing(this.orderInventory);
-        this.stationSourceOrder = new Map();
     }
 
     addOrder(): boolean {
@@ -66,7 +55,7 @@ export class OrderManager {
 
         let beginStation = randomInt(numStations);
         // Make sure source statation is not already used by some other order.
-        while (beginStation in this.stationSourceOrder) {
+        while (this.stations[beginStation].hasOutOrders()) {
             beginStation = randomInt(numStations);
         }
 
@@ -80,64 +69,48 @@ export class OrderManager {
         assert(this.stations[endStation].index == endStation);
 
         var order = new Order(beginStation, endStation);
-        this.stationSourceOrder[beginStation] = order;
-        this.stationSinkOrders[endStation].push(order);
+        this.stations[beginStation].addOutOrder(order, String(endStation));
+        this.stations[endStation].addInOrder(order);
+
         this.openOrders.push(order);
 
-        this.renderStationOrders(beginStation);
-        this.renderStationOrders(endStation);
         return true;
     }
 
+    getStationOpenOrder(station_index: integer) {
+        for (let order of this.openOrders) {
+            if (order.sourceStation == station_index) {
+                return order;
+            }
+        }
+        return null;
+    }
+
     pickOrder(order: Order): void {
+        console.log('Removing order ', order.id, ' from ', order.sourceStation);
         assert(order.status == OrderStatus.open);
         order.status = OrderStatus.taken;
 
-        delete this.stationSourceOrder[order.sourceStation];
-        let idx = this.stationSinkOrders[order.sinkStation].indexOf(order);
-        this.stationSinkOrders[order.sinkStation].splice(idx, 1);
-
-        idx = this.openOrders.indexOf(order);
+        let idx = this.openOrders.indexOf(order);
         this.openOrders.splice(idx, 1);
+
+        this.stations[order.sourceStation].removeOutOrder(order);
+        // TODO: Mark order as picked in In station.
 
         this.ordersInInventory.push(order);
         this.orderInventory.setOrders(this.ordersInInventory);
-
-        this.renderStationOrders(order.sourceStation);
-        this.renderStationOrders(order.sinkStation);
     }
 
     fulfilOrdersInStations(station): number {
         let originalInventorySize = this.ordersInInventory.length;
-        this.ordersInInventory.forEach(el => { console.log(el.sinkStation, station.index, el.sinkStation != station.index) })
+        for (let order of this.ordersInInventory) {
+            if (order.sinkStation == station.id) {
+                station.tryFulfilInOrder(order.id);
+            }
+        }
         this.ordersInInventory = this.ordersInInventory.filter(order => order.sinkStation != station.index);
         let newInventorySize = this.ordersInInventory.length;
         this.orderInventory.setOrders(this.ordersInInventory);
         return originalInventorySize - newInventorySize;
-    }
-
-    renderStationOrders(station: integer): void {
-        // Remove old sprites.
-        this.stationContainer[station].removeAll();
-
-        let locX = this.stations[station].column * CONST.tileSize;
-        let locY = this.stations[station].row * CONST.tileSize;
-        if (station in this.stationSourceOrder) {
-            let order = this.stationSourceOrder[station];
-            var orderSource = new Phaser.GameObjects.Image(this.scene, locX, locY, 'orderSource');
-            orderSource.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
-            this.stationContainer[station].add(orderSource);
-            let text = new Phaser.GameObjects.Text(this.scene, locX - 20, locY - 20, String(order.id), { fontSize: "15pt", color: "#000" });
-            this.stationContainer[station].add(text);
-        }
-
-        for (let i = 0; i < this.stationSinkOrders[station].length; ++i) {
-            let order = this.stationSinkOrders[station][i];
-            let orderSink = new Phaser.GameObjects.Image(this.scene, locX + 80 + i * 50, locY + 80, 'orderSink');
-            orderSink.setDisplaySize(CONST.tileSize / 2, CONST.tileSize / 2);
-            this.stationContainer[station].add(orderSink);
-            // let text = new Phaser.GameObjects.Text(this.scene, locX + 60 + i * 50, locY + 60, String(order.id), { fontSize: "15pt", color: "#000" });
-            // this.stationContainer[station].add(text);
-        }
     }
 }
