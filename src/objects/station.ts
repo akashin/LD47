@@ -22,7 +22,7 @@ export class Station extends Phaser.GameObjects.Container {
         this.station_tile.setDisplaySize(CONST.tileSize, CONST.tileSize);
         this.add(this.station_tile);
 
-        this.station_name_text = scene.add.text(0, 0, 'A');
+        this.station_name_text = scene.add.text(0, 0, this.station_name);
         this.add(this.station_name_text);
     }
 
