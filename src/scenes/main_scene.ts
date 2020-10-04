@@ -1,39 +1,38 @@
 import { CONST } from "../const";
 import { Order, OrderManager } from "../core/order";
 import { GameMap, GroundType, RailType } from "../core/map";
-import { randomInt } from "../utils/math";
 import { Station } from "../objects/station";
 import { Player } from "../core/player";
 import { Position } from "../utils/position";
 import { Direction } from "../utils/direction";
 
 export class MainScene extends Phaser.Scene {
+    // Graphics.
     private backgroundSprite: Phaser.GameObjects.Sprite;
-    private msSinceLastTick: number;
-    private tickCounter: integer;
-    private orders: Order[];
-    private orderSources: Phaser.GameObjects.Image[];
-    private orderSinks: Phaser.GameObjects.Image[];
-    private takeOrderKey: Phaser.Input.Keyboard.Key;
-    private gameMap: GameMap;
-    private stationLocations: Array<Array<integer>>;
-    private usedSourceStationIds: Array<integer>;
-    private stations: Station[];
-    private orderManager: OrderManager;
-    private player: Player;
-
     // Holds data about the actual map.
     private tilemap: Phaser.Tilemaps.Tilemap;
     // Stores tiles images.
     private tileset: Phaser.Tilemaps.Tileset;
     private backgroundLayer: Phaser.Tilemaps.StaticTilemapLayer;
 
+    // Inputs.
+    private takeOrderKey: Phaser.Input.Keyboard.Key;
+
+    // Game time.
+    private msSinceLastTick: number;
+    private tickCounter: integer;
+
+    // Game objects.
+    private gameMap: GameMap;
+    private stations: Station[];
+    private orderManager: OrderManager;
+    private player: Player;
+
     constructor() {
         super({
             key: "MainScene"
         });
     }
-
 
     // Preloads game resources.
     preload(): void {
@@ -79,10 +78,6 @@ export class MainScene extends Phaser.Scene {
                 gameHeight / this.backgroundSprite.height,
             );
         }
-
-        this.orders = [];
-        this.orderSources = [];
-        this.orderSinks = [];
 
         // this.tilemap = this.make.tilemap({ key: "level" });
         // this.tileset = this.tilemap.addTilesetImage("_bloodnight", "tiles");
