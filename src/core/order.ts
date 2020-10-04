@@ -47,7 +47,7 @@ export class OrderManager {
     }
 
     pickResource(factory: Factory): void {
-        this.resourcesInInventory.push(factory.resource_type);
+        this.resourcesInInventory.push(factory.resourceType);
         this.resourceInventory.setResources(this.resourcesInInventory);
     }
 

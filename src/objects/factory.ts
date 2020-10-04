@@ -45,29 +45,37 @@ export class Factory extends Phaser.GameObjects.Container {
     column: integer;
     row: integer;
     index: integer;
-    public resource_type: ResourceType;
+    public resourceType: ResourceType;
 
-    station_sprite: Phaser.GameObjects.Sprite;
-    station_resource_sprite: Phaser.GameObjects.Sprite;
+    factorySprite: Phaser.GameObjects.Sprite;
+    factoryResourceSprite: Phaser.GameObjects.Sprite;
 
-    constructor(scene, params) {
+    constructor(scene: Phaser.Scene, params) {
         super(scene, params.x, params.y);
         this.column = params.column;
         this.row = params.row;
-        this.resource_type = params.resource_type;
+        this.resourceType = params.resourceType;
 
-        this.station_sprite = scene.add.sprite(0, 0, "factory_tile");
-        this.station_sprite.setOrigin(0, 0);
-        this.station_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
-        this.add(this.station_sprite);
+        this.factorySprite = new Phaser.GameObjects.Sprite(scene, 0, 0, 'factory_tile');
+        this.factorySprite.setOrigin(0, 0);
+        this.factorySprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        this.add(this.factorySprite);
 
-        this.station_sprite = scene.add.sprite(CONST.tileSize, 0, getResourceTextureName(this.resource_type));
-        this.station_sprite.setOrigin(0, 0);
-        this.station_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
-        this.add(this.station_sprite);
+        this.factoryResourceSprite = new Phaser.GameObjects.Sprite(scene, CONST.tileSize, 0, getResourceTextureName(this.resourceType));
+        this.factoryResourceSprite.setOrigin(0, 0);
+        this.factoryResourceSprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        this.add(this.factoryResourceSprite);
     }
 
     isNearby(column: integer, row: integer): boolean {
         return Math.max(Math.abs(column - this.column), Math.abs(row - this.row)) <= CONST.orderPickupDistance;
+    }
+
+    setHighlighted(highlighted: boolean): void {
+        if (highlighted) {
+            this.factorySprite.setTint(0xFF0000);
+        } else {
+            this.factorySprite.setTint(0xFFFFFF);
+        }
     }
 }

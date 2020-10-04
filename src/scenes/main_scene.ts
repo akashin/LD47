@@ -194,9 +194,9 @@ export class MainScene extends Phaser.Scene {
             this.addFactory(Math.round(object.x / 32), Math.round(object.y / 32) - 1, typeToResourceType[object.properties[0].value]);
         });
 
-        for (let station of this.stations) {
-            this.gameMap.generatePlatform(station.column, station.row);
-        }
+        // for (let station of this.stations) {
+        //     this.gameMap.generatePlatform(station.column, station.row);
+        // }
         for (let factory of this.factories) {
             this.gameMap.generatePlatform(factory.column, factory.row);
         }
@@ -214,18 +214,17 @@ export class MainScene extends Phaser.Scene {
         this.buildingsContainer.add(station);
     }
 
-    addFactory(x: integer, y: integer, resource_type: ResourceType): void {
+    addFactory(x: integer, y: integer, resourceType: ResourceType): void {
         let factory = new Factory(this, {
             x: x * CONST.tileSize,
             y: y * CONST.tileSize,
             column: x,
             row: y,
-            resource_type: resource_type,
+            resourceType: resourceType,
         });
         this.factories.push(factory);
         this.buildingsContainer.add(factory);
     }
-
 
     // Called periodically to update game state.
     update(time: number, delta: number): void {
@@ -246,6 +245,16 @@ export class MainScene extends Phaser.Scene {
                 } else {
                     this.orderManager.pickResource(nearbyFactory);
                 }
+            }
+        }
+
+        {
+            for (let factory of this.factories) {
+                factory.setHighlighted(false);
+            }
+            let nearbyFactory = this.findNearbyFactory();
+            if (nearbyFactory) {
+                nearbyFactory.setHighlighted(true);
             }
         }
 
