@@ -75,6 +75,7 @@ export class MainScene extends Phaser.Scene {
 
     // Creates game objects.
     create(): void {
+
         var gameWidth = this.game.config.width as number;
         var gameHeight = this.game.config.height as number;
 
@@ -140,6 +141,8 @@ export class MainScene extends Phaser.Scene {
         // Change ground
         this.gameMap.updateGround(5, 5, GroundType.Grass);
 
+        // Reset station counter in case it's not our first game.
+        Station.station_count = 0;
         // Add stations.
         this.addStation(x0 + 1, y0 + 1);
         this.addStation(x0 + 1, y1 - 1);
