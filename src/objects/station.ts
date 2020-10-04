@@ -5,7 +5,6 @@ class Demand extends Phaser.GameObjects.Container {
     resourceType: ResourceType;
     resourceSprite: Phaser.GameObjects.Sprite;
     dialogSprite: Phaser.GameObjects.Sprite;
-    resourceTypeText: Phaser.GameObjects.Text;
 
     constructor(scene: Phaser.Scene, resourceType: ResourceType) {
         super(scene, 0, 0);
@@ -20,9 +19,6 @@ class Demand extends Phaser.GameObjects.Container {
         // this.resourceSprite.setDisplayOrigin(0, this.resourceSprite.height);
         this.resourceSprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
         this.add(this.resourceSprite);
-
-        this.resourceTypeText = scene.add.text(0, 0, resourceType.toString());
-        this.add(this.resourceTypeText);
     }
 }
 
@@ -34,7 +30,7 @@ export class Station extends Phaser.GameObjects.Container {
     station_name: string;
 
     station_sprite: Phaser.GameObjects.Sprite;
-    station_name_text: Phaser.GameObjects.Text;
+    // station_name_text: Phaser.GameObjects.Text;
 
     demand: Demand;
 
@@ -50,8 +46,8 @@ export class Station extends Phaser.GameObjects.Container {
         this.station_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
         this.add(this.station_sprite);
 
-        this.station_name_text = scene.add.text(0, 0, this.station_name);
-        this.add(this.station_name_text);
+        // this.station_name_text = scene.add.text(0, 0, this.station_name);
+        // this.add(this.station_name_text);
 
         this.demand = null;
     }
