@@ -48,7 +48,7 @@ export class Factory extends Phaser.GameObjects.Container {
     public resource_type: ResourceType;
 
     station_sprite: Phaser.GameObjects.Sprite;
-    station_name_text: Phaser.GameObjects.Text;
+    station_resource_sprite: Phaser.GameObjects.Sprite;
 
     constructor(scene, params) {
         super(scene, params.x, params.y);
@@ -61,8 +61,10 @@ export class Factory extends Phaser.GameObjects.Container {
         this.station_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
         this.add(this.station_sprite);
 
-        this.station_name_text = scene.add.text(0, 0, this.resource_type);
-        this.add(this.station_name_text);
+        this.station_sprite = scene.add.sprite(CONST.tileSize, 0, getResourceTextureName(this.resource_type));
+        this.station_sprite.setOrigin(0, 0);
+        this.station_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        this.add(this.station_sprite);
     }
 
     isNearby(column: integer, row: integer): boolean {
