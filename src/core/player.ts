@@ -27,7 +27,6 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     update(delta: number): void {
-        console.log((this.mapPosition.x + 0.5) * CONST.tileSize, (this.mapPosition.y + 0.5) * CONST.tileSize);
         this.movementState += delta / 1000.0 * CONST.trainSpeed;
         if (this.movementState >= 1.0) {
             this.movementState -= 1.0;
@@ -35,10 +34,7 @@ export class Player extends Phaser.GameObjects.Container {
             this.mapPosition = this.mapPosition.add(this.movementDirection);
 
             let railType = this.gameMap.getRailType(this.mapPosition.x, this.mapPosition.y);
-            console.log('railType is', railType, 'movementDirection is', this.movementDirection);
             this.movementDirection = getAnotherEndDirection(railType, this.movementDirection);
-
-            console.log('next direction is', this.movementDirection);
         }
 
         let dx = getDirectionDX(this.movementDirection) * this.movementState;
