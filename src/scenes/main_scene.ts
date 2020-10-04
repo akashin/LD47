@@ -139,22 +139,22 @@ export class MainScene extends Phaser.Scene {
         // Reset station counter in case it's not our first game.
         Station.station_count = 0;
         // Add stations.
-        this.addStation(x0 + 1, y0 + 1, 'A');
-        this.addStation(x0 + 1, 8 + 1, 'A 1/4');
-        this.addStation(x0 + 1, 12 + 1, 'A 1/2');
-        this.addStation(x0 + 1, 16 + 1, 'A 3/4');
-        this.addStation(x0 + 1, y1 - 1, 'B');
-        this.addStation(5, y1 - 1, 'B 1/4');
-        this.addStation(10, y1 - 1, 'B 1/2');
-        this.addStation(15, y1 - 1, 'B 3/4');
-        this.addStation(x1 - 1, y0 + 1, 'C');
-        this.addStation(5, y0 + 1, 'C 1/4');
-        this.addStation(10, y0 + 1, 'C 1/2');
-        this.addStation(15, y0 + 1, 'C 3/4');
-        this.addStation(x1 - 1, y1 - 1, 'D');
-        this.addStation(x1 - 1, 8 + 1, 'D 1/4');
-        this.addStation(x1 - 1, 12 + 1, 'D 1/2');
-        this.addStation(x1 - 1, 16 + 1, 'D 3/4');
+        this.addStation(x0 + 1, y0 + 1, '0');
+        this.addStation(x0 + 1, 8 + 1, '15');
+        this.addStation(x0 + 1, 12 + 1, '14');
+        this.addStation(x0 + 1, 16 + 1, '13');
+        this.addStation(x0 + 1, y1 - 1, '12');
+        this.addStation(5, y1 - 1, '11');
+        this.addStation(10, y1 - 1, '10');
+        this.addStation(15, y1 - 1, '9');
+        this.addStation(x1 - 1, y0 + 1, '4');
+        this.addStation(5, y0 + 1, '1');
+        this.addStation(10, y0 + 1, '2');
+        this.addStation(15, y0 + 1, '3');
+        this.addStation(x1 - 1, y1 - 1, '8');
+        this.addStation(x1 - 1, 8 + 1, '5');
+        this.addStation(x1 - 1, 12 + 1, '6');
+        this.addStation(x1 - 1, 16 + 1, '7');
     }
 
     addStation(x: integer, y: integer, station_name: string): void {
