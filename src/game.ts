@@ -9,7 +9,7 @@ const config: Phaser.Types.Core.GameConfig = {
     height: 600,
     type: Phaser.AUTO,
     parent: "game",
-    scene: [TitleScene, MainScene, EndScene],
+    scene: [MainScene, TitleScene, EndScene],
     input: {
         keyboard: true
     },
