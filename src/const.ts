@@ -4,7 +4,7 @@ export let CONST = {
     // Map
     mapWidth: 50,
     mapHeight: 50,
-    tileSize: 16,
+    tileSize: 32,
 
     // Stations.
     orderPickupDistance: 1.1,

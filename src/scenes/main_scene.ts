@@ -120,9 +120,9 @@ export class MainScene extends Phaser.Scene {
     generateMap(): void {
         // Add rails
         let x0 = 2;
-        let x1 = 40;
+        let x1 = 25;
         let y0 = 2;
-        let y1 = 30;
+        let y1 = 20;
 
         for (let x = x0 + 1; x < x1; ++x) {
             this.gameMap.updateRail(x, y0, RailType.Horizontal);
