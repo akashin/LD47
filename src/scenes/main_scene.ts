@@ -3,7 +3,9 @@ import { Order, OrderManager } from "../core/order";
 import { GameMap, GroundType, RailType } from "../core/map";
 import { randomInt } from "../utils/math";
 import { Station } from "../objects/station";
-import { PlayerState } from "../core/player_state";
+import { Player } from "../core/player";
+import { Position } from "../utils/position";
+import { Direction } from "../utils/direction";
 
 export class MainScene extends Phaser.Scene {
     private backgroundSprite: Phaser.GameObjects.Sprite;
@@ -13,12 +15,12 @@ export class MainScene extends Phaser.Scene {
     private orderSources: Phaser.GameObjects.Image[];
     private orderSinks: Phaser.GameObjects.Image[];
     private takeOrderKey: Phaser.Input.Keyboard.Key;
-    private map: GameMap;
+    private gameMap: GameMap;
     private stationLocations: Array<Array<integer>>;
     private usedSourceStationIds: Array<integer>;
     private stations: Station[];
     private orderManager: OrderManager;
-    private playerState: PlayerState;
+    private player: Player;
 
     private tmpStationIdx: number;
     private tmpPositionText: Phaser.GameObjects.Text;
@@ -70,8 +72,6 @@ export class MainScene extends Phaser.Scene {
         var gameWidth = this.game.config.width as number;
         var gameHeight = this.game.config.height as number;
 
-        this.playerState = new PlayerState();
-
         // Draw background image.
         {
             this.backgroundSprite = this.add.sprite(0, 0, "gameBackground");
@@ -93,29 +93,32 @@ export class MainScene extends Phaser.Scene {
         // this.backgroundLayer = this.tilemap.createStaticLayer("Background", this.tileset, 0, 0);
 
         // Map
-        this.map = new GameMap(this, 0, 0);
-        this.add.existing(this.map);
+        this.gameMap = new GameMap(this, 0, 0);
+        this.add.existing(this.gameMap);
         this.generateMap();
+
+        this.player = new Player(this, this.gameMap, new Position(5, 4), Direction.Right);
+        this.add.existing(this.player);
 
         this.orderManager = new OrderManager(this, this.stations);
 
         this.tmpStationIdx = 0;
-        this.tmpPositionText = this.add.text(this.playerState.position.x + 30, this.playerState.position.y + 30, '*');
+        this.tmpPositionText = this.add.text(this.player.x + 30, this.player.y + 30, '*');
     }
 
     generateMap(): void {
         // Add rails
-        this.map.updateRail(4, 4, RailType.DownRight);
-        this.map.updateRail(5, 4, RailType.Horizontal);
-        this.map.updateRail(6, 4, RailType.DownLeft);
-        this.map.updateRail(6, 5, RailType.Vertical);
-        this.map.updateRail(6, 6, RailType.UpLeft);
-        this.map.updateRail(5, 6, RailType.Horizontal);
-        this.map.updateRail(4, 6, RailType.UpRight);
-        this.map.updateRail(4, 5, RailType.Vertical);
+        this.gameMap.updateRail(4, 4, RailType.DownRight);
+        this.gameMap.updateRail(5, 4, RailType.Horizontal);
+        this.gameMap.updateRail(6, 4, RailType.DownLeft);
+        this.gameMap.updateRail(6, 5, RailType.Vertical);
+        this.gameMap.updateRail(6, 6, RailType.UpLeft);
+        this.gameMap.updateRail(5, 6, RailType.Horizontal);
+        this.gameMap.updateRail(4, 6, RailType.UpRight);
+        this.gameMap.updateRail(4, 5, RailType.Vertical);
 
         // Change ground
-        this.map.updateGround(5, 5, GroundType.Grass);
+        this.gameMap.updateGround(5, 5, GroundType.Grass);
 
         // Add stations.
         this.addStation(3, 3);
@@ -137,6 +140,8 @@ export class MainScene extends Phaser.Scene {
 
     // Called periodically to update game state.
     update(time: number, delta: number): void {
+        this.player.update(delta);
+
         if (this.takeOrderKey.isDown) {
             let nearbyStation = this.findNearbyStation();
             if (nearbyStation) {
@@ -149,7 +154,7 @@ export class MainScene extends Phaser.Scene {
                     }
                 } else {
                     console.log('No order');
-                }   
+                }
             }
         }
         this.msSinceLastTick += delta;
@@ -163,7 +168,7 @@ export class MainScene extends Phaser.Scene {
     findNearbyStation(): Station {
         var nearbyStations = [];
         this.stations.forEach(station => {
-            if (station.isNearby(this.playerState.position.x, this.playerState.position.y)) {
+            if (station.isNearby(this.player.x, this.player.y)) {
               nearbyStations.push(station);
             }
         });
@@ -192,12 +197,12 @@ export class MainScene extends Phaser.Scene {
             }
         }
         if ((this.tickCounter % 30) == 1) {
-            this.playerState.position.x = this.stations[this.tmpStationIdx].column;
-            this.playerState.position.y = this.stations[this.tmpStationIdx].row;
+            this.player.x = this.stations[this.tmpStationIdx].column;
+            this.player.y = this.stations[this.tmpStationIdx].row;
             this.tmpStationIdx = (this.tmpStationIdx + 1) % 4;
             this.tmpPositionText.setPosition(
-                this.playerState.position.x * CONST.tileSize,
-                this.playerState.position.y * CONST.tileSize
+                this.player.x * CONST.tileSize,
+                this.player.y * CONST.tileSize
             );
             this.fulfulNearbyOrders();
         }

@@ -1,4 +1,5 @@
 import { CONST } from "../const";
+import { Direction, getOppositeDirection } from "../utils/direction";
 
 export enum GroundType {
     Grass,
@@ -12,6 +13,35 @@ export enum RailType {
     DownRight,
     DownLeft,
     UpLeft,
+}
+
+function getRailDirections(railType: RailType): [Direction, Direction] {
+    switch (railType) {
+        case RailType.Horizontal:
+            return [Direction.Left, Direction.Right];
+        case RailType.Vertical:
+            return [Direction.Up, Direction.Down];
+        case RailType.UpRight:
+            return [Direction.Up, Direction.Right];
+        case RailType.DownRight:
+            return [Direction.Down, Direction.Right];
+        case RailType.DownLeft:
+            return [Direction.Down, Direction.Left];
+        case RailType.UpLeft:
+            return [Direction.Up, Direction.Left];
+    }
+    throw new Error('Unknown RailType');
+}
+
+export function getAnotherEndDirection(railType: RailType, direction: Direction): Direction {
+    let directions: [Direction, Direction] = getRailDirections(railType);
+    if (direction == getOppositeDirection(directions[0])) {
+        return directions[1];
+    }
+    if (direction == getOppositeDirection(directions[1])) {
+        return directions[0];
+    }
+    return null;
 }
 
 class Tile extends Phaser.GameObjects.Sprite {
@@ -149,6 +179,10 @@ export class GameMap extends Phaser.GameObjects.Container {
                 this.tiles[x][y].updateGroundType(groundType);
             }
         }
+    }
+
+    getRailType(x: integer, y: integer): RailType {
+        return this.rails[x][y].railType;
     }
 
     updateRail(x: integer, y: integer, railType: RailType): void {
