@@ -18,8 +18,8 @@ export let CONST = {
     addOrderFrequency: 30,
 
     // Train
-    trainMinSpeed: 1,
-    trainMaxSpeed: 5,
+    trainMinSpeed: 3,
+    trainMaxSpeed: 10,
     trainGoodDistanceInTiles: 5,
     trainIgnoreDistanceInTiles: 1,
     trainCarriagesCount: 5,
