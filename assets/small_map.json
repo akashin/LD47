@@ -3,7 +3,7 @@
     {
      "export":
         {
-         "target":"maps"
+         "format":"json"
         }
     },
  "height":10,
@@ -31,8 +31,17 @@
  "tileheight":64,
  "tilesets":[
         {
+         "columns":7,
          "firstgid":1,
-         "source":"maps\/spritesheet.json"
+         "image":"spritesheet.png",
+         "imageheight":64,
+         "imagewidth":448,
+         "margin":0,
+         "name":"spritesheet",
+         "spacing":0,
+         "tilecount":7,
+         "tileheight":64,
+         "tilewidth":64
         }],
  "tilewidth":64,
  "type":"map",
