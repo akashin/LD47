@@ -122,14 +122,14 @@ export class MainScene extends Phaser.Scene {
     }
 
     addStation(x: integer, y: integer): void {
-      let station = new Station(this, {
-        x: x * CONST.tileSize,
-        y: y * CONST.tileSize,
-        column: x,
-        row: y,
-      });
-      this.stations.push(station);
-      this.add.existing(station);
+        let station = new Station(this, {
+            x: x * CONST.tileSize,
+            y: y * CONST.tileSize,
+            column: x,
+            row: y,
+        });
+        this.stations.push(station);
+        this.add.existing(station);
     }
 
     // Called periodically to update game state.
@@ -164,11 +164,11 @@ export class MainScene extends Phaser.Scene {
         this.stations.forEach(station => {
             // TODO: Figure out whether we need to do comparison in L2 space.
             if (station.isNearby(this.player.x / CONST.tileSize, this.player.y / CONST.tileSize)) {
-              nearbyStations.push(station);
+                nearbyStations.push(station);
             }
         });
         if (nearbyStations.length > 0) {
-          console.log("Found ", nearbyStations.length, " stations nearby.");
+            console.log("Found ", nearbyStations.length, " stations nearby.");
         }
         var assert = require('assert');
         assert(nearbyStations.length <= 1);
