@@ -54,7 +54,9 @@ export class OrderManager {
     fulfilDemandInStation(station: Station): number {
         for (let i = 0; i < this.resourcesInInventory.length; ++i) {
             if (station.tryFulfilDemand(this.resourcesInInventory[i])) {
+                console.log('Fulfilled demand at station', station.index, 'and resource', this.resourcesInInventory[i]);
                 this.resourcesInInventory.splice(i);
+                this.resourceInventory.setResources(this.resourcesInInventory);
                 this.demand_count -= 1;
                 return 1;
             }

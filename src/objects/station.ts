@@ -77,7 +77,11 @@ export class Station extends Phaser.GameObjects.Container {
         if (!this.hasDemand()) {
             return false;
         }
-        // TODO: Do some fulfil animation.
-        return this.demand.resource_type == resource_type;
+        if (this.demand.resource_type == resource_type) {
+            // TODO: Do some fulfil animation.
+            this.removeDemand();
+            return true;
+        }
+        return false;
     }
 }
