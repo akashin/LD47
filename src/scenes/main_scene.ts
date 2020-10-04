@@ -1,5 +1,5 @@
 import { CONST } from "../const";
-import { Order, OrderManager } from "../core/order";
+import { OrderManager } from "../core/order";
 import { GameMap, GroundType, RailType } from "../core/map";
 import { Station } from "../objects/station";
 import { Player } from "../core/player";
@@ -194,7 +194,7 @@ export class MainScene extends Phaser.Scene {
         if (this.takeOrderKey.isDown) {
             let nearbyFactory = this.findNearbyFactory();
             if (nearbyFactory) {
-                if (this.orderManager.resourcesInInventory.length < CONST.inventorySize) {
+                if (this.orderManager.resourcesInInventory.length >= CONST.inventorySize) {
                     console.log('Inventory is full!');
                 } else {
                     this.orderManager.pickResource(nearbyFactory);

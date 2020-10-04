@@ -1,5 +1,4 @@
 import { CONST } from "../const";
-import { Order } from "../core/order";
 import { ResourceType } from "./factory";
 
 class Demand extends Phaser.GameObjects.Container {

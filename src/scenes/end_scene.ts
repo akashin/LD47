@@ -1,5 +1,4 @@
 import { CONST } from "../const";
-import { Order } from "../core/order";
 
 export class EndScene extends Phaser.Scene {
     private backgroundSprite: Phaser.GameObjects.Sprite;

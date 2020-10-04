@@ -1,4 +1,3 @@
-import { Order } from "../core/order";
 import { ResourceType } from "../objects/factory";
 
 export class OrderInventory extends Phaser.GameObjects.Container {
