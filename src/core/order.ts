@@ -125,7 +125,7 @@ export class OrderManager {
         if (station in this.stationSourceOrder) {
             let order = this.stationSourceOrder[station];
             var orderSource = new Phaser.GameObjects.Image(this.scene, locX, locY, 'orderSource');
-            orderSource.setDisplaySize(CONST.tileSize / 2, CONST.tileSize / 2);
+            orderSource.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
             this.stationContainer[station].add(orderSource);
             let text = new Phaser.GameObjects.Text(this.scene, locX - 20, locY - 20, String(order.id), { fontSize: "15pt", color: "#000" });
             this.stationContainer[station].add(text);
