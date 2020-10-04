@@ -39,8 +39,8 @@ export class OrderManager {
         }
         assert(this.stations[station_index].index == station_index);
 
-        // TODO: Generate resource type.
-        this.stations[station_index].setDemand(ResourceType.Steel);
+        let resource_type = randomInt(CONST.resourceCount);
+        this.stations[station_index].setDemand(resource_type);
         this.demand_count += 1;
 
         return true;

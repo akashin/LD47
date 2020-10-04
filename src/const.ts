@@ -23,4 +23,7 @@ export let CONST = {
     trainGoodDistanceInTiles: 5,
     trainIgnoreDistanceInTiles: 1,
     trainCarriagesCount: 5,
+
+    // Resources.
+    resourceCount: 5,
 }
