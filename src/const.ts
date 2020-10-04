@@ -22,4 +22,5 @@ export let CONST = {
     trainMaxSpeed: 5,
     trainGoodDistanceInTiles: 5,
     trainIgnoreDistanceInTiles: 1,
+    trainCarriagesCount: 5,
 }

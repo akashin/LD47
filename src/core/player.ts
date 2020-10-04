@@ -1,16 +1,23 @@
 import { CONST } from "../const";
-import { Direction, getDirectionDX, getDirectionDY } from "../utils/direction";
+import { Direction, getDirectionDX, getDirectionDY, getOppositeDirection } from "../utils/direction";
 import { Position } from "../utils/position";
 import { GameMap, getAnotherEndDirection } from "./map";
 
+enum TramSectionType {
+    Head,
+    Carriage,
+}
+
 class TramSectionState extends Phaser.GameObjects.Sprite {
+    public tramSectionType: TramSectionType;
     public mapPosition: Position;
     public movementDirection: Direction;
     public movementState: number = 0.0;
 
-    constructor(scene: Phaser.Scene, mapPosition: Position, movementDirection: Direction) {
-        super(scene, 0, 0, 'tram_head');
+    constructor(scene: Phaser.Scene, mapPosition: Position, movementDirection: Direction, tramSectionType: TramSectionType) {
+        super(scene, 0, 0, tramSectionType == TramSectionType.Head ? 'tram_head' : 'tram_carriage');
 
+        this.tramSectionType = tramSectionType;
         this.mapPosition = mapPosition;
         this.movementDirection = movementDirection;
 
@@ -19,6 +26,27 @@ class TramSectionState extends Phaser.GameObjects.Sprite {
 
     private updateScale(): void {
         this.setDisplaySize(CONST.tileSize * 0.6, CONST.tileSize * 0.6);
+    }
+
+    update(): void {
+        switch (this.movementDirection) {
+            case Direction.Up:
+                this.setAngle(270);
+                this.setFlipX(true);
+                break;
+            case Direction.Right:
+                this.setAngle(0);
+                this.setFlipX(true);
+                break;
+            case Direction.Down:
+                this.setAngle(90);
+                this.setFlipX(true);
+                break;
+            case Direction.Left:
+                this.setAngle(0);
+                this.setFlipX(false);
+                break;
+        }
     }
 }
 
@@ -36,8 +64,17 @@ export class Player extends Phaser.GameObjects.Container {
         this.gameMap = gameMap;
 
         this.tramSectionStates = new Array<TramSectionState>();
-        this.tramSectionStates.push(new TramSectionState(scene, mapPosition, movementDirection))
-        this.add(this.tramSectionStates[0]);
+        for (let i = 0; i < 1 + CONST.trainCarriagesCount; ++i) {
+            let tramSectionType = i == 0 ? TramSectionType.Head : TramSectionType.Carriage;
+            let tramSectionState = new TramSectionState(scene, mapPosition, movementDirection, tramSectionType);
+            this.tramSectionStates.push(tramSectionState)
+            this.add(tramSectionState);
+
+            let railType = this.gameMap.getRailType(mapPosition.x, mapPosition.y);
+            let backwardDirection = getAnotherEndDirection(railType, getOppositeDirection(movementDirection));
+            mapPosition = mapPosition.add(backwardDirection);
+            movementDirection = getOppositeDirection(backwardDirection);
+        }
     }
 
     update(delta: number, distanceToNearestStation: number): void {
@@ -59,6 +96,8 @@ export class Player extends Phaser.GameObjects.Container {
 
                 let railType = this.gameMap.getRailType(state.mapPosition.x, state.mapPosition.y);
                 state.movementDirection = getAnotherEndDirection(railType, state.movementDirection);
+
+                state.update();
             }
         }
 
@@ -70,6 +109,15 @@ export class Player extends Phaser.GameObjects.Container {
             this.setPosition(
                 (headSection.mapPosition.x + dx + 0.5) * CONST.tileSize,
                 (headSection.mapPosition.y + dy + 0.5) * CONST.tileSize
+            );
+        }
+
+        for (let section of this.tramSectionStates) {
+            let dx = getDirectionDX(section.movementDirection) * section.movementState;
+            let dy = getDirectionDY(section.movementDirection) * section.movementState;
+            section.setPosition(
+                (section.mapPosition.x + dx + 0.5) * CONST.tileSize - this.x,
+                (section.mapPosition.y + dy + 0.5) * CONST.tileSize - this.y
             );
         }
     }
