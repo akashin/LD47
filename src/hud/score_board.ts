@@ -1,6 +1,6 @@
 export class ScoreBoard extends Phaser.GameObjects.Container {
     private scoreBoardText: Phaser.GameObjects.Text;
-    private score: number;
+    public score: number;
 
     constructor(scene, x: number, y: number) {
         super(scene, x, y);

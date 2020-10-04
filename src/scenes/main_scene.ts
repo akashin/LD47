@@ -300,7 +300,7 @@ export class MainScene extends Phaser.Scene {
 
     // Called every tickDelta ticks to update game state.
     updateStep(): void {
-        if ((this.tickCounter % CONST.addOrderFrequency) == 1) {
+        if ((this.tickCounter % Math.max(CONST.addOrderFrequency - 4 * this.scoreBoard.score, 10)) == 1) {
             if (!this.orderManager.addDemand()) {
                 console.log('You\'re dead!')
                 this.scene.start("EndScene");
