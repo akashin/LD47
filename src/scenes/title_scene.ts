@@ -39,9 +39,9 @@ export class TitleScene extends Phaser.Scene {
             );
         }
         let text = "Help a Mars colony grow and prosper!\n\n";
-        text += "Pick resources with the space button and\n";
+        text += "Pick resources by clicking and\n";
         text += "deliver it to settlements in need.\n\n";
-        text += "Press space to start.";
+        text += "Click anywhere to start.";
         this.gameNameText = this.add.text(
             gameWidth / 2 - 250, gameHeight / 2 - 100, text, {color: 'Yellow', fontSize: '20pt'}
         )

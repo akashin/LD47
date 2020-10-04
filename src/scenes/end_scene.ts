@@ -43,7 +43,7 @@ export class EndScene extends Phaser.Scene {
         }
         let text = "You lost!\n\n";
         text += 'Score: ' + String(this.score) + '\n\n';
-        text += "Press space to re-start.\n\n\n\n\n";
+        text += "Click to re-start.\n\n\n\n\n";
         text += "Made by \n";
         let names = ['Andrey Kashin', 'Marina Tarasova', 'Andrew Osipov', 'Alex Novikov'];
         this.randomShuffle(names).forEach(name => {
