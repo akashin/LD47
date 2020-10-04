@@ -53,8 +53,10 @@ export class MainScene extends Phaser.Scene {
         this.load.image('rails_top_bottom', "rails_top_bottom.png");
         this.load.image('rails_top_right', "rails_top_right.png");
         // Tram
-        this.load.image('tram_carriage', 'tram_carriage.png');
-        this.load.image('tram_head', 'tram_head.png');
+        this.load.image('tram_carriage_horizontal', 'tram_carriage_horizontal.png');
+        this.load.image('tram_carriage_vertical', 'tram_carriage_vertical.png');
+        this.load.image('tram_head_horizontal', 'tram_head_horizontal.png');
+        this.load.image('tram_head_vertical', 'tram_head_vertical.png');
         // A useful image to draw squares.
         this.load.image("blank", "blank.png");
 

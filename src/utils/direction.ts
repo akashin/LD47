@@ -43,3 +43,14 @@ export function getOppositeDirection(direction: Direction): Direction {
             return Direction.Right;
     }
 }
+
+export function isDirectionHorizontal(direction: Direction): boolean {
+    switch (direction) {
+        case Direction.Up:
+        case Direction.Down:
+            return false;
+        case Direction.Right:
+        case Direction.Left:
+            return true;
+    }
+}

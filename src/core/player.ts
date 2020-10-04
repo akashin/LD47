@@ -1,5 +1,5 @@
 import { CONST } from "../const";
-import { Direction, getDirectionDX, getDirectionDY, getOppositeDirection } from "../utils/direction";
+import { Direction, getDirectionDX, getDirectionDY, getOppositeDirection, isDirectionHorizontal } from "../utils/direction";
 import { Position } from "../utils/position";
 import { GameMap, getAnotherEndDirection } from "./map";
 
@@ -8,14 +8,30 @@ enum TramSectionType {
     Carriage,
 }
 
-class TramSectionState extends Phaser.GameObjects.Sprite {
+class TramSection extends Phaser.GameObjects.Sprite {
     public tramSectionType: TramSectionType;
     public mapPosition: Position;
     public movementDirection: Direction;
     public movementState: number = 0.0;
 
+    private static getTextureName(movementDirection: Direction, tramSectionType: TramSectionType): string {
+        if (isDirectionHorizontal(movementDirection)) {
+            if (tramSectionType == TramSectionType.Head) {
+                return 'tram_head_horizontal';
+            } else {
+                return 'tram_carriage_horizontal';
+            }
+        } else {
+            if (tramSectionType == TramSectionType.Head) {
+                return 'tram_head_vertical';
+            } else {
+                return 'tram_carriage_vertical';
+            }
+        }
+    }
+
     constructor(scene: Phaser.Scene, mapPosition: Position, movementDirection: Direction, tramSectionType: TramSectionType) {
-        super(scene, 0, 0, tramSectionType == TramSectionType.Head ? 'tram_head' : 'tram_carriage');
+        super(scene, 0, 0, TramSection.getTextureName(movementDirection, tramSectionType));
 
         this.tramSectionType = tramSectionType;
         this.mapPosition = mapPosition;
@@ -29,30 +45,28 @@ class TramSectionState extends Phaser.GameObjects.Sprite {
     }
 
     update(): void {
+        this.setTexture(TramSection.getTextureName(this.movementDirection, this.tramSectionType));
         switch (this.movementDirection) {
             case Direction.Up:
-                this.setAngle(270);
-                this.setFlipX(true);
+                this.setFlip(false, true);
                 break;
             case Direction.Right:
-                this.setAngle(0);
-                this.setFlipX(true);
+                this.setFlip(true, false);
                 break;
             case Direction.Down:
-                this.setAngle(90);
-                this.setFlipX(true);
+                this.setFlip(true, false);
                 break;
             case Direction.Left:
-                this.setAngle(0);
-                this.setFlipX(false);
+                this.setFlip(false, false);
                 break;
         }
+        this.updateScale();
     }
 }
 
 export class Player extends Phaser.GameObjects.Container {
     private gameMap: GameMap;
-    private tramSectionStates: Array<TramSectionState>;
+    private tramSections: Array<TramSection>;
 
     constructor(
         scene: Phaser.Scene,
@@ -63,12 +77,12 @@ export class Player extends Phaser.GameObjects.Container {
         super(scene, (mapPosition.x + 0.5) * CONST.tileSize, (mapPosition.y + 0.5) * CONST.tileSize);
         this.gameMap = gameMap;
 
-        this.tramSectionStates = new Array<TramSectionState>();
+        this.tramSections = new Array<TramSection>();
         for (let i = 0; i < 1 + CONST.trainCarriagesCount; ++i) {
             let tramSectionType = i == 0 ? TramSectionType.Head : TramSectionType.Carriage;
-            let tramSectionState = new TramSectionState(scene, mapPosition, movementDirection, tramSectionType);
-            this.tramSectionStates.push(tramSectionState)
-            this.add(tramSectionState);
+            let tramSection = new TramSection(scene, mapPosition, movementDirection, tramSectionType);
+            this.tramSections.push(tramSection)
+            this.add(tramSection);
 
             let railType = this.gameMap.getRailType(mapPosition.x, mapPosition.y);
             let backwardDirection = getAnotherEndDirection(railType, getOppositeDirection(movementDirection));
@@ -87,22 +101,22 @@ export class Player extends Phaser.GameObjects.Container {
         let ratio = distance / goodDistance;
         let speed = CONST.trainMinSpeed + (CONST.trainMaxSpeed - CONST.trainMinSpeed) * ratio;
 
-        for (let state of this.tramSectionStates) {
-            state.movementState += delta / 1000.0 * speed;
-            if (state.movementState >= 1.0) {
-                state.movementState -= 1.0;
+        for (let section of this.tramSections) {
+            section.movementState += delta / 1000.0 * speed;
+            if (section.movementState >= 1.0) {
+                section.movementState -= 1.0;
 
-                state.mapPosition = state.mapPosition.add(state.movementDirection);
+                section.mapPosition = section.mapPosition.add(section.movementDirection);
 
-                let railType = this.gameMap.getRailType(state.mapPosition.x, state.mapPosition.y);
-                state.movementDirection = getAnotherEndDirection(railType, state.movementDirection);
+                let railType = this.gameMap.getRailType(section.mapPosition.x, section.mapPosition.y);
+                section.movementDirection = getAnotherEndDirection(railType, section.movementDirection);
 
-                state.update();
+                section.update();
             }
         }
 
         {
-            let headSection = this.tramSectionStates[0];
+            let headSection = this.tramSections[0];
 
             let dx = getDirectionDX(headSection.movementDirection) * headSection.movementState;
             let dy = getDirectionDY(headSection.movementDirection) * headSection.movementState;
@@ -112,7 +126,7 @@ export class Player extends Phaser.GameObjects.Container {
             );
         }
 
-        for (let section of this.tramSectionStates) {
+        for (let section of this.tramSections) {
             let dx = getDirectionDX(section.movementDirection) * section.movementState;
             let dy = getDirectionDY(section.movementDirection) * section.movementState;
             section.setPosition(
