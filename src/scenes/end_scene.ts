@@ -4,6 +4,7 @@ export class EndScene extends Phaser.Scene {
     private backgroundSprite: Phaser.GameObjects.Sprite;
     private startKey: Phaser.Input.Keyboard.Key;
     private gameNameText: Phaser.GameObjects.Text;
+    private score: number;
 
     constructor() {
         super({
@@ -17,7 +18,8 @@ export class EndScene extends Phaser.Scene {
     }
 
     // Initializes game state.
-    init(): void {
+    init(data): void {
+        this.score = data.score;
         this.startKey = this.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
@@ -39,6 +41,7 @@ export class EndScene extends Phaser.Scene {
             );
         }
         let text = "Your lost!\n\n";
+        text += 'Score: ' + String(this.score) + '\n\n';
         text += "Press space to re-start.\n\n\n\n\n";
         text += "Made by \n Andrey Kashin,\n Marina Tarasova,\n Andrew Osipov\n and Alex Novikov\nin no particular order."
         this.gameNameText = this.add.text(

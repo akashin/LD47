@@ -303,7 +303,7 @@ export class MainScene extends Phaser.Scene {
         if ((this.tickCounter % Math.max(CONST.addOrderFrequency - 4 * this.scoreBoard.score, 10)) == 1) {
             if (!this.orderManager.addDemand()) {
                 console.log('You\'re dead!')
-                this.scene.start("EndScene");
+                this.scene.start("EndScene", { score: this.scoreBoard.score});
             }
         }
     }
