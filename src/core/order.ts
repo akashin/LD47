@@ -3,6 +3,8 @@ import { OrderInventory } from "../hud/order_inventory";
 import { Station } from "../objects/station";
 import { randomInt } from "../utils/math";
 
+let assert = require('assert');
+
 export enum OrderStatus {
     open,
     taken,
@@ -57,39 +59,37 @@ export class OrderManager {
 
     addOrder(): boolean {
         let numStations = this.stations.length;
-        if (this.openOrders.length < numStations) {
-
-            let beginStation = randomInt(numStations);
-            // Make sure source statation is not already used by some other order.
-            while (beginStation in this.stationSourceOrder) {
-                beginStation = randomInt(numStations);
-            }
-
-            let endStation = randomInt(numStations);
-            // Make sure source and sink are distinct.
-            while (beginStation == endStation) {
-                endStation = randomInt(numStations);
-            }
-
-            var assert = require('assert');
-            assert(this.stations[beginStation].index == beginStation);
-            assert(this.stations[endStation].index == endStation);
-
-            var order = new Order(beginStation, endStation);
-            this.stationSourceOrder[beginStation] = order;
-            this.stationSinkOrders[endStation].push(order);
-            this.openOrders.push(order);
-
-            this.renderStationOrders(beginStation);
-            this.renderStationOrders(endStation);
-            return true;
-        } else {
+        // No more space to create orders.
+        if (this.openOrders.length >= numStations) {
             return false;
         }
+
+        let beginStation = randomInt(numStations);
+        // Make sure source statation is not already used by some other order.
+        while (beginStation in this.stationSourceOrder) {
+            beginStation = randomInt(numStations);
+        }
+
+        let endStation = randomInt(numStations);
+        // Make sure source and sink are distinct.
+        while (beginStation == endStation) {
+            endStation = randomInt(numStations);
+        }
+
+        assert(this.stations[beginStation].index == beginStation);
+        assert(this.stations[endStation].index == endStation);
+
+        var order = new Order(beginStation, endStation);
+        this.stationSourceOrder[beginStation] = order;
+        this.stationSinkOrders[endStation].push(order);
+        this.openOrders.push(order);
+
+        this.renderStationOrders(beginStation);
+        this.renderStationOrders(endStation);
+        return true;
     }
 
     pickOrder(order: Order): void {
-        var assert = require('assert');
         assert(order.status == OrderStatus.open);
         order.status = OrderStatus.taken;
 
@@ -136,8 +136,8 @@ export class OrderManager {
             let orderSink = new Phaser.GameObjects.Image(this.scene, locX + 80 + i * 50, locY + 80, 'orderSink');
             orderSink.setDisplaySize(CONST.tileSize / 2, CONST.tileSize / 2);
             this.stationContainer[station].add(orderSink);
-            let text = new Phaser.GameObjects.Text(this.scene, locX + 60 + i * 50, locY + 60, String(order.id), { fontSize: "15pt", color: "#000" });
-            this.stationContainer[station].add(text);
+            // let text = new Phaser.GameObjects.Text(this.scene, locX + 60 + i * 50, locY + 60, String(order.id), { fontSize: "15pt", color: "#000" });
+            // this.stationContainer[station].add(text);
         }
     }
 }

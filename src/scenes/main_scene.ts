@@ -109,11 +109,6 @@ export class MainScene extends Phaser.Scene {
 
         // this.debugVisualizeNearTiles();
 
-        this.add.text(this.stations[0].column * CONST.tileSize, this.stations[0].row * CONST.tileSize, 'A');
-        this.add.text(this.stations[1].column * CONST.tileSize, this.stations[1].row * CONST.tileSize, 'B');
-        this.add.text(this.stations[2].column * CONST.tileSize, this.stations[2].row * CONST.tileSize, 'C');
-        this.add.text(this.stations[3].column * CONST.tileSize, this.stations[3].row * CONST.tileSize, 'D');
-
         // this.cameras.main.startFollow(this.player);
         // this.cameras.main.setZoom(10);
     }
@@ -144,18 +139,19 @@ export class MainScene extends Phaser.Scene {
         // Reset station counter in case it's not our first game.
         Station.station_count = 0;
         // Add stations.
-        this.addStation(x0 + 1, y0 + 1);
-        this.addStation(x0 + 1, y1 - 1);
-        this.addStation(x1 - 1, y0 + 1);
-        this.addStation(x1 - 1, y1 - 1);
+        this.addStation(x0 + 1, y0 + 1, 'A');
+        this.addStation(x0 + 1, y1 - 1, 'B');
+        this.addStation(x1 - 1, y0 + 1, 'C');
+        this.addStation(x1 - 1, y1 - 1, 'D');
     }
 
-    addStation(x: integer, y: integer): void {
+    addStation(x: integer, y: integer, station_name: string): void {
         let station = new Station(this, {
             x: x * CONST.tileSize,
             y: y * CONST.tileSize,
             column: x,
             row: y,
+            station_name: station_name,
         });
         this.stations.push(station);
         this.add.existing(station);
@@ -201,7 +197,7 @@ export class MainScene extends Phaser.Scene {
             }
         });
         if (nearbyStations.length == 1) {
-            console.log('Near station ' + ['A', 'B','C', 'D'][nearbyStations[0].index]);
+            console.log('Near station ' + ['A', 'B', 'C', 'D'][nearbyStations[0].index]);
         }
         var assert = require('assert');
         assert(nearbyStations.length <= 1);
