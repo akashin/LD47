@@ -21,11 +21,11 @@ export class MainScene extends Phaser.Scene {
 
     // Inputs.
     private takeOrderKey: Phaser.Input.Keyboard.Key;
+    private takenLastUpdate: boolean;
 
     // Game time.
     private msSinceLastTick: number;
     private tickCounter: integer;
-    private lastKeyDetected: number;
 
     // Game objects.
     private gameMap: GameMap;
@@ -100,7 +100,7 @@ export class MainScene extends Phaser.Scene {
         this.tickCounter = 0;
         this.stations = [];
         this.factories = [];
-        this.lastKeyDetected = 0;
+        this.takenLastUpdate = false;
     }
 
     // Creates game objects.
@@ -231,22 +231,25 @@ export class MainScene extends Phaser.Scene {
     update(time: number, delta: number): void {
         this.player.update(delta, this.findNearestStation()[1]);
 
+
         let nearbyStation = this.findNearbyStation();
         if (nearbyStation) {
             let numFulfilled = this.orderManager.fulfilDemandInStation(nearbyStation);
             this.scoreBoard.increaseScore(numFulfilled);
         }
-        let isReady = (time - this.lastKeyDetected) > CONST.minMsBetweenClicks;
-        if (this.takeOrderKey.isDown && isReady) {
-            this.lastKeyDetected = time;
+        if (this.takeOrderKey.isDown && !this.takenLastUpdate) {
+            this.takenLastUpdate = false;
             let nearbyFactory = this.findNearbyFactory();
             if (nearbyFactory) {
                 if (this.orderManager.resourcesInInventory.length >= CONST.inventorySize) {
                     console.log('Inventory is full!');
                 } else {
                     this.orderManager.pickResource(nearbyFactory);
+                    this.takenLastUpdate = true;
                 }
             }
+        } else {
+            this.takenLastUpdate = false;
         }
 
         this.msSinceLastTick += delta;
