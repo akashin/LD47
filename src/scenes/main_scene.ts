@@ -6,6 +6,9 @@ import { Player } from "../core/player";
 import { Position } from "../utils/position";
 import { Direction } from "../utils/direction";
 import { ScoreBoard } from "../hud/score_board";
+import { Factory, ResourceType } from "../objects/factory";
+
+var assert = require('assert');
 
 export class MainScene extends Phaser.Scene {
     // Graphics.
@@ -26,6 +29,7 @@ export class MainScene extends Phaser.Scene {
     // Game objects.
     private gameMap: GameMap;
     private stations: Station[];
+    private factories: Factory[];
     private orderManager: OrderManager;
     private player: Player;
 
@@ -74,6 +78,7 @@ export class MainScene extends Phaser.Scene {
         this.msSinceLastTick = 0;
         this.tickCounter = 0;
         this.stations = [];
+        this.factories = [];
     }
 
     // Creates game objects.
@@ -136,9 +141,6 @@ export class MainScene extends Phaser.Scene {
         this.gameMap.updateRail(x1, y1, RailType.UpLeft);
         this.gameMap.updateRail(x0, y1, RailType.UpRight);
 
-        // Change ground
-        this.gameMap.updateGround(5, 5, GroundType.Grass);
-
         // Reset station counter in case it's not our first game.
         Station.station_count = 0;
         // Add stations.
@@ -146,6 +148,9 @@ export class MainScene extends Phaser.Scene {
         this.addStation(x0 + 1, y1 - 1, "1");
         this.addStation(x1 - 1, y0 + 1, "2");
         this.addStation(x1 - 1, y1 - 1, "3");
+
+        this.gameMap.updateGround(10, 3, GroundType.Grass);
+        this.addFactory(10, 3, ResourceType.Steel);
     }
 
     addStation(x: integer, y: integer, station_name: string): void {
@@ -160,28 +165,43 @@ export class MainScene extends Phaser.Scene {
         this.add.existing(station);
     }
 
+    addFactory(x: integer, y: integer, resource_type: ResourceType): void {
+        let factory = new Factory(this, {
+            x: x * CONST.tileSize,
+            y: y * CONST.tileSize,
+            column: x,
+            row: y,
+            resource_type: resource_type,
+        });
+        this.factories.push(factory);
+        this.add.existing(factory);
+    }
+
+
     // Called periodically to update game state.
     update(time: number, delta: number): void {
         this.player.update(delta, this.findNearestStation()[1]);
 
         let nearbyStation = this.findNearbyStation();
         if (nearbyStation) {
-            let numFulfilled = this.orderManager.fulfilOrdersInStations(nearbyStation);
+            let numFulfilled = this.orderManager.fulfilDemandInStation(nearbyStation);
             this.scoreBoard.increaseScore(numFulfilled);
 
             if (this.takeOrderKey.isDown) {
-                let order = this.orderManager.getStationOpenOrder(nearbyStation.index);
-                if (order) {
-                    if (this.orderManager.ordersInInventory.length < CONST.inventorySize) {
-                        this.orderManager.pickOrder(order);
-                    } else {
-                        console.log('Inventory is too full!');
-                    }
+            }
+        }
+
+        if (this.takeOrderKey.isDown) {
+            let nearbyFactory = this.findNearbyFactory();
+            if (nearbyFactory) {
+                if (this.orderManager.resourcesInInventory.length < CONST.inventorySize) {
+                    console.log('Inventory is full!');
                 } else {
-                    console.log('No order');
+                    this.orderManager.pickResource(nearbyFactory);
                 }
             }
         }
+
         this.msSinceLastTick += delta;
         while (this.msSinceLastTick >= CONST.tickDelta) {
             this.msSinceLastTick -= CONST.tickDelta;
@@ -199,10 +219,6 @@ export class MainScene extends Phaser.Scene {
                 nearbyStations.push(station);
             }
         });
-        if (nearbyStations.length == 1) {
-            console.log('Near station ' + ['A', 'B', 'C', 'D'][nearbyStations[0].index]);
-        }
-        var assert = require('assert');
         assert(nearbyStations.length <= 1);
         if (nearbyStations.length == 1) {
             return nearbyStations[0];
@@ -222,10 +238,25 @@ export class MainScene extends Phaser.Scene {
         return [nearestStation, nearestDistance];
     }
 
+    findNearbyFactory(): Factory {
+        var nearbyFactories = [];
+        this.factories.forEach(factory => {
+            // TODO: Figure out whether we need to do comparison in L2 space.
+            let loc = this.player.getTileCoordinates();
+            if (factory.isNearby(loc[0], loc[1])) {
+                nearbyFactories.push(factory);
+            }
+        });
+        assert(nearbyFactories.length <= 1);
+        if (nearbyFactories.length == 1) {
+            return nearbyFactories[0];
+        }
+    }
+
     // Called every tickDelta ticks to update game state.
     updateStep(): void {
         if ((this.tickCounter % CONST.addOrderFrequency) == 1) {
-            if (!this.orderManager.addOrder()) {
+            if (!this.orderManager.addDemand()) {
                 console.log('You\'re dead!')
                 // this.scene.start("EndScene");
             }

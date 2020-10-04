@@ -1,4 +1,5 @@
 import { Order } from "../core/order";
+import { ResourceType } from "../objects/factory";
 
 export class OrderInventory extends Phaser.GameObjects.Container {
     private orderCountText: Phaser.GameObjects.Text;
@@ -15,10 +16,10 @@ export class OrderInventory extends Phaser.GameObjects.Container {
         this.add(this.orderCountText);
     }
 
-    setOrders(orders: Array<Order>): void {
-        let status = 'Orders in inventory:\n';
-        orders.forEach(element => {
-            status += 'Wheat to station ' + element.sinkStation + ';\n';
+    setResources(resources: Array<ResourceType>): void {
+        let status = 'Resources in inventory:\n';
+        resources.forEach(element => {
+            status += element + ', ';
         });
         this.orderCountText.setText(status);
     }

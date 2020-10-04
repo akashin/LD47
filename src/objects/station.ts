@@ -1,32 +1,23 @@
 import { CONST } from "../const";
 import { Order } from "../core/order";
+import { ResourceType } from "./factory";
 
-class InOrder extends Phaser.GameObjects.Container {
+class Demand extends Phaser.GameObjects.Container {
     order_sprite: Phaser.GameObjects.Sprite;
-
-    constructor(scene, params) {
-        super(scene, params.x, params.y);
-
-        // this.order_sprite = scene.add.sprite(0, 0, "orderSink");
-        // this.order_sprite.setOrigin(0, 0);
-        // this.order_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
-        // this.add(this.order_sprite);
-    }
-}
-
-class OutOrder extends Phaser.GameObjects.Container {
-    order_sprite: Phaser.GameObjects.Sprite;
+    // TODO: Use order demand instread.
     order_destination_text: Phaser.GameObjects.Text;
+    resource_type: ResourceType;
 
     constructor(scene, params) {
         super(scene, params.x, params.y);
+        this.resource_type = params.resource_type;
 
         this.order_sprite = scene.add.sprite(0, 0, "order_box");
         this.order_sprite.setOrigin(0, 0);
         this.order_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
         this.add(this.order_sprite);
 
-        this.order_destination_text = scene.add.text(0, 0, params.destination);
+        this.order_destination_text = scene.add.text(0, 0, params.resource_type);
         this.add(this.order_destination_text);
     }
 }
@@ -41,8 +32,7 @@ export class Station extends Phaser.GameObjects.Container {
     station_sprite: Phaser.GameObjects.Sprite;
     station_name_text: Phaser.GameObjects.Text;
 
-    in_orders: Map<integer, InOrder>;
-    out_orders: Map<integer, OutOrder>;
+    demand: Demand;
 
     constructor(scene, params) {
         super(scene, params.x, params.y);
@@ -59,47 +49,36 @@ export class Station extends Phaser.GameObjects.Container {
         this.station_name_text = scene.add.text(0, 0, this.station_name);
         this.add(this.station_name_text);
 
-        this.in_orders = new Map();
-        this.out_orders = new Map();
+        this.demand = null;
     }
 
     isNearby(column: integer, row: integer): boolean {
         return Math.abs(column - this.column) + Math.abs(row - this.row) <= CONST.orderPickupDistance;
     }
 
-    addInOrder(order: Order): void {
-        let in_order = new InOrder(this.scene, { x: CONST.tileSize, y: CONST.tileSize });
-        this.in_orders.set(order.id, in_order);
-        this.add(in_order);
+    setDemand(resource_type: ResourceType): void {
+        this.demand = new Demand(this.scene, { x: CONST.tileSize, y: CONST.tileSize, resource_type: resource_type});
+        this.add(this.demand);
     }
 
-    removeInOrder(order_id: integer): void {
-        let in_order = this.in_orders.get(order_id);
-        this.in_orders.delete(order_id);
-        this.remove(in_order);
+    removeDemand(): void {
+        this.remove(this.demand)
+        this.demand = null;
     }
 
-    tryFulfilInOrder(order_id: integer): boolean {
-        if (!this.in_orders.has(order_id)) {
+    hasDemand(): boolean {
+        return this.demand != null;
+    }
+
+    getDemand() {
+        return this.demand;
+    }
+
+    tryFulfilDemand(resource_type: ResourceType): boolean {
+        if (!this.hasDemand()) {
             return false;
         }
         // TODO: Do some fulfil animation.
-        this.removeInOrder(order_id);
-    }
-
-    addOutOrder(order: Order, destination: string): void {
-        let out_order = new OutOrder(this.scene, { x: CONST.tileSize, y: CONST.tileSize, destination: destination });
-        this.out_orders.set(order.id, out_order);
-        this.add(out_order);
-    }
-
-    removeOutOrder(order: Order): void {
-        let out_order = this.out_orders.get(order.id);
-        this.out_orders.delete(order.id);
-        this.remove(out_order);
-    }
-
-    hasOutOrders(): boolean {
-        return this.out_orders.size > 0;
+        return this.demand.resource_type == resource_type;
     }
 }

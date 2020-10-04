@@ -1,5 +1,6 @@
 import { CONST } from "../const";
 import { OrderInventory } from "../hud/order_inventory";
+import { Factory, ResourceType } from "../objects/factory";
 import { Station } from "../objects/station";
 import { randomInt } from "../utils/math";
 
@@ -29,10 +30,10 @@ export class Order {
 
 export class OrderManager {
     private stations: Array<Station>;
-    private openOrders: Array<Order>;
-    public ordersInInventory: Array<Order>;
+    private demand_count: number;
+    public resourcesInInventory: Array<ResourceType>;
     private scene: Phaser.Scene;
-    private orderInventory: OrderInventory;
+    private resourceInventory: OrderInventory;
 
     // Creates OrderManager objects.
     constructor(scene: Phaser.Scene, stations: Array<Station>) {
@@ -40,77 +41,50 @@ export class OrderManager {
 
         this.stations = stations;
 
-        this.openOrders = [];
-        this.ordersInInventory = [];
-        this.orderInventory = new OrderInventory(scene, CONST.inventoryX, CONST.inventoryY,);
-        this.scene.add.existing(this.orderInventory);
+        this.demand_count = 0;
+        this.resourcesInInventory = [];
+        this.resourceInventory = new OrderInventory(scene, CONST.inventoryX, CONST.inventoryY,);
+        this.scene.add.existing(this.resourceInventory);
     }
 
-    addOrder(): boolean {
+    addDemand(): boolean {
         let numStations = this.stations.length;
         // No more space to create orders.
-        if (this.openOrders.length >= numStations) {
+        if (this.demand_count >= numStations) {
             return false;
         }
 
-        let beginStation = randomInt(numStations);
-        // Make sure source statation is not already used by some other order.
-        while (this.stations[beginStation].hasOutOrders()) {
-            beginStation = randomInt(numStations);
+        let station_index = randomInt(numStations);
+        // Make sure station does not already have a demand.
+        while (this.stations[station_index].hasDemand()) {
+            station_index = randomInt(numStations);
         }
+        assert(this.stations[station_index].index == station_index);
 
-        let endStation = randomInt(numStations);
-        // Make sure source and sink are distinct.
-        while (beginStation == endStation) {
-            endStation = randomInt(numStations);
-        }
-
-        assert(this.stations[beginStation].index == beginStation);
-        assert(this.stations[endStation].index == endStation);
-
-        var order = new Order(beginStation, endStation);
-        this.stations[beginStation].addOutOrder(order, String(endStation));
-        this.stations[endStation].addInOrder(order);
-
-        this.openOrders.push(order);
+        // TODO: Generate resource type.
+        this.stations[station_index].setDemand(ResourceType.Steel);
+        this.demand_count += 1;
 
         return true;
     }
 
-    getStationOpenOrder(station_index: integer) {
-        for (let order of this.openOrders) {
-            if (order.sourceStation == station_index) {
-                return order;
-            }
-        }
-        return null;
+    getStationDemands(station_index: integer) {
+        return this.stations[station_index].getDemand();
     }
 
-    pickOrder(order: Order): void {
-        console.log('Removing order ', order.id, ' from ', order.sourceStation);
-        assert(order.status == OrderStatus.open);
-        order.status = OrderStatus.taken;
-
-        let idx = this.openOrders.indexOf(order);
-        this.openOrders.splice(idx, 1);
-
-        this.stations[order.sourceStation].removeOutOrder(order);
-        // TODO: Mark order as picked in In station.
-
-        this.ordersInInventory.push(order);
-        this.orderInventory.setOrders(this.ordersInInventory);
+    pickResource(factory: Factory): void {
+        this.resourcesInInventory.push(factory.resource_type);
+        this.resourceInventory.setResources(this.resourcesInInventory);
     }
 
-    fulfilOrdersInStations(station): number {
-        let originalInventorySize = this.ordersInInventory.length;
-        for (let order of this.ordersInInventory) {
-            if (order.sinkStation == station.id) {
-                station.tryFulfilInOrder(order.id);
+    fulfilDemandInStation(station): number {
+        for (let i = 0; i < this.resourcesInInventory.length; ++i) {
+            if (station.tryFulfilDemand(this.resourcesInInventory[i])) {
+                this.resourcesInInventory.splice(i);
+                this.demand_count -= 1;
+                return 1;
             }
         }
-        this.ordersInInventory = this.ordersInInventory.filter(order => order.sinkStation != station.index);
-        let newInventorySize = this.ordersInInventory.length;
-        this.orderInventory.setOrders(this.ordersInInventory);
-        return originalInventorySize - newInventorySize;
+        return 0;
     }
 }
