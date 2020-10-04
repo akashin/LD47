@@ -189,10 +189,14 @@ export class MainScene extends Phaser.Scene {
         var nearbyStations = [];
         this.stations.forEach(station => {
             // TODO: Figure out whether we need to do comparison in L2 space.
-            if (station.isNearby(this.player.x / CONST.tileSize, this.player.y / CONST.tileSize)) {
+            let loc = this.player.getTileCoordinates();
+            if (station.isNearby(loc[0], loc[1])) {
                 nearbyStations.push(station);
             }
         });
+        if (nearbyStations.length == 1) {
+            console.log('Near station ' + ['A', 'B','C', 'D'][nearbyStations[0].index]);   
+        }
         var assert = require('assert');
         assert(nearbyStations.length <= 1);
         if (nearbyStations.length == 1) {

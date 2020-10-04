@@ -48,4 +48,10 @@ export class Player extends Phaser.GameObjects.Container {
             (this.mapPosition.y + dy + 0.5) * CONST.tileSize
         );
     }
+
+    getTileCoordinates(): Array<number> {
+        // Floating point coordinates in the tile coordinate system.
+        return [this.x / CONST.tileSize - 0.5, this.y / CONST.tileSize - 0.5];
+    }
+
 }
