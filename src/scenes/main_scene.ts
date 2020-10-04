@@ -51,6 +51,9 @@ export class MainScene extends Phaser.Scene {
         // Rails
         this.load.image('rails_top_bottom', "rails_top_bottom.png");
         this.load.image('rails_top_right', "rails_top_right.png");
+        // Tram
+        this.load.image('tram_carriage', 'tram_carriage.png');
+        this.load.image('tram_head', 'tram_head.png');
         // A useful image to draw squares.
         this.load.image("blank", "blank.png");
 
@@ -96,7 +99,7 @@ export class MainScene extends Phaser.Scene {
         this.add.existing(this.gameMap);
         this.generateMap();
 
-        this.player = new Player(this, this.gameMap, new Position(5, 4), Direction.Right);
+        this.player = new Player(this, this.gameMap, new Position(3, 2), Direction.Right);
         this.add.existing(this.player);
 
         this.orderManager = new OrderManager(this, this.stations);
@@ -108,14 +111,18 @@ export class MainScene extends Phaser.Scene {
 
     generateMap(): void {
         // Add rails
-        this.gameMap.updateRail(4, 4, RailType.DownRight);
-        this.gameMap.updateRail(5, 4, RailType.Horizontal);
-        this.gameMap.updateRail(6, 4, RailType.DownLeft);
-        this.gameMap.updateRail(6, 5, RailType.Vertical);
-        this.gameMap.updateRail(6, 6, RailType.UpLeft);
-        this.gameMap.updateRail(5, 6, RailType.Horizontal);
-        this.gameMap.updateRail(4, 6, RailType.UpRight);
-        this.gameMap.updateRail(4, 5, RailType.Vertical);
+        for (let x = 3; x < 7; ++x) {
+            this.gameMap.updateRail(x, 2, RailType.Horizontal);
+            this.gameMap.updateRail(x, 7, RailType.Horizontal);
+        }
+        for (let y = 3; y < 7; ++y) {
+            this.gameMap.updateRail(2, y, RailType.Vertical);
+            this.gameMap.updateRail(7, y, RailType.Vertical);
+        }
+        this.gameMap.updateRail(2, 2, RailType.DownRight);
+        this.gameMap.updateRail(7, 2, RailType.DownLeft);
+        this.gameMap.updateRail(7, 7, RailType.UpLeft);
+        this.gameMap.updateRail(2, 7, RailType.UpRight);
 
         // Change ground
         this.gameMap.updateGround(5, 5, GroundType.Grass);

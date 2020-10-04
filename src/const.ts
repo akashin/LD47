@@ -16,4 +16,7 @@ export let CONST = {
 
     // How often we create a new order.
     addOrderFrequency: 30,
+
+    // Train
+    trainSpeed: 2,
 }

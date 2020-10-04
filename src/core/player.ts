@@ -29,9 +29,9 @@ export class Player extends Phaser.GameObjects.Container {
 
     update(delta: number): void {
         console.log((this.mapPosition.x + 0.5) * CONST.tileSize, (this.mapPosition.y + 0.5) * CONST.tileSize);
-        this.movementState += delta;
-        if (this.movementState >= 1000.0) {
-            this.movementState -= 1000.0;
+        this.movementState += delta / 1000.0 * CONST.trainSpeed;
+        if (this.movementState >= 1.0) {
+            this.movementState -= 1.0;
 
             this.mapPosition = this.mapPosition.add(this.movementDirection);
 
@@ -42,8 +42,8 @@ export class Player extends Phaser.GameObjects.Container {
             console.log('next direction is', this.movementDirection);
         }
 
-        let dx = getDirectionDX(this.movementDirection) * this.movementState / 1000.0;
-        let dy = getDirectionDY(this.movementDirection) * this.movementState / 1000.0;
+        let dx = getDirectionDX(this.movementDirection) * this.movementState;
+        let dy = getDirectionDY(this.movementDirection) * this.movementState;
         this.setPosition(
             (this.mapPosition.x + dx + 0.5) * CONST.tileSize,
             (this.mapPosition.y + dy + 0.5) * CONST.tileSize
