@@ -169,9 +169,6 @@ export class MainScene extends Phaser.Scene {
                 nearbyStations.push(station);
             }
         });
-        if (nearbyStations.length > 0) {
-            console.log("Found stations: ", nearbyStations);
-        }
         var assert = require('assert');
         assert(nearbyStations.length <= 1);
         if (nearbyStations.length == 1) {
@@ -184,7 +181,7 @@ export class MainScene extends Phaser.Scene {
         if ((this.tickCounter % CONST.addOrderFrequency) == 1) {
             if (!this.orderManager.addOrder()) {
                 console.log('You\'re dead!')
-                // alert('You\'re dead!');
+                this.scene.start("EndScene");
             }
         }
     }
@@ -211,14 +208,5 @@ export class MainScene extends Phaser.Scene {
                 }
             }
         }
-
-
-        if ((this.tickCounter % CONST.addOrderFrequency) == 1) {
-            if (!this.orderManager.addOrder()) {
-                console.log('You\'re dead!')
-                // alert('You\'re dead!');
-            }
-        }
     }
-
 }

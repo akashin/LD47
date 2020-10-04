@@ -1,4 +1,5 @@
 import "phaser";
+import { EndScene } from "./scenes/end_scene";
 import { MainScene } from "./scenes/main_scene";
 import { TitleScene } from "./scenes/title_scene";
 
@@ -8,7 +9,7 @@ const config: Phaser.Types.Core.GameConfig = {
     height: 600,
     type: Phaser.AUTO,
     parent: "game",
-    scene: [MainScene, TitleScene],
+    scene: [TitleScene, MainScene, EndScene],
     input: {
         keyboard: true
     },

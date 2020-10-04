@@ -1,14 +1,14 @@
 import { CONST } from "../const";
 import { Order } from "../core/order";
 
-export class TitleScene extends Phaser.Scene {
+export class EndScene extends Phaser.Scene {
     private backgroundSprite: Phaser.GameObjects.Sprite;
     private startKey: Phaser.Input.Keyboard.Key;
     private gameNameText: Phaser.GameObjects.Text;
 
     constructor() {
         super({
-            key: "TitleScene"
+            key: "EndScene"
         });
     }
 
@@ -39,8 +39,9 @@ export class TitleScene extends Phaser.Scene {
                 gameHeight / this.backgroundSprite.height,
             );
         }
-        let text = "Awesome Game Name\n\n";
-        text += "Press space to start.";
+        let text = "You are overwhelmed by packages, tough luck!\n\n";
+        text += "Press space to re-start.\n\n\n";
+        text += "Made by \n Andrey Kashin,\n Marina Tarasova,\n Andrew Osipov\n and Alex Novikov\nin no particular order."
         this.gameNameText = this.add.text(
             gameWidth / 2 - 50, gameHeight / 2 - 20, text
         )
