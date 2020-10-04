@@ -7,10 +7,8 @@ export class OrderInventory extends Phaser.GameObjects.Container {
         super(scene, x, y);
 
         this.orderCountText = scene.make.text({
-            // TODO: why not x, y?
-            x: 600,
-            y: 10,
-            add: false,
+            x: x,
+            y: y,
         });
         this.add(this.orderCountText);
     }

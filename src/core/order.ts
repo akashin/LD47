@@ -21,7 +21,7 @@ export class OrderManager {
 
         this.demand_count = 0;
         this.resourcesInInventory = [];
-        this.resourceInventory = new OrderInventory(scene, CONST.inventoryX, CONST.inventoryY,);
+        this.resourceInventory = new OrderInventory(scene, CONST.inventoryX, CONST.inventoryY);
         this.scene.add.existing(this.resourceInventory);
     }
 
