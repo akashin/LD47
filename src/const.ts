@@ -10,8 +10,8 @@ export let CONST = {
     orderPickupDistance: 1.1,
 
     // Inventory.
-    inventoryX: 600,
-    inventoryY: 10,
+    inventoryX: 10,
+    inventoryY: 600,
     inventorySize: 2,  // How many elements fits in the train.
 
     // How often we create a new order.
