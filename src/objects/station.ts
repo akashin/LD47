@@ -7,10 +7,10 @@ class InOrder extends Phaser.GameObjects.Container {
     constructor(scene, params) {
         super(scene, params.x, params.y);
 
-        this.order_sprite = scene.add.sprite(0, 0, "orderSink");
-        this.order_sprite.setOrigin(0, 0);
-        this.order_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
-        this.add(this.order_sprite);
+        // this.order_sprite = scene.add.sprite(0, 0, "orderSink");
+        // this.order_sprite.setOrigin(0, 0);
+        // this.order_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        // this.add(this.order_sprite);
     }
 }
 
