@@ -161,7 +161,11 @@ export class GameMap extends Phaser.GameObjects.Container {
     }
 
     getGroundType(x: integer, y: integer): GroundType {
-        return this.tiles[x][y].groundType;
+        if (this.tiles[x][y] == null) {
+            return null;
+        } else {
+            return this.tiles[x][y].groundType;
+        }
     }
 
     updateGround(x: integer, y: integer, groundType: GroundType): void {
@@ -172,7 +176,7 @@ export class GameMap extends Phaser.GameObjects.Container {
             }
         } else {
             if (this.tiles[x][y] == null) {
-                let tile = new Tile(this.scene, x * CONST.tileSize, y * CONST.tileSize, GroundType.Grass);
+                let tile = new Tile(this.scene, x * CONST.tileSize, y * CONST.tileSize, groundType);
                 this.tiles[x][y] = tile;
                 this.tilesContainer.add(tile);
             } else {
@@ -182,7 +186,11 @@ export class GameMap extends Phaser.GameObjects.Container {
     }
 
     getRailType(x: integer, y: integer): RailType {
-        return this.rails[x][y].railType;
+        if (this.rails[x][y] == null) {
+            return null;
+        } else {
+            return this.rails[x][y].railType;
+        }
     }
 
     updateRail(x: integer, y: integer, railType: RailType): void {
@@ -195,6 +203,20 @@ export class GameMap extends Phaser.GameObjects.Container {
             let rail = new Rail(this.scene, x * CONST.tileSize, y * CONST.tileSize, railType);
             this.rails[x][y] = rail;
             this.railsContainer.add(rail);
+        }
+    }
+
+    isInsideMap(x: integer, y: integer): boolean {
+        return x >= 0 && x < CONST.mapWidth && y >= 0 && y < CONST.mapHeight;
+    }
+
+    generatePlatform(platformX: integer, platformY: integer): void {
+        for (let x = platformX - 1; x <= platformX + 1; ++x) {
+            for (let y = platformY - 1; y <= platformY + 1; ++y) {
+                if (this.isInsideMap(x, y) && this.getRailType(x, y) != null) {
+                    this.updateGround(x, y, GroundType.Sand);
+                }
+            }
         }
     }
 }

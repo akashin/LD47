@@ -153,6 +153,13 @@ export class MainScene extends Phaser.Scene {
 
         this.gameMap.updateGround(10, 3, GroundType.Grass);
         this.addFactory(10, 3, ResourceType.Steel);
+
+        for (let station of this.stations) {
+            this.gameMap.generatePlatform(station.column, station.row);
+        }
+        for (let factory of this.factories) {
+            this.gameMap.generatePlatform(factory.column, factory.row);
+        }
     }
 
     addStation(x: integer, y: integer, station_name: string): void {
