@@ -169,7 +169,6 @@ export class MainScene extends Phaser.Scene {
 
         this.backgroundLayer = this.tilemap.createStaticLayer("Rails", this.tileset, 0, 0);
         this.backgroundLayer.setVisible(false);
-        // console.log(this.backgroundLayer.tilemap.objects) // objectlayer
         let tiles = this.backgroundLayer.tilemap.layers[0].data;
         let typeToRailType = {'UpLeft': RailType.UpLeft, 'UpRight': RailType.UpRight, 'DownLeft': RailType.DownLeft, 'DownRight': RailType.DownRight, 'Vertical': RailType.Vertical, 'Horizontal': RailType.Horizontal};
 
@@ -186,6 +185,14 @@ export class MainScene extends Phaser.Scene {
                 }
             }
         }
+
+        // Add factories (they are objects instead of tiles because that allows to add custom properties to each factory).
+        let typeToResourceType = {'Steel': ResourceType.Steel, 'Food': ResourceType.Food, 'Oxygen': ResourceType.Oxygen, 'Water': ResourceType.Water, 'Medicine': ResourceType.Medicine};
+        this.backgroundLayer.tilemap.objects[0].objects.forEach(object => {
+            console.log(object)
+            // TODO: why -1?
+            this.addFactory(Math.round(object.x / 32), Math.round(object.y / 32) - 1, typeToResourceType[object.properties['resource_type']]);
+        });
 
         for (let station of this.stations) {
             this.gameMap.generatePlatform(station.column, station.row);
