@@ -18,12 +18,15 @@ export class Order {
     public sinkStation: integer;
     public status: OrderStatus;
 
+    public score: number;
+
     // Creates Order objects.
-    constructor(sourceStation: integer, sinkStation: integer) {
+    constructor(sourceStation: integer, sinkStation: integer, score: number) {
         this.id = Order.orderCount++;
         this.sourceStation = sourceStation;
         this.sinkStation = sinkStation;
         this.status = OrderStatus.open;
+        this.score = score;
     }
 }
 
@@ -79,7 +82,8 @@ export class OrderManager {
         assert(this.stations[beginStation].index == beginStation);
         assert(this.stations[endStation].index == endStation);
 
-        var order = new Order(beginStation, endStation);
+        let score = randomInt(5) + 1;
+        let order = new Order(beginStation, endStation, score);
         this.stationSourceOrder[beginStation] = order;
         this.stationSinkOrders[endStation].push(order);
         this.openOrders.push(order);
@@ -109,11 +113,13 @@ export class OrderManager {
 
     fulfilOrdersInStations(station): number {
         let originalInventorySize = this.ordersInInventory.length;
+        let gainedScore = 0;
+        this.ordersInInventory.forEach(order => { if (order.sinkStation == station.index) {gainedScore += order.score;}})
         this.ordersInInventory.forEach(el => { console.log(el.sinkStation, station.index, el.sinkStation != station.index) })
         this.ordersInInventory = this.ordersInInventory.filter(order => order.sinkStation != station.index);
         let newInventorySize = this.ordersInInventory.length;
         this.orderInventory.setOrders(this.ordersInInventory, this.stations);
-        return originalInventorySize - newInventorySize;
+        return gainedScore
     }
 
     renderStationOrders(station: integer): void {
@@ -129,6 +135,8 @@ export class OrderManager {
             this.stationContainer[station].add(orderSource);
             let text = new Phaser.GameObjects.Text(this.scene, locX - 20, locY - 20, this.stations[order.sinkStation].station_name, { fontSize: "15pt", color: "#000" });
             this.stationContainer[station].add(text);
+            let stext = new Phaser.GameObjects.Text(this.scene, locX - 40, locY - 40, '+' + String(order.score), { fontSize: "15pt", color: "#ff000" });
+            this.stationContainer[station].add(stext);
         }
 
         // for (let i = 0; i < this.stationSinkOrders[station].length; ++i) {
