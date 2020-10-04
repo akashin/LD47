@@ -2,21 +2,27 @@ import { CONST } from "../const";
 import { getResourceTextureName, ResourceType } from "./factory";
 
 class Demand extends Phaser.GameObjects.Container {
-    demand_sprite: Phaser.GameObjects.Sprite;
-    resource_type_text: Phaser.GameObjects.Text;
-    resource_type: ResourceType;
+    resourceType: ResourceType;
+    resourceSprite: Phaser.GameObjects.Sprite;
+    dialogSprite: Phaser.GameObjects.Sprite;
+    resourceTypeText: Phaser.GameObjects.Text;
 
-    constructor(scene, params) {
-        super(scene, params.x, params.y);
-        this.resource_type = params.resource_type;
+    constructor(scene: Phaser.Scene, resourceType: ResourceType) {
+        super(scene, 0, 0);
+        this.resourceType = resourceType;
 
-        this.demand_sprite = scene.add.sprite(0, 0, getResourceTextureName(params.resource_type));
-        this.demand_sprite.setOrigin(0, 0);
-        this.demand_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
-        this.add(this.demand_sprite);
+        this.dialogSprite = new Phaser.GameObjects.Sprite(scene, 0, 0, 'dialog');
+        this.dialogSprite.setDisplayOrigin(0, this.dialogSprite.height);
+        this.dialogSprite.setDisplaySize(CONST.tileSize * 1.5, CONST.tileSize * 1.5);
+        this.add(this.dialogSprite);
 
-        this.resource_type_text = scene.add.text(0, 0, params.resource_type);
-        this.add(this.resource_type_text);
+        this.resourceSprite = new Phaser.GameObjects.Sprite(scene, CONST.tileSize * 0.7, CONST.tileSize * -0.85, getResourceTextureName(resourceType));
+        // this.resourceSprite.setDisplayOrigin(0, this.resourceSprite.height);
+        this.resourceSprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        this.add(this.resourceSprite);
+
+        this.resourceTypeText = scene.add.text(0, 0, resourceType.toString());
+        this.add(this.resourceTypeText);
     }
 }
 
@@ -39,7 +45,7 @@ export class Station extends Phaser.GameObjects.Container {
         this.station_name = params.station_name;
         this.index = Station.station_count++;
 
-        this.station_sprite = scene.add.sprite(0, 0, "station_tile");
+        this.station_sprite = scene.add.sprite(0, 0, 'station_tile');
         this.station_sprite.setOrigin(0, 0);
         this.station_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
         this.add(this.station_sprite);
@@ -54,8 +60,8 @@ export class Station extends Phaser.GameObjects.Container {
         return Math.abs(column - this.column) + Math.abs(row - this.row) <= CONST.orderPickupDistance;
     }
 
-    setDemand(resource_type: ResourceType): void {
-        this.demand = new Demand(this.scene, { x: CONST.tileSize, y: CONST.tileSize, resource_type: resource_type});
+    setDemand(resourceType: ResourceType): void {
+        this.demand = new Demand(this.scene, resourceType);
         this.add(this.demand);
     }
 
@@ -72,11 +78,11 @@ export class Station extends Phaser.GameObjects.Container {
         return this.demand;
     }
 
-    tryFulfilDemand(resource_type: ResourceType): boolean {
+    tryFulfilDemand(resourceType: ResourceType): boolean {
         if (!this.hasDemand()) {
             return false;
         }
-        if (this.demand.resource_type == resource_type) {
+        if (this.demand.resourceType == resourceType) {
             // TODO: Do some fulfil animation.
             this.removeDemand();
             return true;

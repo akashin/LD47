@@ -33,6 +33,9 @@ export class MainScene extends Phaser.Scene {
     private orderManager: OrderManager;
     private player: Player;
 
+    // Containers
+    private buildingsContainer: Phaser.GameObjects.Container;
+
     // Visual elements.
     private scoreBoard: ScoreBoard;
 
@@ -46,34 +49,44 @@ export class MainScene extends Phaser.Scene {
     preload(): void {
 
         this.load.setPath('./assets/');
-        this.load.image("gameBackground", "karta1.png");
 
-        // Resources.
-        this.load.image("order_box", "order_box.png");
-        this.load.image("resource_food", "resource_food.png");
-        this.load.image("resource_oxygen", "resource_oxygen.png");
-        this.load.image("resource_water", "resource_water.png");
-        this.load.image("resource_steel", "resource_steel.png");
-        this.load.image("resource_medicine", "resource_medicine.png");
+        // Background
+        this.load.image('gameBackground', 'karta1.png');
 
-        this.load.image('grass_tile', "grass.png");
-        this.load.image('sand_tile', "sand.png");
-        this.load.image('station_tile', "station.png");
-        this.load.image('factory_tile', "original/factory.png");
+        // Resources
+        this.load.image('order_box', 'order_box.png');
+        this.load.image('resource_food', 'resource_food.png');
+        this.load.image('resource_oxygen', 'resource_oxygen.png');
+        this.load.image('resource_water', 'resource_water.png');
+        this.load.image('resource_steel', 'resource_steel.png');
+        this.load.image('resource_medicine', 'resource_medicine.png');
+
+        // Objects
+        this.load.image('orderSource', 'orderSource.png');
+        this.load.image('orderSink', 'orderSink.png');
+        this.load.image('grass_tile', 'grass.png');
+        this.load.image('sand_tile', 'sand.png');
+        this.load.image('station_tile', 'station.png');
+        this.load.image('factory_tile', 'original/factory.png');
+        this.load.image('dialog', 'dialog.png');
+
         // Rails
-        this.load.image('rails_top_bottom', "rails_top_bottom.png");
-        this.load.image('rails_top_right', "rails_top_right.png");
+        this.load.image('rails_top_bottom', 'rails_top_bottom.png');
+        this.load.image('rails_top_right', 'rails_top_right.png');
+
         // Tram
         this.load.image('tram_carriage_horizontal', 'tram_carriage_horizontal.png');
         this.load.image('tram_carriage_vertical', 'tram_carriage_vertical.png');
         this.load.image('tram_head_horizontal', 'tram_head_horizontal.png');
         this.load.image('tram_head_vertical', 'tram_head_vertical.png');
-        // A useful image to draw squares.
-        this.load.image("blank", "blank.png");
 
-        this.load.image("tiles", "spritesheet.png");
+        // A useful image to draw squares.
+        this.load.image('blank', 'blank.png');
+
+        this.load.image('tiles', 'spritesheet.png');
         // this.load.atlas("tiles", "./assets/pack/spritesheet.png", "./assets/pack/spritesheet.json");
-        this.load.tilemapTiledJSON("level", "big_map.json");
+
+        this.load.tilemapTiledJSON('level', 'big_map.json');
     }
 
 
@@ -108,6 +121,7 @@ export class MainScene extends Phaser.Scene {
         this.tilemap = this.make.tilemap({ key: "level" });
         this.tileset = this.tilemap.addTilesetImage("spritesheet", "tiles");
 
+        this.buildingsContainer = new Phaser.GameObjects.Container(this, 0, 0);
 
         // Map
         this.gameMap = new GameMap(this, 0, 0);
@@ -117,6 +131,8 @@ export class MainScene extends Phaser.Scene {
         let loc = this.findFirstRail();
         this.player = new Player(this, this.gameMap, loc, Direction.Right);
         this.add.existing(this.player);
+
+        this.add.existing(this.buildingsContainer);
 
         this.orderManager = new OrderManager(this, this.stations);
         this.scoreBoard = new ScoreBoard(this, 10, 10);
@@ -188,7 +204,7 @@ export class MainScene extends Phaser.Scene {
             station_name: station_name,
         });
         this.stations.push(station);
-        this.add.existing(station);
+        this.buildingsContainer.add(station);
     }
 
     addFactory(x: integer, y: integer, resource_type: ResourceType): void {
@@ -200,7 +216,7 @@ export class MainScene extends Phaser.Scene {
             resource_type: resource_type,
         });
         this.factories.push(factory);
-        this.add.existing(factory);
+        this.buildingsContainer.add(factory);
     }
 
 

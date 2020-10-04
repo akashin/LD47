@@ -24,7 +24,6 @@ export function getResourceTextureName(resource_type: ResourceType): string {
     throw new Error('Unknown ResourceType');
 }
 
-
 class Resource extends Phaser.GameObjects.Container {
     order_sprite: Phaser.GameObjects.Sprite;
     order_destination_text: Phaser.GameObjects.Text;
