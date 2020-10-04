@@ -18,5 +18,5 @@ export let CONST = {
     addOrderFrequency: 30,
 
     // Train
-    trainSpeed: 2,
+    trainSpeed: 20,
 }
