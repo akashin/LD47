@@ -1,4 +1,5 @@
 import { Order } from "../core/order";
+import { Station } from "../objects/station";
 
 export class OrderInventory extends Phaser.GameObjects.Container {
     private orderCountText: Phaser.GameObjects.Text;
@@ -15,10 +16,10 @@ export class OrderInventory extends Phaser.GameObjects.Container {
         this.add(this.orderCountText);
     }
 
-    setOrders(orders: Array<Order>): void {
+    setOrders(orders: Array<Order>, stations: Array<Station>): void {
         let status = 'Orders in inventory:\n';
         orders.forEach(element => {
-            status += 'Wheat to station ' + ['A', 'B', 'C', 'D'][element.sinkStation] + ';\n';
+            status += 'Wheat to station ' + stations[element.sinkStation].station_name + ';\n';
         });
         this.orderCountText.setText(status);
     }

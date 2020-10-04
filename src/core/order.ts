@@ -101,7 +101,7 @@ export class OrderManager {
         this.openOrders.splice(idx, 1);
 
         this.ordersInInventory.push(order);
-        this.orderInventory.setOrders(this.ordersInInventory);
+        this.orderInventory.setOrders(this.ordersInInventory, this.stations);
 
         this.renderStationOrders(order.sourceStation);
         this.renderStationOrders(order.sinkStation);
@@ -112,7 +112,7 @@ export class OrderManager {
         this.ordersInInventory.forEach(el => { console.log(el.sinkStation, station.index, el.sinkStation != station.index) })
         this.ordersInInventory = this.ordersInInventory.filter(order => order.sinkStation != station.index);
         let newInventorySize = this.ordersInInventory.length;
-        this.orderInventory.setOrders(this.ordersInInventory);
+        this.orderInventory.setOrders(this.ordersInInventory, this.stations);
         return originalInventorySize - newInventorySize;
     }
 
@@ -123,21 +123,21 @@ export class OrderManager {
         let locX = this.stations[station].column * CONST.tileSize;
         let locY = this.stations[station].row * CONST.tileSize;
         if (station in this.stationSourceOrder) {
-            let order = this.stationSourceOrder[station];
+            var order: Order = this.stationSourceOrder[station];
             var orderSource = new Phaser.GameObjects.Image(this.scene, locX, locY, 'orderSource');
             orderSource.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
             this.stationContainer[station].add(orderSource);
-            let text = new Phaser.GameObjects.Text(this.scene, locX - 20, locY - 20, String(order.id), { fontSize: "15pt", color: "#000" });
+            let text = new Phaser.GameObjects.Text(this.scene, locX - 20, locY - 20, this.stations[order.sinkStation].station_name, { fontSize: "15pt", color: "#000" });
             this.stationContainer[station].add(text);
         }
 
-        for (let i = 0; i < this.stationSinkOrders[station].length; ++i) {
-            let order = this.stationSinkOrders[station][i];
-            let orderSink = new Phaser.GameObjects.Image(this.scene, locX + 80 + i * 50, locY + 80, 'orderSink');
-            orderSink.setDisplaySize(CONST.tileSize / 2, CONST.tileSize / 2);
-            this.stationContainer[station].add(orderSink);
-            // let text = new Phaser.GameObjects.Text(this.scene, locX + 60 + i * 50, locY + 60, String(order.id), { fontSize: "15pt", color: "#000" });
-            // this.stationContainer[station].add(text);
-        }
+        // for (let i = 0; i < this.stationSinkOrders[station].length; ++i) {
+        //     let order = this.stationSinkOrders[station][i];
+        //     let orderSink = new Phaser.GameObjects.Image(this.scene, locX + 80 + i * 50, locY + 80, 'orderSink');
+        //     orderSink.setDisplaySize(CONST.tileSize / 2, CONST.tileSize / 2);
+        //     this.stationContainer[station].add(orderSink);
+        //     // let text = new Phaser.GameObjects.Text(this.scene, locX + 60 + i * 50, locY + 60, String(order.id), { fontSize: "15pt", color: "#000" });
+        //     // this.stationContainer[station].add(text);
+        // }
     }
 }

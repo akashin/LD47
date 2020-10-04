@@ -140,9 +140,21 @@ export class MainScene extends Phaser.Scene {
         Station.station_count = 0;
         // Add stations.
         this.addStation(x0 + 1, y0 + 1, 'A');
+        this.addStation(x0 + 1, 8 + 1, 'A 1/4');
+        this.addStation(x0 + 1, 12 + 1, 'A 1/2');
+        this.addStation(x0 + 1, 16 + 1, 'A 3/4');
         this.addStation(x0 + 1, y1 - 1, 'B');
+        this.addStation(5, y1 - 1, 'B 1/4');
+        this.addStation(10, y1 - 1, 'B 1/2');
+        this.addStation(15, y1 - 1, 'B 3/4');
         this.addStation(x1 - 1, y0 + 1, 'C');
+        this.addStation(5, y0 + 1, 'C 1/4');
+        this.addStation(10, y0 + 1, 'C 1/2');
+        this.addStation(15, y0 + 1, 'C 3/4');
         this.addStation(x1 - 1, y1 - 1, 'D');
+        this.addStation(x1 - 1, 8 + 1, 'D 1/4');
+        this.addStation(x1 - 1, 12 + 1, 'D 1/2');
+        this.addStation(x1 - 1, 16 + 1, 'D 3/4');
     }
 
     addStation(x: integer, y: integer, station_name: string): void {
