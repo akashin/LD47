@@ -1,4 +1,5 @@
 import { CONST } from "../const";
+import { randomInt } from "../utils/math";
 
 export class EndScene extends Phaser.Scene {
     private backgroundSprite: Phaser.GameObjects.Sprite;
@@ -40,13 +41,30 @@ export class EndScene extends Phaser.Scene {
                 gameHeight / this.backgroundSprite.height,
             );
         }
-        let text = "Your lost!\n\n";
+        let text = "You lost!\n\n";
         text += 'Score: ' + String(this.score) + '\n\n';
         text += "Press space to re-start.\n\n\n\n\n";
-        text += "Made by \n Andrey Kashin,\n Marina Tarasova,\n Andrew Osipov\n and Alex Novikov\nin no particular order."
+        text += "Made by \n";
+        let names = ['Andrey Kashin', 'Marina Tarasova', 'Andrew Osipov', 'Alex Novikov'];
+        this.randomShuffle(names).forEach(name => {
+            text += '  ' + name + '\n';
+        });
+        text += "in no particular order."
         this.gameNameText = this.add.text(
             gameWidth / 2 - 170, gameHeight / 2 - 170, text, {color: 'yellow', fontSize: '20pt'}
         )
+    }
+
+    randomShuffle(arr: Array<String>): Array<String> {
+        var newArr = [];
+        let remaining = arr;
+        let i = 0;
+        while (remaining.length > 0) {
+            let curr = randomInt(remaining.length);
+            newArr.push(remaining[curr]);
+            remaining.splice(curr, 1);
+        }
+        return newArr;
     }
 
     // Called periodically to update game state.
