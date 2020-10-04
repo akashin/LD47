@@ -123,7 +123,7 @@ export class OrderManager {
         if (station in this.stationSourceOrder) {
             let order = this.stationSourceOrder[station];
             var orderSource = new Phaser.GameObjects.Image(this.scene, locX, locY, 'orderSource');
-            orderSource.setScale(0.3, 0.3);
+            orderSource.setDisplaySize(CONST.tileSize / 2, CONST.tileSize / 2);
             this.stationContainer[station].add(orderSource);
             let text = new Phaser.GameObjects.Text(this.scene, locX - 20, locY - 20, String(order.id), { fontSize: "15pt", color: "#000" });
             this.stationContainer[station].add(text);
@@ -132,7 +132,7 @@ export class OrderManager {
         for (let i = 0; i < this.stationSinkOrders[station].length; ++i) {
             let order = this.stationSinkOrders[station][i];
             let orderSink = new Phaser.GameObjects.Image(this.scene, locX + 80 + i * 50, locY + 80, 'orderSink');
-            orderSink.setScale(0.1, 0.1);
+            orderSink.setDisplaySize(CONST.tileSize / 2, CONST.tileSize / 2);
             this.stationContainer[station].add(orderSink);
             let text = new Phaser.GameObjects.Text(this.scene, locX + 60 + i * 50, locY + 60, String(order.id), { fontSize: "15pt", color: "#000" });
             this.stationContainer[station].add(text);
