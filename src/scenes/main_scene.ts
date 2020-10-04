@@ -189,7 +189,7 @@ export class MainScene extends Phaser.Scene {
         this.backgroundLayer.tilemap.objects[0].objects.forEach(object => {
             console.log(object)
             // TODO: why -1?
-            this.addFactory(Math.round(object.x / 32), Math.round(object.y / 32) - 1, typeToResourceType[object.properties['resource_type']]);
+            this.addFactory(Math.round(object.x / 32), Math.round(object.y / 32) - 1, typeToResourceType[object.properties[0].value]);
         });
 
         for (let station of this.stations) {
