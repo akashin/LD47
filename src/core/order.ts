@@ -51,7 +51,7 @@ export class OrderManager {
         }
         this.openOrders = [];
         this.ordersInInventory = [];
-        this.orderInventory = new OrderInventory(scene, CONST.inventoryX, CONST.inventoryY, );
+        this.orderInventory = new OrderInventory(scene, CONST.inventoryX, CONST.inventoryY,);
         this.scene.add.existing(this.orderInventory);
         this.stationSourceOrder = new Map();
     }
@@ -109,7 +109,7 @@ export class OrderManager {
     }
 
     fulfulOrdersInStations(station): void {
-        this.ordersInInventory.forEach(el => {console.log(el.sinkStation, station.index, el.sinkStation != station.index)})
+        this.ordersInInventory.forEach(el => { console.log(el.sinkStation, station.index, el.sinkStation != station.index) })
         this.ordersInInventory = this.ordersInInventory.filter(order => order.sinkStation != station.index);
         this.orderInventory.setOrders(this.ordersInInventory);
     }
@@ -125,7 +125,7 @@ export class OrderManager {
             var orderSource = new Phaser.GameObjects.Image(this.scene, locX, locY, 'orderSource');
             orderSource.setScale(0.3, 0.3);
             this.stationContainer[station].add(orderSource);
-            let text = new Phaser.GameObjects.Text(this.scene, locX - 20, locY - 20, String(order.id), {fontSize: "15pt", color: "#000"});
+            let text = new Phaser.GameObjects.Text(this.scene, locX - 20, locY - 20, String(order.id), { fontSize: "15pt", color: "#000" });
             this.stationContainer[station].add(text);
         }
 
@@ -134,7 +134,7 @@ export class OrderManager {
             let orderSink = new Phaser.GameObjects.Image(this.scene, locX + 80 + i * 50, locY + 80, 'orderSink');
             orderSink.setScale(0.1, 0.1);
             this.stationContainer[station].add(orderSink);
-            let text = new Phaser.GameObjects.Text(this.scene, locX + 60 + i * 50, locY + 60, String(order.id), {fontSize: "15pt", color: "#000"});
+            let text = new Phaser.GameObjects.Text(this.scene, locX + 60 + i * 50, locY + 60, String(order.id), { fontSize: "15pt", color: "#000" });
             this.stationContainer[station].add(text);
         }
     }
