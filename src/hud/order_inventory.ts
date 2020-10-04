@@ -26,7 +26,7 @@ export class OrderInventory extends Phaser.GameObjects.Container {
 
         let shiftX = 0;
         for (let resource of resources) {
-            let resourceTile = this.scene.add.sprite(shiftX, 0, getResourceTextureName(resource));
+            let resourceTile = this.scene.add.sprite(shiftX, 70, getResourceTextureName(resource));
             resourceTile.setOrigin(0, 0);
             resourceTile.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
             this.resourceTiles.push(resourceTile);
