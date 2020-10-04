@@ -83,7 +83,7 @@ export class MainScene extends Phaser.Scene {
         }
 
         // this.tilemap = this.make.tilemap({ key: "level" });
-        // this.tileset = this.tilemap.addTilesetImage("tiles", "Tiles", 64, 64);
+        // this.tileset = this.tilemap.addTilesetImage("tiles_64px", "tiles", 64, 64);
 
         // this.backgroundLayer = this.tilemap.createStaticLayer("Rails", this.tileset, 0, 0);
 
