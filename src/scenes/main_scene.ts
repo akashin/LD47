@@ -112,6 +112,9 @@ export class MainScene extends Phaser.Scene {
         this.add.text(this.stations[1].column * CONST.tileSize, this.stations[1].row * CONST.tileSize, 'B');
         this.add.text(this.stations[2].column * CONST.tileSize, this.stations[2].row * CONST.tileSize, 'C');
         this.add.text(this.stations[3].column * CONST.tileSize, this.stations[3].row * CONST.tileSize, 'D');
+
+        this.cameras.main.startFollow(this.player);
+        this.cameras.main.setZoom(5);
     }
 
     generateMap(): void {
