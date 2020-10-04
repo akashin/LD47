@@ -101,7 +101,6 @@ export class MainScene extends Phaser.Scene {
         this.tilemap = this.make.tilemap({ key: "level" });
         this.tileset = this.tilemap.addTilesetImage("spritesheet", "tiles");
 
-        // this.backgroundLayer = this.tilemap.createStaticLayer("Rails", this.tileset, 0, 0);
 
         // Map
         this.gameMap = new GameMap(this, 0, 0);
@@ -128,18 +127,21 @@ export class MainScene extends Phaser.Scene {
         let y0 = 2;
         let y1 = 20;
 
-        for (let x = x0 + 1; x < x1; ++x) {
-            this.gameMap.updateRail(x, y0, RailType.Horizontal);
-            this.gameMap.updateRail(x, y1, RailType.Horizontal);
+
+        this.backgroundLayer = this.tilemap.createStaticLayer("Rails", this.tileset, 0, 0);
+        this.backgroundLayer.setVisible(false);
+        // console.log(this.backgroundLayer.tilemap.objects) // objectlayer
+        let tiles = this.backgroundLayer.tilemap.layers[0].data;
+        let typeToRailType = {'UpLeft': RailType.UpLeft, 'UpRight': RailType.UpRight, 'DownLeft': RailType.DownLeft, 'DownRight': RailType.DownRight, 'Vertical': RailType.Vertical, 'Horizontal': RailType.Horizontal};
+        for (let x = 0; x < tiles.length; ++x) {
+            for (let y = 0; y < 10; ++y) {
+                if (tiles[x][y].properties.type) {
+                    let type = tiles[x][y].properties.type;
+                    console.log(tiles[x][y].properties.type, x, y)
+                    this.gameMap.updateRail(y, x, typeToRailType[type]);
+                }
+            }
         }
-        for (let y = y0 + 1; y < y1; ++y) {
-            this.gameMap.updateRail(x0, y, RailType.Vertical);
-            this.gameMap.updateRail(x1, y, RailType.Vertical);
-        }
-        this.gameMap.updateRail(x0, y0, RailType.DownRight);
-        this.gameMap.updateRail(x1, y0, RailType.DownLeft);
-        this.gameMap.updateRail(x1, y1, RailType.UpLeft);
-        this.gameMap.updateRail(x0, y1, RailType.UpRight);
 
         // Reset station counter in case it's not our first game.
         Station.station_count = 0;
