@@ -2,7 +2,6 @@ import { CONST } from "../const";
 import { OrderInventory } from "../hud/order_inventory";
 import { Station } from "../objects/station";
 import { randomInt } from "../utils/math";
-import { GroundType } from "./map";
 
 export enum OrderStatus {
     open,
