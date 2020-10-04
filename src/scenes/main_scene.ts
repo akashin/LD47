@@ -303,7 +303,7 @@ export class MainScene extends Phaser.Scene {
         if ((this.tickCounter % CONST.addOrderFrequency) == 1) {
             if (!this.orderManager.addDemand()) {
                 console.log('You\'re dead!')
-                // this.scene.start("EndScene");
+                this.scene.start("EndScene");
             }
         }
     }
