@@ -113,8 +113,8 @@ export class MainScene extends Phaser.Scene {
         this.add.text(this.stations[2].column * CONST.tileSize, this.stations[2].row * CONST.tileSize, 'C');
         this.add.text(this.stations[3].column * CONST.tileSize, this.stations[3].row * CONST.tileSize, 'D');
 
-        this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(5);
+        // this.cameras.main.startFollow(this.player);
+        // this.cameras.main.setZoom(10);
     }
 
     generateMap(): void {
@@ -198,7 +198,7 @@ export class MainScene extends Phaser.Scene {
             }
         });
         if (nearbyStations.length == 1) {
-            console.log('Near station ' + ['A', 'B','C', 'D'][nearbyStations[0].index]);   
+            console.log('Near station ' + ['A', 'B','C', 'D'][nearbyStations[0].index]);
         }
         var assert = require('assert');
         assert(nearbyStations.length <= 1);
