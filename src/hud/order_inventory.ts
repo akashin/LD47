@@ -19,7 +19,7 @@ export class OrderInventory extends Phaser.GameObjects.Container {
     setOrders(orders: Array<Order>, stations: Array<Station>): void {
         let status = 'Orders in inventory:\n';
         orders.forEach(element => {
-            status += 'Wheat to station ' + stations[element.sinkStation].station_name + ';\n';
+            status += 'Wheat to station ' + stations[element.sinkStation].station_name + '; (+' + String(element.score) + ')\n';
         });
         this.orderCountText.setText(status);
     }

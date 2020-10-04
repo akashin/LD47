@@ -133,9 +133,13 @@ export class OrderManager {
             var orderSource = new Phaser.GameObjects.Image(this.scene, locX, locY, 'orderSource');
             orderSource.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
             this.stationContainer[station].add(orderSource);
-            let text = new Phaser.GameObjects.Text(this.scene, locX - 20, locY - 20, this.stations[order.sinkStation].station_name, { fontSize: "15pt", color: "#000" });
+            let distance = parseInt(this.stations[order.sinkStation].station_name) - parseInt(this.stations[order.sourceStation].station_name);
+            if (distance < 0) {
+                distance += this.stations.length;
+            }
+            let text = new Phaser.GameObjects.Text(this.scene, locX - 40, locY + 10, String(distance) + '(st ' + this.stations[order.sinkStation].station_name + ')', { fontSize: "15pt", color: "#ffff00" });
             this.stationContainer[station].add(text);
-            let stext = new Phaser.GameObjects.Text(this.scene, locX - 40, locY - 40, '+' + String(order.score), { fontSize: "15pt", color: "#ff000" });
+            let stext = new Phaser.GameObjects.Text(this.scene, locX - 40, locY - 40, '+' + String(order.score), { fontSize: "15pt", color: "#000000" });
             this.stationContainer[station].add(stext);
         }
 
