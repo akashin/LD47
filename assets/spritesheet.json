@@ -1,0 +1,14 @@
+{ "columns":7,
+ "image":"spritesheet.png",
+ "imageheight":64,
+ "imagewidth":448,
+ "margin":0,
+ "name":"spritesheet",
+ "spacing":0,
+ "tilecount":7,
+ "tiledversion":"1.4.2",
+ "tileheight":64,
+ "tilewidth":64,
+ "type":"tileset",
+ "version":1.4
+}

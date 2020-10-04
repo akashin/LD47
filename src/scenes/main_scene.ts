@@ -52,7 +52,7 @@ export class MainScene extends Phaser.Scene {
 
         this.load.image("tiles", "spritesheet.png");
         // this.load.atlas("tiles", "./assets/pack/spritesheet.png", "./assets/pack/spritesheet.json");
-        this.load.tilemapTiledJSON("level", "maps/small_map.json");
+        this.load.tilemapTiledJSON("level", "small_map.json");
     }
 
 
@@ -83,7 +83,7 @@ export class MainScene extends Phaser.Scene {
         }
 
         // this.tilemap = this.make.tilemap({ key: "level" });
-        // this.tileset = this.tilemap.addTilesetImage("tiles_64px", "tiles", 64, 64);
+        // this.tileset = this.tilemap.addTilesetImage("spritesheet", "tiles");
 
         // this.backgroundLayer = this.tilemap.createStaticLayer("Rails", this.tileset, 0, 0);
 
