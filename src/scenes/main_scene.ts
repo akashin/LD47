@@ -116,27 +116,32 @@ export class MainScene extends Phaser.Scene {
 
     generateMap(): void {
         // Add rails
-        for (let x = 3; x < 7; ++x) {
-            this.gameMap.updateRail(x, 2, RailType.Horizontal);
-            this.gameMap.updateRail(x, 7, RailType.Horizontal);
+        let x0 = 2;
+        let x1 = 40;
+        let y0 = 2;
+        let y1 = 30;
+
+        for (let x = x0 + 1; x < x1; ++x) {
+            this.gameMap.updateRail(x, y0, RailType.Horizontal);
+            this.gameMap.updateRail(x, y1, RailType.Horizontal);
         }
-        for (let y = 3; y < 7; ++y) {
-            this.gameMap.updateRail(2, y, RailType.Vertical);
-            this.gameMap.updateRail(7, y, RailType.Vertical);
+        for (let y = y0 + 1; y < y1; ++y) {
+            this.gameMap.updateRail(x0, y, RailType.Vertical);
+            this.gameMap.updateRail(x1, y, RailType.Vertical);
         }
-        this.gameMap.updateRail(2, 2, RailType.DownRight);
-        this.gameMap.updateRail(7, 2, RailType.DownLeft);
-        this.gameMap.updateRail(7, 7, RailType.UpLeft);
-        this.gameMap.updateRail(2, 7, RailType.UpRight);
+        this.gameMap.updateRail(x0, y0, RailType.DownRight);
+        this.gameMap.updateRail(x1, y0, RailType.DownLeft);
+        this.gameMap.updateRail(x1, y1, RailType.UpLeft);
+        this.gameMap.updateRail(x0, y1, RailType.UpRight);
 
         // Change ground
         this.gameMap.updateGround(5, 5, GroundType.Grass);
 
         // Add stations.
-        this.addStation(3, 3);
-        this.addStation(3, 6);
-        this.addStation(6, 3);
-        this.addStation(6, 6);
+        this.addStation(x0 + 1, y0 + 1);
+        this.addStation(x0 + 1, y1 - 1);
+        this.addStation(x1 - 1, y0 + 1);
+        this.addStation(x1 - 1, y1 - 1);
     }
 
     addStation(x: integer, y: integer): void {

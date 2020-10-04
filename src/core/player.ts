@@ -21,9 +21,8 @@ export class Player extends Phaser.GameObjects.Container {
         this.mapPosition = mapPosition;
         this.movementDirection = movementDirection;
 
-        let trainSprite = new Phaser.GameObjects.Sprite(scene, 0, 0, 'blank');
-        trainSprite.setDisplaySize(40, 40);
-        trainSprite.setTint(0x333333);
+        let trainSprite = new Phaser.GameObjects.Sprite(scene, 0, 0, 'tram_head');
+        trainSprite.setDisplaySize(CONST.tileSize * 0.6, CONST.tileSize * 0.6);
         this.add(trainSprite);
     }
 

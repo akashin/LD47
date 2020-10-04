@@ -2,9 +2,9 @@ export let CONST = {
     tickDelta: 100,
 
     // Map
-    mapWidth: 10,
-    mapHeight: 10,
-    tileSize: 64,
+    mapWidth: 50,
+    mapHeight: 50,
+    tileSize: 16,
 
     // Stations.
     orderPickupDistance: 1,
