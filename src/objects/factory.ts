@@ -57,8 +57,7 @@ export class Factory extends Phaser.GameObjects.Container {
         this.row = params.row;
         this.resource_type = params.resource_type;
 
-        // TODO: Use factory sprite here.
-        this.station_sprite = scene.add.sprite(0, 0, "station_tile");
+        this.station_sprite = scene.add.sprite(0, 0, "factory_tile");
         this.station_sprite.setOrigin(0, 0);
         this.station_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
         this.add(this.station_sprite);

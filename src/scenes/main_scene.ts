@@ -59,6 +59,7 @@ export class MainScene extends Phaser.Scene {
         this.load.image('grass_tile', "grass.png");
         this.load.image('sand_tile', "sand.png");
         this.load.image('station_tile', "station.png");
+        this.load.image('factory_tile', "original/factory.png");
         // Rails
         this.load.image('rails_top_bottom', "rails_top_bottom.png");
         this.load.image('rails_top_right', "rails_top_right.png");
@@ -228,7 +229,6 @@ export class MainScene extends Phaser.Scene {
     findNearbyStation(): Station {
         var nearbyStations = [];
         this.stations.forEach(station => {
-            // TODO: Figure out whether we need to do comparison in L2 space.
             let loc = this.player.getTileCoordinates();
             if (station.isNearby(loc[0], loc[1])) {
                 nearbyStations.push(station);
@@ -256,7 +256,6 @@ export class MainScene extends Phaser.Scene {
     findNearbyFactory(): Factory {
         var nearbyFactories = [];
         this.factories.forEach(factory => {
-            // TODO: Figure out whether we need to do comparison in L2 space.
             let loc = this.player.getTileCoordinates();
             if (factory.isNearby(loc[0], loc[1])) {
                 nearbyFactories.push(factory);
