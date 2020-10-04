@@ -5,6 +5,7 @@ import { Station } from "../objects/station";
 import { Player } from "../core/player";
 import { Position } from "../utils/position";
 import { Direction } from "../utils/direction";
+import { ScoreBoard } from "../hud/score_board";
 
 export class MainScene extends Phaser.Scene {
     // Graphics.
@@ -27,6 +28,9 @@ export class MainScene extends Phaser.Scene {
     private stations: Station[];
     private orderManager: OrderManager;
     private player: Player;
+
+    // Visual elements.
+    private scoreBoard: ScoreBoard;
 
     constructor() {
         super({
@@ -96,6 +100,8 @@ export class MainScene extends Phaser.Scene {
         this.add.existing(this.player);
 
         this.orderManager = new OrderManager(this, this.stations);
+        this.scoreBoard = new ScoreBoard(this, 10, 10);
+        this.add.existing(this.scoreBoard);
 
         this.debugVisualizeNearTiles();
     }
@@ -138,7 +144,8 @@ export class MainScene extends Phaser.Scene {
 
         let nearbyStation = this.findNearbyStation();
         if (nearbyStation) {
-            this.orderManager.fulfilOrdersInStations(nearbyStation);
+            let numFulfilled = this.orderManager.fulfilOrdersInStations(nearbyStation);
+            this.scoreBoard.increaseScore(numFulfilled);
 
             if (this.takeOrderKey.isDown) {
                 let order = this.orderManager.stationSourceOrder[nearbyStation.index];
@@ -200,11 +207,17 @@ export class MainScene extends Phaser.Scene {
                     let sptite = new Phaser.GameObjects.Sprite(this, x * CONST.tileSize, y * CONST.tileSize, 'blank');
                     sptite.setOrigin(0, 0);
                     sptite.setDisplaySize(CONST.tileSize, CONST.tileSize);
-                    sptite.setTint(0xff0000);
+                    sptite.setTint(0x880000);
                     sptite.setAlpha(0.4)
                     this.add.existing(sptite);
                 } else if (nearbyStations.length > 1) {
-                    alert('Tile ' + String(x) + ', ' + String(y) + ' is nearest to two tiles!');
+                    let sptite = new Phaser.GameObjects.Sprite(this, x * CONST.tileSize, y * CONST.tileSize, 'blank');
+                    sptite.setOrigin(0, 0);
+                    sptite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+                    sptite.setTint(0xff0000);
+                    sptite.setAlpha(0.4)
+                    this.add.existing(sptite);
+                    // alert('Tile ' + String(x) + ', ' + String(y) + ' is nearest to two tiles!');
                 }
             }
         }

@@ -107,10 +107,13 @@ export class OrderManager {
         this.renderStationOrders(order.sinkStation);
     }
 
-    fulfilOrdersInStations(station): void {
+    fulfilOrdersInStations(station): number {
+        let originalInventorySize = this.ordersInInventory.length;
         this.ordersInInventory.forEach(el => { console.log(el.sinkStation, station.index, el.sinkStation != station.index) })
         this.ordersInInventory = this.ordersInInventory.filter(order => order.sinkStation != station.index);
+        let newInventorySize = this.ordersInInventory.length;
         this.orderInventory.setOrders(this.ordersInInventory);
+        return originalInventorySize - newInventorySize;
     }
 
     renderStationOrders(station: integer): void {
