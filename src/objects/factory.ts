@@ -1,9 +1,27 @@
 import { CONST } from "../const";
 
 export enum ResourceType {
-    Wheat,
+    Food,
     Steel,
     Water,
+    Oxygen,
+    Medicine,
+}
+
+export function getResourceTextureName(resource_type: ResourceType): string {
+    switch (resource_type) {
+        case ResourceType.Food:
+            return 'resource_food';
+        case ResourceType.Steel:
+            return 'resource_steel';
+        case ResourceType.Water:
+            return 'resource_water';
+        case ResourceType.Oxygen:
+            return 'resource_oxygen';
+        case ResourceType.Medicine:
+            return 'resource_medicine';
+    }
+    throw new Error('Unknown ResourceType');
 }
 
 
@@ -14,7 +32,7 @@ class Resource extends Phaser.GameObjects.Container {
     constructor(scene, params) {
         super(scene, params.x, params.y);
 
-        this.order_sprite = scene.add.sprite(0, 0, "order_box");
+        this.order_sprite = scene.add.sprite(0, 0, getResourceTextureName(params.resource_type));
         this.order_sprite.setOrigin(0, 0);
         this.order_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
         this.add(this.order_sprite);

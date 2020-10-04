@@ -1,23 +1,22 @@
 import { CONST } from "../const";
-import { ResourceType } from "./factory";
+import { getResourceTextureName, ResourceType } from "./factory";
 
 class Demand extends Phaser.GameObjects.Container {
-    order_sprite: Phaser.GameObjects.Sprite;
-    // TODO: Use order demand instread.
-    order_destination_text: Phaser.GameObjects.Text;
+    demand_sprite: Phaser.GameObjects.Sprite;
+    resource_type_text: Phaser.GameObjects.Text;
     resource_type: ResourceType;
 
     constructor(scene, params) {
         super(scene, params.x, params.y);
         this.resource_type = params.resource_type;
 
-        this.order_sprite = scene.add.sprite(0, 0, "order_box");
-        this.order_sprite.setOrigin(0, 0);
-        this.order_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
-        this.add(this.order_sprite);
+        this.demand_sprite = scene.add.sprite(0, 0, getResourceTextureName(params.resource_type));
+        this.demand_sprite.setOrigin(0, 0);
+        this.demand_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        this.add(this.demand_sprite);
 
-        this.order_destination_text = scene.add.text(0, 0, params.resource_type);
-        this.add(this.order_destination_text);
+        this.resource_type_text = scene.add.text(0, 0, params.resource_type);
+        this.add(this.resource_type_text);
     }
 }
 

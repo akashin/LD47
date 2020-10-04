@@ -47,9 +47,15 @@ export class MainScene extends Phaser.Scene {
 
         this.load.setPath('./assets/');
         this.load.image("gameBackground", "karta1.png");
+
+        // Resources.
         this.load.image("order_box", "order_box.png");
-        this.load.image("orderSource", "orderSource.png");
-        this.load.image("orderSink", "orderSink.png");
+        this.load.image("resource_food", "resource_food.png");
+        this.load.image("resource_oxygen", "resource_oxygen.png");
+        this.load.image("resource_water", "resource_water.png");
+        this.load.image("resource_steel", "resource_steel.png");
+        this.load.image("resource_medicine", "resource_medicine.png");
+
         this.load.image('grass_tile', "grass.png");
         this.load.image('sand_tile', "sand.png");
         this.load.image('station_tile', "station.png");
