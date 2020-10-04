@@ -93,6 +93,8 @@ export class MainScene extends Phaser.Scene {
         this.add.existing(this.player);
 
         this.orderManager = new OrderManager(this, this.stations);
+
+        this.debugVisualizeNearTiles();
     }
 
     generateMap(): void {
@@ -176,6 +178,38 @@ export class MainScene extends Phaser.Scene {
 
     // Called every tickDelta ticks to update game state.
     updateStep(): void {
+        if ((this.tickCounter % CONST.addOrderFrequency) == 1) {
+            if (!this.orderManager.addOrder()) {
+                console.log('You\'re dead!')
+                // alert('You\'re dead!');
+            }
+        }
+    }
+
+    // Visualize station coverege for deubgging.
+    debugVisualizeNearTiles(): void {
+        for (let x = 0; x < CONST.mapWidth; ++x) {
+            for (let y = 0; y < CONST.mapHeight; ++y) {
+                var nearbyStations = [];
+                this.stations.forEach(station => {
+                    if (station.isNearby(x, y)) {
+                        nearbyStations.push(station);
+                    }
+                });
+                if (nearbyStations.length == 1) {
+                    let sptite = new Phaser.GameObjects.Sprite(this, x * CONST.tileSize, y * CONST.tileSize, 'blank');
+                    sptite.setOrigin(0, 0);
+                    sptite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+                    sptite.setTint(0xff0000);
+                    sptite.setAlpha(0.4)
+                    this.add.existing(sptite);
+                } else if (nearbyStations.length > 1) {
+                    alert('Tile ' + String(x) + ', ' + String(y) + ' is nearest to two tiles!');
+                }
+            }
+        }
+        
+
         if ((this.tickCounter % CONST.addOrderFrequency) == 1) {
             if (!this.orderManager.addOrder()) {
                 console.log('You\'re dead!')
