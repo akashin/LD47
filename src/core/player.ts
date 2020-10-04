@@ -137,8 +137,8 @@ export class Player extends Phaser.GameObjects.Container {
         }
     }
 
-    getTileCoordinates(): Array<number> {
+    getTileCoordinates(): [number, number] {
         // Floating point coordinates in the tile coordinate system.
-        return [this.x / CONST.tileSize - 0.5, this.y / CONST.tileSize - 0.5];
+        return [Math.round(this.x / CONST.tileSize - 0.5), Math.round(this.y / CONST.tileSize - 0.5)];
     }
 }
