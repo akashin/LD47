@@ -36,20 +36,23 @@ export class MainScene extends Phaser.Scene {
 
     // Preloads game resources.
     preload(): void {
-        this.load.image("gameBackground", "./assets/karta1.png");
-        this.load.image("orderSource", "./assets/orderSource.png");
-        this.load.image("orderSink", "./assets/orderSink.png");
-        this.load.image('grass_tile', "./assets/grass.png");
-        this.load.image('sand_tile', "./assets/sand.png");
-        this.load.image('station_tile', "./assets/station.png");
-        // Rails
-        this.load.image('rails_top_bottom', "./assets/rails_top_bottom.png");
-        this.load.image('rails_top_right', "./assets/rails_top_right.png");
-        // A useful image to draw squares.
-        this.load.image("blank", "./assets/blank.png");
 
-        // this.load.image("tiles", "all_tiles.png");
-        this.load.tilemapTiledJSON("level", "./assets/maps/small_map.json");
+        this.load.setPath('./assets/');
+        this.load.image("gameBackground", "karta1.png");
+        this.load.image("orderSource", "orderSource.png");
+        this.load.image("orderSink", "orderSink.png");
+        this.load.image('grass_tile', "grass.png");
+        this.load.image('sand_tile', "sand.png");
+        this.load.image('station_tile', "station.png");
+        // Rails
+        this.load.image('rails_top_bottom', "rails_top_bottom.png");
+        this.load.image('rails_top_right', "rails_top_right.png");
+        // A useful image to draw squares.
+        this.load.image("blank", "blank.png");
+
+        this.load.image("tiles", "spritesheet.png");
+        // this.load.atlas("tiles", "./assets/pack/spritesheet.png", "./assets/pack/spritesheet.json");
+        this.load.tilemapTiledJSON("level", "maps/small_map.json");
     }
 
 
@@ -80,9 +83,9 @@ export class MainScene extends Phaser.Scene {
         }
 
         // this.tilemap = this.make.tilemap({ key: "level" });
-        // this.tileset = this.tilemap.addTilesetImage("_bloodnight", "tiles");
+        // this.tileset = this.tilemap.addTilesetImage("tiles", "Tiles", 64, 64);
 
-        // this.backgroundLayer = this.tilemap.createStaticLayer("Background", this.tileset, 0, 0);
+        // this.backgroundLayer = this.tilemap.createStaticLayer("Rails", this.tileset, 0, 0);
 
         // Map
         this.gameMap = new GameMap(this, 0, 0);
@@ -208,7 +211,7 @@ export class MainScene extends Phaser.Scene {
                 }
             }
         }
-        
+
 
         if ((this.tickCounter % CONST.addOrderFrequency) == 1) {
             if (!this.orderManager.addOrder()) {
