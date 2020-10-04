@@ -160,7 +160,7 @@ export class MainScene extends Phaser.Scene {
 
     // Called periodically to update game state.
     update(time: number, delta: number): void {
-        this.player.update(delta);
+        this.player.update(delta, this.findNearestStation()[1]);
 
         let nearbyStation = this.findNearbyStation();
         if (nearbyStation) {
@@ -205,6 +205,19 @@ export class MainScene extends Phaser.Scene {
         if (nearbyStations.length == 1) {
             return nearbyStations[0];
         }
+    }
+
+    findNearestStation(): [Station, number] {
+        let nearestStation: Station = null;
+        let nearestDistance: number = 1e6;
+        for (let station of this.stations) {
+            let distance = Phaser.Math.Distance.Between(station.x, station.y, this.player.x, this.player.y);
+            if (distance < nearestDistance) {
+                nearestStation = station;
+                nearestDistance = distance;
+            }
+        }
+        return [nearestStation, nearestDistance];
     }
 
     // Called every tickDelta ticks to update game state.
