@@ -106,7 +106,12 @@ export class MainScene extends Phaser.Scene {
         this.scoreBoard = new ScoreBoard(this, 10, 10);
         this.add.existing(this.scoreBoard);
 
-        this.debugVisualizeNearTiles();
+        // this.debugVisualizeNearTiles();
+
+        this.add.text(this.stations[0].column * CONST.tileSize, this.stations[0].row * CONST.tileSize, 'A');
+        this.add.text(this.stations[1].column * CONST.tileSize, this.stations[1].row * CONST.tileSize, 'B');
+        this.add.text(this.stations[2].column * CONST.tileSize, this.stations[2].row * CONST.tileSize, 'C');
+        this.add.text(this.stations[3].column * CONST.tileSize, this.stations[3].row * CONST.tileSize, 'D');
     }
 
     generateMap(): void {
