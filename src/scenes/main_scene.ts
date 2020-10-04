@@ -22,9 +22,6 @@ export class MainScene extends Phaser.Scene {
     private orderManager: OrderManager;
     private player: Player;
 
-    private tmpStationIdx: number;
-    private tmpPositionText: Phaser.GameObjects.Text;
-
     // Holds data about the actual map.
     private tilemap: Phaser.Tilemaps.Tilemap;
     // Stores tiles images.
@@ -101,9 +98,6 @@ export class MainScene extends Phaser.Scene {
         this.add.existing(this.player);
 
         this.orderManager = new OrderManager(this, this.stations);
-
-        this.tmpStationIdx = 0;
-        this.tmpPositionText = this.add.text(this.player.x + 30, this.player.y + 30, '*');
     }
 
     generateMap(): void {
@@ -168,11 +162,14 @@ export class MainScene extends Phaser.Scene {
     findNearbyStation(): Station {
         var nearbyStations = [];
         this.stations.forEach(station => {
-            if (station.isNearby(this.player.x, this.player.y)) {
+            // TODO: Figure out whether we need to do comparison in L2 space.
+            if (station.isNearby(this.player.x / CONST.tileSize, this.player.y / CONST.tileSize)) {
               nearbyStations.push(station);
             }
         });
-        console.log("Found ", nearbyStations.length, " stations nearby.");
+        if (nearbyStations.length > 0) {
+          console.log("Found ", nearbyStations.length, " stations nearby.");
+        }
         var assert = require('assert');
         assert(nearbyStations.length <= 1);
         if (nearbyStations.length == 1) {
@@ -190,21 +187,13 @@ export class MainScene extends Phaser.Scene {
 
     // Called every N ticks to update game state.
     updateStep(): void {
-        if ((this.tickCounter % 30) == 1) {
+        if ((this.tickCounter % CONST.addOrderFrequency) == 1) {
             if (!this.orderManager.addOrder()) {
                 console.log('You\'re dead!')
                 // alert('You\'re dead!');
             }
         }
-        if ((this.tickCounter % 30) == 1) {
-            this.player.x = this.stations[this.tmpStationIdx].column;
-            this.player.y = this.stations[this.tmpStationIdx].row;
-            this.tmpStationIdx = (this.tmpStationIdx + 1) % 4;
-            this.tmpPositionText.setPosition(
-                this.player.x * CONST.tileSize,
-                this.player.y * CONST.tileSize
-            );
-            this.fulfulNearbyOrders();
-        }
+
+        this.fulfulNearbyOrders();
     }
 }
