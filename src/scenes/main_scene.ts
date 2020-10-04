@@ -236,7 +236,7 @@ export class MainScene extends Phaser.Scene {
             this.scoreBoard.increaseScore(numFulfilled);
         }
         let isReady = (time - this.lastKeyDetected) > CONST.minMsBetweenClicks;
-        if (this.takeOrderKey.isDown && isReady) {
+        if ((this.takeOrderKey.isDown || this.input.activePointer.isDown) && isReady) {
             this.lastKeyDetected = time;
             let nearbyFactory = this.findNearbyFactory();
             if (nearbyFactory) {
