@@ -41,7 +41,7 @@ class TramSection extends Phaser.GameObjects.Sprite {
     }
 
     private updateScale(): void {
-        this.setDisplaySize(CONST.tileSize * 0.6, CONST.tileSize * 0.6);
+        this.setDisplaySize(CONST.tileSize, CONST.tileSize);
     }
 
     update(): void {
@@ -89,6 +89,7 @@ export class Player extends Phaser.GameObjects.Container {
             mapPosition = mapPosition.add(backwardDirection);
             movementDirection = getOppositeDirection(backwardDirection);
         }
+        this.reverse();
     }
 
     update(delta: number, distanceToNearestStation: number): void {
