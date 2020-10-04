@@ -30,7 +30,7 @@ function getRailDirections(railType: RailType): [Direction, Direction] {
         case RailType.UpLeft:
             return [Direction.Up, Direction.Left];
     }
-    throw new Error('Unknown RailType');
+    throw new Error('Unknown RailType' + String(railType));
 }
 
 export function getAnotherEndDirection(railType: RailType, direction: Direction): Direction {

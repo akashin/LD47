@@ -73,7 +73,7 @@ export class MainScene extends Phaser.Scene {
 
         this.load.image("tiles", "spritesheet.png");
         // this.load.atlas("tiles", "./assets/pack/spritesheet.png", "./assets/pack/spritesheet.json");
-        this.load.tilemapTiledJSON("level", "small_map.json");
+        this.load.tilemapTiledJSON("level", "big_map.json");
     }
 
 
@@ -114,7 +114,8 @@ export class MainScene extends Phaser.Scene {
         this.add.existing(this.gameMap);
         this.generateMap();
 
-        this.player = new Player(this, this.gameMap, new Position(3, 2), Direction.Right);
+        let loc = this.findFirstRail();
+        this.player = new Player(this, this.gameMap, loc, Direction.Right);
         this.add.existing(this.player);
 
         this.orderManager = new OrderManager(this, this.stations);
@@ -125,6 +126,25 @@ export class MainScene extends Phaser.Scene {
 
         // this.cameras.main.startFollow(this.player);
         // this.cameras.main.setZoom(10);
+    }
+
+    findFirstRail(): Position {
+        let best_priority = 1000;
+        let bestX = -1;
+        let bestY = -1;
+        for (let x = 0; x < CONST.mapWidth; ++x) {
+            for (let y = 0; y < CONST.mapHeight; ++y) {
+                if (!!this.gameMap.getRailType(x, y)) {
+                    let priority = x + y;
+                    if (priority < best_priority) {
+                        best_priority = priority;
+                        bestX = x;
+                        bestY = y;
+                    }
+                }
+            }
+        }
+        return new Position(bestX, bestY);
     }
 
     generateMap(): void {
@@ -140,26 +160,29 @@ export class MainScene extends Phaser.Scene {
         // console.log(this.backgroundLayer.tilemap.objects) // objectlayer
         let tiles = this.backgroundLayer.tilemap.layers[0].data;
         let typeToRailType = {'UpLeft': RailType.UpLeft, 'UpRight': RailType.UpRight, 'DownLeft': RailType.DownLeft, 'DownRight': RailType.DownRight, 'Vertical': RailType.Vertical, 'Horizontal': RailType.Horizontal};
-        for (let x = 0; x < tiles.length; ++x) {
-            for (let y = 0; y < 10; ++y) {
-                if (tiles[x][y].properties.type) {
-                    let type = tiles[x][y].properties.type;
-                    console.log(tiles[x][y].properties.type, x, y)
-                    this.gameMap.updateRail(y, x, typeToRailType[type]);
+
+        console.log(tiles[0]);
+        for (let x = 0; x < 30; ++x) {
+            for (let y = 0; y < tiles.length; ++y) {
+                let type = tiles[y][x].properties.type;
+                if (type == 'Factory' || (type == 'Station')) {
+                    this.addStation(x, y, '0');
+                } else {
+                    this.gameMap.updateRail(x, y, typeToRailType[type]);
                 }
             }
         }
 
-        // Reset station counter in case it's not our first game.
-        Station.station_count = 0;
-        // Add stations.
-        this.addStation(x0 + 1, y0 + 1, "0");
-        this.addStation(x0 + 1, y1 - 1, "1");
-        this.addStation(x1 - 1, y0 + 1, "2");
-        this.addStation(x1 - 1, y1 - 1, "3");
+        // // Reset station counter in case it's not our first game.
+        // Station.station_count = 0;
+        // // Add stations.
+        // this.addStation(x0 + 1, y0 + 1, "0");
+        // this.addStation(x0 + 1, y1 - 1, "1");
+        // this.addStation(x1 - 1, y0 + 1, "2");
+        // this.addStation(x1 - 1, y1 - 1, "3");
 
-        this.gameMap.updateGround(10, 3, GroundType.Grass);
-        this.addFactory(10, 3, ResourceType.Steel);
+        // this.gameMap.updateGround(10, 3, GroundType.Grass);
+        // this.addFactory(10, 3, ResourceType.Steel);
 
         for (let station of this.stations) {
             this.gameMap.generatePlatform(station.column, station.row);
