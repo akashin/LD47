@@ -131,9 +131,11 @@ export class MainScene extends Phaser.Scene {
     update(time: number, delta: number): void {
         this.player.update(delta);
 
-        if (this.takeOrderKey.isDown) {
-            let nearbyStation = this.findNearbyStation();
-            if (nearbyStation) {
+        let nearbyStation = this.findNearbyStation();
+        if (nearbyStation) {
+            this.orderManager.fulfilOrdersInStations(nearbyStation);
+
+            if (this.takeOrderKey.isDown) {
                 let order = this.orderManager.stationSourceOrder[nearbyStation.index];
                 if (order) {
                     if (this.orderManager.ordersInInventory.length < CONST.inventorySize) {
@@ -163,7 +165,7 @@ export class MainScene extends Phaser.Scene {
             }
         });
         if (nearbyStations.length > 0) {
-            console.log("Found ", nearbyStations.length, " stations nearby.");
+            console.log("Found stations: ", nearbyStations);
         }
         var assert = require('assert');
         assert(nearbyStations.length <= 1);
@@ -172,15 +174,7 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-
-    fulfulNearbyOrders(): void {
-        let nearbyStation = this.findNearbyStation();
-        if (nearbyStation) {
-            this.orderManager.fulfulOrdersInStations(nearbyStation);
-        }
-    }
-
-    // Called every N ticks to update game state.
+    // Called every tickDelta ticks to update game state.
     updateStep(): void {
         if ((this.tickCounter % CONST.addOrderFrequency) == 1) {
             if (!this.orderManager.addOrder()) {
@@ -188,7 +182,5 @@ export class MainScene extends Phaser.Scene {
                 // alert('You\'re dead!');
             }
         }
-
-        this.fulfulNearbyOrders();
     }
 }
