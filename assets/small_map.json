@@ -22,8 +22,18 @@
          "width":10,
          "x":0,
          "y":0
+        }, 
+        {
+         "id":4,
+         "image":"karta1.png",
+         "name":"Background",
+         "opacity":1,
+         "type":"imagelayer",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":4,
+ "nextlayerid":5,
  "nextobjectid":1,
  "orientation":"orthogonal",
  "renderorder":"right-down",

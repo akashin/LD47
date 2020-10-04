@@ -89,7 +89,7 @@ export class MainScene extends Phaser.Scene {
         this.tilemap = this.make.tilemap({ key: "level" });
         this.tileset = this.tilemap.addTilesetImage("spritesheet", "tiles");
 
-        this.backgroundLayer = this.tilemap.createStaticLayer("Rails", this.tileset, 0, 0);
+        // this.backgroundLayer = this.tilemap.createStaticLayer("Rails", this.tileset, 0, 0);
 
         // Map
         this.gameMap = new GameMap(this, 0, 0);
