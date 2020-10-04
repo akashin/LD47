@@ -38,10 +38,12 @@ export class TitleScene extends Phaser.Scene {
                 gameHeight / this.backgroundSprite.height,
             );
         }
-        let text = "Awesome Game Name\n\n";
+        let text = "Help a mars colony to grow and prosper!\n\n";
+        text += "Pick resources with the space button and\n";
+        text += "deliver it to settlements in need.\n\n";
         text += "Press space to start.";
         this.gameNameText = this.add.text(
-            gameWidth / 2 - 50, gameHeight / 2 - 20, text
+            gameWidth / 2 - 250, gameHeight / 2 - 100, text, {color: 'Yellow', fontSize: '20pt'}
         )
     }
 
