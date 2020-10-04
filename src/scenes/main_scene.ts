@@ -178,8 +178,6 @@ export class MainScene extends Phaser.Scene {
                 let type = tiles[y][x].properties.type;
                 if (type == 'Station') {
                     this.addStation(x, y, '0');
-                } else if (type == 'Factory') {
-                    this.addFactory(x, y, ResourceType.Steel);
                 } else {
                     this.gameMap.updateRail(x, y, typeToRailType[type]);
                 }
