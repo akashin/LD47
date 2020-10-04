@@ -25,6 +25,7 @@ export class MainScene extends Phaser.Scene {
     // Game time.
     private msSinceLastTick: number;
     private tickCounter: integer;
+    private lastKeyDetected: number;
 
     // Game objects.
     private gameMap: GameMap;
@@ -99,6 +100,7 @@ export class MainScene extends Phaser.Scene {
         this.tickCounter = 0;
         this.stations = [];
         this.factories = [];
+        this.lastKeyDetected = 0;
     }
 
     // Creates game objects.
@@ -233,12 +235,10 @@ export class MainScene extends Phaser.Scene {
         if (nearbyStation) {
             let numFulfilled = this.orderManager.fulfilDemandInStation(nearbyStation);
             this.scoreBoard.increaseScore(numFulfilled);
-
-            if (this.takeOrderKey.isDown) {
-            }
         }
-
-        if (this.takeOrderKey.isDown) {
+        let isReady = (time - this.lastKeyDetected) > CONST.minMsBetweenClicks;
+        if (this.takeOrderKey.isDown && isReady) {
+            this.lastKeyDetected = time;
             let nearbyFactory = this.findNearbyFactory();
             if (nearbyFactory) {
                 if (this.orderManager.resourcesInInventory.length >= CONST.inventorySize) {
