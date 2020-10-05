@@ -8,6 +8,7 @@ import { ScoreBoard } from "../hud/score_board";
 import { Factory, ResourceType } from "../objects/factory";
 import { randomInt } from "../utils/math";
 import { Inventory } from "../hud/inventory";
+import { Tutorial } from "../hud/tutorial";
 
 var assert = require('assert');
 
@@ -35,12 +36,18 @@ export class MainScene extends Phaser.Scene {
     private stations: Station[];
     private factories: Factory[];
     private player: Player;
-    private demandCount: number;
+    public demandCount: number; // UGLY that I have to make it public, but because of tutorial. TODO.
     private demandOverflowTicks: number;
     private resourceInventory: Inventory;
 
     // Logic.
     private muted: boolean;
+    private isPaused: boolean;
+
+    // Tutorial.
+    private tutorial: Tutorial;
+    private tutorialInProgress: boolean;
+    
 
     // Containers
     private buildingsContainer: Phaser.GameObjects.Container;
@@ -122,6 +129,13 @@ export class MainScene extends Phaser.Scene {
         if (data.muted) {
             this.muted = true;
         }
+        // If restarting the game, data.tutorial is not provided (undefined).
+        if (data.tutorial) {
+            this.tutorialInProgress = true;
+        } else {
+            this.tutorialInProgress = false;
+        }
+        this.isPaused = false;
         this.msSinceLastTick = 0;
         this.tickCounter = 0;
         this.stations = [];
@@ -180,6 +194,9 @@ export class MainScene extends Phaser.Scene {
         if (!this.muted) {
             this.backgroundMusic.play({volume: 0.1});
         }
+
+        // Tutorial.
+        this.tutorial = new Tutorial(this, this.stations[2]);
 
         // this.debugVisualizeNearTiles();
 
@@ -275,6 +292,13 @@ export class MainScene extends Phaser.Scene {
 
     // Called periodically to update game state.
     update(time: number, delta: number): void {
+        if (this.isPaused) {
+            if (this.takeResourceKey.isDown || this.input.activePointer.isDown) {
+                this.isPaused = false;
+            }
+            return
+        }
+
         this.player.update(delta, this.findNearestFactory()[1], CONST.trainMaxSpeed * (1 + this.scoreBoard.score / 10));
 
         let nearbyStation = this.findNearbyStation();
@@ -362,8 +386,20 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
+    pause(): void {
+        this.isPaused = true;
+    }
+
     // Called every tickDelta ticks to update game state.
     updateStep(): void {
+        if (this.tutorialInProgress) {
+            let tutorialFinished = this.tutorial.updateStep(this.tickCounter, this);
+            if (tutorialFinished) {
+                this.tutorialInProgress = false;
+            }
+            return
+        }
+
         let demandPeriod = Math.max(
             CONST.baseDemandPeriod - CONST.scoreSpeedupMultiplier * this.scoreBoard.score,
             CONST.minDemandPeriod);

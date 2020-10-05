@@ -45,7 +45,7 @@ export class TitleScene extends Phaser.Scene {
     // Called periodically to update game state.
     update(time: number, delta: number): void {
         if (this.startKey.isDown || this.input.activePointer.isDown) {
-            this.scene.start("MainScene");
+            this.scene.start("MainScene", {tutorial: true});  // TODO: Let user choose between tutorial and not.
         }
     }
 }
