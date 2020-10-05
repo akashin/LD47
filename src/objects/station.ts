@@ -12,12 +12,13 @@ class Demand extends Phaser.GameObjects.Container {
 
         this.dialogSprite = new Phaser.GameObjects.Sprite(scene, 0, 0, 'dialog');
         this.dialogSprite.setDisplayOrigin(0, this.dialogSprite.height);
-        this.dialogSprite.setDisplaySize(CONST.tileSize * 1.5, CONST.tileSize * 1.5);
+        let scale = 1;
+        this.dialogSprite.setDisplaySize(scale * CONST.tileSize * 1.5, scale * CONST.tileSize * 1.5);
         this.add(this.dialogSprite);
 
-        this.resourceSprite = new Phaser.GameObjects.Sprite(scene, CONST.tileSize * 0.7, CONST.tileSize * -0.85, getResourceTextureName(resourceType));
+        this.resourceSprite = new Phaser.GameObjects.Sprite(scene, scale * CONST.tileSize * 0.75, scale * CONST.tileSize * -0.85, getResourceTextureName(resourceType));
         // this.resourceSprite.setDisplayOrigin(0, this.resourceSprite.height);
-        this.resourceSprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        this.resourceSprite.setDisplaySize(scale * CONST.tileSize, scale * CONST.tileSize);
         this.add(this.resourceSprite);
     }
 }
