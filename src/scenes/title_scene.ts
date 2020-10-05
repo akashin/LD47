@@ -14,6 +14,8 @@ export class TitleScene extends Phaser.Scene {
     // Preloads game resources.
     preload(): void {
         this.load.image("titleBackground", "./assets/title.png");
+
+        this.load.image('resource_oxygen', './assets/resource_oxygen.png');//TMP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     // Initializes game state.
@@ -33,6 +35,20 @@ export class TitleScene extends Phaser.Scene {
         this.backgroundSprite.setOrigin(0, 0);
         this.backgroundSprite.setDisplaySize(gameWidth, gameHeight);
 
+        let tutorial = new Phaser.GameObjects.Sprite(this, 10 * CONST.tileSize, 10 * CONST.tileSize, 'resource_oxygen');
+        this.add.existing(tutorial);
+        tutorial.setDisplaySize(100, 100)
+        tutorial.setInteractive();
+        let This = this;
+        tutorial.on('pointerdown', function (pointer) {
+            This.scene.start("MainScene", {tutorial: true});
+        });
+        let playNow = new Phaser.GameObjects.Sprite(this, 15 * CONST.tileSize, 10 * CONST.tileSize, 'resource_oxygen');
+        this.add.existing(playNow);
+        playNow.setDisplaySize(100, 100).setInteractive().on('pointerdown', function (pointer) {
+            This.scene.start("MainScene", {tutorial: false});
+        });
+
         // let text = "Help a Mars colony grow and prosper!\n\n";
         // text += "Pick resources by clicking and\n";
         // text += "deliver it to settlements in need.\n\n";
@@ -40,12 +56,5 @@ export class TitleScene extends Phaser.Scene {
         // this.gameNameText = this.add.text(
         //     gameWidth / 2 - 250, gameHeight / 2 - 100, text, {color: 'Yellow', fontSize: '20pt'}
         // )
-    }
-
-    // Called periodically to update game state.
-    update(time: number, delta: number): void {
-        if (this.startKey.isDown || this.input.activePointer.isDown) {
-            this.scene.start("MainScene", {tutorial: true});  // TODO: Let user choose between tutorial and not.
-        }
     }
 }
