@@ -7,7 +7,7 @@ export let CONST = {
     tileSize: 48,
 
     // Stations.
-    orderPickupDistance: 1.1,
+    resourcePickupDistance: 1.1,
 
     // Inventory.
     inventoryX: 10,

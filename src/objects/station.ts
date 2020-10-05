@@ -53,7 +53,7 @@ export class Station extends Phaser.GameObjects.Container {
     }
 
     isNearby(column: integer, row: integer): boolean {
-        return Math.max(Math.abs(column - this.column), Math.abs(row - this.row)) <= CONST.orderPickupDistance;
+        return Math.max(Math.abs(column - this.column), Math.abs(row - this.row)) <= CONST.resourcePickupDistance;
     }
 
     setDemand(resourceType: ResourceType): void {

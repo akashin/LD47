@@ -353,7 +353,7 @@ export class MainScene extends Phaser.Scene {
 
     addDemand(): boolean {
         let numStations = this.stations.length;
-        // No more space to create orders.
+        // No more space to create demands.
         if (this.demand_count >= numStations) {
             return false;
         }

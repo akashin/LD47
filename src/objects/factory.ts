@@ -25,19 +25,15 @@ export function getResourceTextureName(resource_type: ResourceType): string {
 }
 
 class Resource extends Phaser.GameObjects.Container {
-    order_sprite: Phaser.GameObjects.Sprite;
-    order_destination_text: Phaser.GameObjects.Text;
+    resourceSprite: Phaser.GameObjects.Sprite;
 
     constructor(scene, params) {
         super(scene, params.x, params.y);
 
-        this.order_sprite = scene.add.sprite(0, 0, getResourceTextureName(params.resource_type));
-        this.order_sprite.setOrigin(0, 0);
-        this.order_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
-        this.add(this.order_sprite);
-
-        this.order_destination_text = scene.add.text(0, 0, params.destination);
-        this.add(this.order_destination_text);
+        this.resourceSprite = scene.add.sprite(0, 0, getResourceTextureName(params.resource_type));
+        this.resourceSprite.setOrigin(0, 0);
+        this.resourceSprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        this.add(this.resourceSprite);
     }
 }
 
@@ -68,7 +64,7 @@ export class Factory extends Phaser.GameObjects.Container {
     }
 
     isNearby(column: integer, row: integer): boolean {
-        return Math.max(Math.abs(column - this.column), Math.abs(row - this.row)) <= CONST.orderPickupDistance;
+        return Math.max(Math.abs(column - this.column), Math.abs(row - this.row)) <= CONST.resourcePickupDistance;
     }
 
     setHighlighted(highlighted: boolean): void {
