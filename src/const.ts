@@ -33,7 +33,4 @@ export let CONST = {
 
     // Resources.
     resourceCount: 5,
-
-    // Space detection.
-    minMsBetweenClicks: 120,
 }

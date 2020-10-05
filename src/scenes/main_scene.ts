@@ -26,7 +26,8 @@ export class MainScene extends Phaser.Scene {
     // Game time.
     private msSinceLastTick: number;
     private tickCounter: integer;
-    private lastKeyDetected: number;
+    // True if in the previous update() call user was pressing space AND was near a factory.
+    private prevUpdateClickedAndStation: boolean;
 
     // Game objects.
     private gameMap: GameMap;
@@ -110,7 +111,9 @@ export class MainScene extends Phaser.Scene {
         this.tickCounter = 0;
         this.stations = [];
         this.factories = [];
-        this.lastKeyDetected = 0;
+        // Init with true so that if the user lost and then clicked to restart the game,
+        // this first clicked didn't count as taking resource from the first factory.
+        this.prevUpdateClickedAndStation = true;
         this.demandCount = 0;
         this.demandOverflowTicks = 0;
     }
@@ -255,17 +258,20 @@ export class MainScene extends Phaser.Scene {
             let numFulfilled = this.fulfilDemandInStation(nearbyStation);
             this.scoreBoard.increaseScore(numFulfilled);
         }
-        let isReady = (time - this.lastKeyDetected) > CONST.minMsBetweenClicks;
-        if ((this.takeResourceKey.isDown || this.input.activePointer.isDown) && isReady) {
-            this.lastKeyDetected = time;
+        if (this.takeResourceKey.isDown || this.input.activePointer.isDown) {
             let nearbyFactory = this.findNearbyFactory();
             if (nearbyFactory) {
                 if (this.resourceInventory.getResources().length >= CONST.inventorySize) {
                     console.log('Inventory is full!');
-                } else {
+                } else if (!this.prevUpdateClickedAndStation){
                     this.resourceInventory.addResource(nearbyFactory.resourceType);
                 }
+                this.prevUpdateClickedAndStation = true;
+            } else {
+                this.prevUpdateClickedAndStation = false;
             }
+        } else {
+            this.prevUpdateClickedAndStation = false
         }
 
         {
