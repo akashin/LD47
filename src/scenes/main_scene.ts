@@ -237,16 +237,17 @@ export class MainScene extends Phaser.Scene {
             let numFulfilled = this.orderManager.fulfilDemandInStation(nearbyStation);
             this.scoreBoard.increaseScore(numFulfilled);
         }
-        if (this.takeOrderKey.isDown && !this.takenLastUpdate) {
-            this.takenLastUpdate = false;
+        if (this.takeOrderKey.isDown) {
             let nearbyFactory = this.findNearbyFactory();
             if (nearbyFactory) {
                 if (this.orderManager.resourcesInInventory.length >= CONST.inventorySize) {
                     console.log('Inventory is full!');
-                } else {
+                } else if (!this.takenLastUpdate) {
                     this.orderManager.pickResource(nearbyFactory);
-                    this.takenLastUpdate = true;
                 }
+                this.takenLastUpdate = true;
+            } else {
+                this.takenLastUpdate = false;
             }
         } else {
             this.takenLastUpdate = false;
