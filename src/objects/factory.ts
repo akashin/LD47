@@ -52,14 +52,14 @@ export class Factory extends Phaser.GameObjects.Container {
         this.row = params.row;
         this.resourceType = params.resourceType;
 
-        this.factorySprite = new Phaser.GameObjects.Sprite(scene, 0, 0, 'factory_tile');
-        this.factorySprite.setOrigin(0, 0);
-        this.factorySprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
-        this.add(this.factorySprite);
+        // this.factorySprite = new Phaser.GameObjects.Sprite(scene, 0, 0, 'factory_tile');
+        // this.factorySprite.setOrigin(0, 0);
+        // this.factorySprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        // this.add(this.factorySprite);
 
-        this.factoryResourceSprite = new Phaser.GameObjects.Sprite(scene, CONST.tileSize, 0, getResourceTextureName(this.resourceType));
-        this.factoryResourceSprite.setOrigin(0, 0);
-        this.factoryResourceSprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        this.factoryResourceSprite = new Phaser.GameObjects.Sprite(scene, 0, 0, getResourceTextureName(this.resourceType));
+        this.factoryResourceSprite.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
+        this.factoryResourceSprite.setDisplayOrigin(CONST.tileSize * 2, CONST.tileSize * 2);
         this.add(this.factoryResourceSprite);
     }
 
@@ -68,10 +68,10 @@ export class Factory extends Phaser.GameObjects.Container {
     }
 
     setHighlighted(highlighted: boolean): void {
-        if (highlighted) {
-            this.factorySprite.setTint(0xFF0000);
-        } else {
-            this.factorySprite.setTint(0xFFFFFF);
-        }
+        // if (highlighted) {
+        //     this.factoryResourceSprite.setTint(0xFF0000);
+        // } else {
+        //     this.factoryResourceSprite.setTint(0xFFFFFF);
+        // }
     }
 }
