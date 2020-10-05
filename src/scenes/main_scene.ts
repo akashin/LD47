@@ -33,7 +33,7 @@ export class MainScene extends Phaser.Scene {
     private stations: Station[];
     private factories: Factory[];
     private player: Player;
-    private demand_count: number;
+    private demandCount: number;
     private resourceInventory: Inventory;
 
     // Containers
@@ -100,7 +100,7 @@ export class MainScene extends Phaser.Scene {
         this.stations = [];
         this.factories = [];
         this.lastKeyDetected = 0;
-        this.demand_count = 0;
+        this.demandCount = 0;
     }
 
     // Creates game objects.
@@ -148,15 +148,15 @@ export class MainScene extends Phaser.Scene {
     }
 
     findFirstRail(): Position {
-        let best_priority = 1000;
+        let bestPriority = 1000;
         let bestX = -1;
         let bestY = -1;
         for (let x = 0; x < CONST.mapWidth; ++x) {
             for (let y = 0; y < CONST.mapHeight; ++y) {
                 if (!!this.gameMap.getRailType(x, y)) {
                     let priority = x + y;
-                    if (priority < best_priority) {
-                        best_priority = priority;
+                    if (priority < bestPriority) {
+                        bestPriority = priority;
                         bestX = x;
                         bestY = y;
                     }
@@ -168,7 +168,7 @@ export class MainScene extends Phaser.Scene {
 
     generateMap(): void {
         // Reset station counter in case it's not our first game.
-        Station.station_count = 0;
+        Station.stationCount = 0;
 
         this.backgroundLayer = this.tilemap.createStaticLayer("Rails", this.tileset, 0, 0);
         this.backgroundLayer.setVisible(false);
@@ -180,7 +180,7 @@ export class MainScene extends Phaser.Scene {
             for (let y = 0; y < tiles.length; ++y) {
                 let type = tiles[y][x].properties.type;
                 if (type == 'Station') {
-                    this.addStation(x, y, '0');
+                    this.addStation(x, y);
                 } else {
                     this.gameMap.updateRail(x, y, typeToRailType[type]);
                 }
@@ -203,13 +203,12 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    addStation(x: integer, y: integer, station_name: string): void {
+    addStation(x: integer, y: integer): void {
         let station = new Station(this, {
             x: x * CONST.tileSize,
             y: y * CONST.tileSize,
             column: x,
             row: y,
-            station_name: station_name,
         });
         this.stations.push(station);
         this.buildingsContainer.add(station);
@@ -354,20 +353,20 @@ export class MainScene extends Phaser.Scene {
     addDemand(): boolean {
         let numStations = this.stations.length;
         // No more space to create demands.
-        if (this.demand_count >= numStations) {
+        if (this.demandCount >= numStations) {
             return false;
         }
 
-        let station_index = randomInt(numStations);
+        let stationIndex = randomInt(numStations);
         // Make sure station does not already have a demand.
-        while (this.stations[station_index].hasDemand()) {
-            station_index = randomInt(numStations);
+        while (this.stations[stationIndex].hasDemand()) {
+            stationIndex = randomInt(numStations);
         }
-        assert(this.stations[station_index].index == station_index);
+        assert(this.stations[stationIndex].index == stationIndex);
 
-        let resource_type = randomInt(CONST.resourceCount);
-        this.stations[station_index].setDemand(resource_type);
-        this.demand_count += 1;
+        let resourceType = randomInt(CONST.resourceCount);
+        this.stations[stationIndex].setDemand(resourceType);
+        this.demandCount += 1;
 
         return true;
     }
@@ -378,7 +377,7 @@ export class MainScene extends Phaser.Scene {
             if (station.tryFulfilDemand(resources[i])) {
                 console.log('Fulfilled demand at station', station.index, 'and resource', resources[i]);
                 this.resourceInventory.removeResource(i);
-                this.demand_count -= 1;
+                this.demandCount -= 1;
                 return 1;
             }
         }

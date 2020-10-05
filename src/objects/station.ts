@@ -23,31 +23,24 @@ class Demand extends Phaser.GameObjects.Container {
 }
 
 export class Station extends Phaser.GameObjects.Container {
-    static station_count: integer = 0;
+    static stationCount: integer = 0;
     column: integer;
     row: integer;
     index: integer;
-    station_name: string;
 
-    station_sprite: Phaser.GameObjects.Sprite;
-    // station_name_text: Phaser.GameObjects.Text;
-
+    stationSprite: Phaser.GameObjects.Sprite;
     demand: Demand;
 
     constructor(scene, params) {
         super(scene, params.x, params.y);
         this.column = params.column;
         this.row = params.row;
-        this.station_name = params.station_name;
-        this.index = Station.station_count++;
+        this.index = Station.stationCount++;
 
-        this.station_sprite = scene.add.sprite(0, 0, 'station_tile');
-        this.station_sprite.setOrigin(0, 0);
-        this.station_sprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
-        this.add(this.station_sprite);
-
-        // this.station_name_text = scene.add.text(0, 0, this.station_name);
-        // this.add(this.station_name_text);
+        this.stationSprite = scene.add.sprite(0, 0, 'station_tile');
+        this.stationSprite.setOrigin(0, 0);
+        this.stationSprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        this.add(this.stationSprite);
 
         this.demand = null;
     }
