@@ -219,10 +219,14 @@ export class MainScene extends Phaser.Scene {
         });
 
         this.tilemap.getObjectLayer('Decorations').objects.forEach(object => {
-            let decorationName = object.properties[0].value;
-            let sprite = this.add.sprite(object.x / 32 * CONST.tileSize, (object.y / 32 - 1) * CONST.tileSize, decorationName);
-            sprite.setOrigin(0, 0);
-            sprite.setDisplaySize(object.width / 32 * CONST.tileSize, object.height / 32 * CONST.tileSize);
+            if (object.properties == null) {
+                console.log('Bad object:', object.properties);
+            } else {
+                let decorationName = object.properties[0].value;
+                let sprite = this.add.sprite(object.x / 32 * CONST.tileSize, (object.y / 32 - 1) * CONST.tileSize, decorationName);
+                sprite.setOrigin(0, 0);
+                sprite.setDisplaySize(object.width / 32 * CONST.tileSize, object.height / 32 * CONST.tileSize);
+            }
         });
 
         for (let factory of this.factories) {
