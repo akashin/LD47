@@ -11,7 +11,7 @@ export let CONST = {
 
     // Inventory.
     inventoryX: 10,
-    inventoryY: 600,
+    inventoryY: 700,
     inventorySize: 3,  // How many elements fits in the train.
 
     // How often we create a new demand.

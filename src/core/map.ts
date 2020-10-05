@@ -203,6 +203,7 @@ export class GameMap extends Phaser.GameObjects.Container {
         }
 
         if (railType != null) {
+            // console.log(x, y);
             let rail = new Rail(this.scene, x * CONST.tileSize, y * CONST.tileSize, railType);
             this.rails[x][y] = rail;
             this.railsContainer.add(rail);

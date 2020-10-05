@@ -90,6 +90,10 @@ export class MainScene extends Phaser.Scene {
         this.load.image('raketa2', 'raketa2.png');
         this.load.image('gorka', 'gorka.png');
 
+        // Inventory.
+        this.load.image('inventory_end', 'inventar_1.png');
+        this.load.image('inventory_body', 'inventar_2.png');
+
         // A useful image to draw squares.
         this.load.image('blank', 'blank.png');
 

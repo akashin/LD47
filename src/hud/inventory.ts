@@ -11,6 +11,30 @@ export class Inventory extends Phaser.GameObjects.Container {
         this.resources = [];
         this.resourceTiles = [];
         this.setResources(this.resources);
+
+        {
+            var leftEndSprite = this.scene.add.sprite(0, 0, "inventory_end");
+            leftEndSprite.setOrigin(0, 0);
+            leftEndSprite.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
+            this.add(leftEndSprite);
+        }
+
+        for (let i = 1; i < CONST.inventorySize - 1; ++i) {
+            var leftEndSprite = this.scene.add.sprite(CONST.tileSize * 2 * i, 0, "inventory_body");
+            leftEndSprite.setOrigin(0, 0);
+            leftEndSprite.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
+            this.add(leftEndSprite);
+        }
+
+        {
+            var rightEndSprite = this.scene.add.sprite(CONST.tileSize * 2 * (CONST.inventorySize - 1), 0, "inventory_end");
+            rightEndSprite.flipX = true;
+            rightEndSprite.setOrigin(0, 0);
+            rightEndSprite.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
+            this.add(rightEndSprite);
+        }
+
+        // this.scene.add.sprite(0, 0, "inventory_body");
     }
 
     getResources() {
@@ -35,7 +59,7 @@ export class Inventory extends Phaser.GameObjects.Container {
 
         let shiftX = 0;
         for (let resource of resources) {
-            let resourceTile = this.scene.add.sprite(shiftX, 70, getResourceTextureName(resource));
+            let resourceTile = this.scene.add.sprite(shiftX, 0, getResourceTextureName(resource));
             resourceTile.setOrigin(0, 0);
             resourceTile.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
             this.resourceTiles.push(resourceTile);
