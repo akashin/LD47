@@ -68,6 +68,7 @@ export class MainScene extends Phaser.Scene {
         // Objects
         this.load.image('grass_tile', 'grass.png');
         this.load.image('sand_tile', 'sand.png');
+        this.load.image('platform_tile', 'platform_tile.png');
         this.load.image('station_tile', 'station.png');
         this.load.image('factory_tile', 'original/factory.png');
         this.load.image('dialog', 'dialog.png');

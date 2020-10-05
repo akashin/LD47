@@ -4,6 +4,7 @@ import { Direction, getOppositeDirection } from "../utils/direction";
 export enum GroundType {
     Grass,
     Sand,
+    Platform,
 }
 
 export enum RailType {
@@ -53,6 +54,8 @@ class Tile extends Phaser.GameObjects.Sprite {
                 return 'grass_tile';
             case GroundType.Sand:
                 return 'sand_tile';
+            case GroundType.Platform:
+                return 'platform_tile';
         }
         throw new Error('Unknown GroundType');
     }
@@ -214,7 +217,7 @@ export class GameMap extends Phaser.GameObjects.Container {
         for (let x = platformX - 1; x <= platformX + 1; ++x) {
             for (let y = platformY - 1; y <= platformY + 1; ++y) {
                 if (this.isInsideMap(x, y) && this.getRailType(x, y) != null) {
-                    this.updateGround(x, y, GroundType.Sand);
+                    this.updateGround(x, y, GroundType.Platform);
                 }
             }
         }
