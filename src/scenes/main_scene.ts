@@ -49,6 +49,8 @@ export class MainScene extends Phaser.Scene {
     private scoreBoard: ScoreBoard;
 
     private backgroundMusic: Phaser.Sound.BaseSound;
+    private resourcePickup: Phaser.Sound.BaseSound;
+    private resourceDelivery: Phaser.Sound.BaseSound;
 
     constructor() {
         super({
@@ -112,6 +114,10 @@ export class MainScene extends Phaser.Scene {
         this.load.tilemapTiledJSON('level', 'big_map.json');
 
         this.load.audio("background_track", "background.mp3");
+
+        // Sounds.
+        this.load.audio("resource_pickup", "resource_pickup.wav");
+        this.load.audio("resource_delivery", "resource_delivery.wav");
     }
 
 
@@ -185,6 +191,9 @@ export class MainScene extends Phaser.Scene {
         if (!this.muted) {
             this.backgroundMusic.play({volume: 0.1});
         }
+
+        this.resourcePickup = this.sound.add("resource_pickup");
+        this.resourceDelivery = this.sound.add("resource_delivery");
 
         // this.debugVisualizeNearTiles();
 
@@ -293,6 +302,7 @@ export class MainScene extends Phaser.Scene {
                 if (this.resourceInventory.getResources().length >= CONST.inventorySize) {
                     console.log('Inventory is full!');
                 } else if (!this.prevUpdateClickedAndStation){
+                    this.resourcePickup.play();
                     this.resourceInventory.addResource(nearbyFactory.resourceType);
                 }
                 this.prevUpdateClickedAndStation = true;
@@ -444,6 +454,7 @@ export class MainScene extends Phaser.Scene {
                 console.log('Fulfilled demand at station', station.index, 'and resource', resources[i]);
                 this.resourceInventory.removeResource(i);
                 this.demandCount -= 1;
+                this.resourceDelivery.play();
                 return 1;
             }
         }
