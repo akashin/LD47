@@ -3,7 +3,6 @@ import { CONST } from "../const";
 export class TitleScene extends Phaser.Scene {
     private backgroundSprite: Phaser.GameObjects.Sprite;
     private startKey: Phaser.Input.Keyboard.Key;
-    // private gameNameText: Phaser.GameObjects.Text;
 
     constructor() {
         super({
@@ -48,13 +47,5 @@ export class TitleScene extends Phaser.Scene {
         playNow.setScale(0.4).setInteractive().on('pointerdown', function (pointer) {
             This.scene.start("MainScene", {tutorial: false});
         });
-
-        // let text = "Help a Mars colony grow and prosper!\n\n";
-        // text += "Pick resources by clicking and\n";
-        // text += "deliver it to settlements in need.\n\n";
-        // text += "Click anywhere to start.";
-        // this.gameNameText = this.add.text(
-        //     gameWidth / 2 - 250, gameHeight / 2 - 100, text, {color: 'Yellow', fontSize: '20pt'}
-        // )
     }
 }
