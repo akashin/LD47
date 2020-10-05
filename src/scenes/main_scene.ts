@@ -333,7 +333,9 @@ export class MainScene extends Phaser.Scene {
                 if (this.resourceInventory.getResources().length >= CONST.inventorySize) {
                     console.log('Inventory is full!');
                 } else if (!this.prevUpdateClickedAndStation){
-                    this.resourcePickup.play();
+                    if (!this.muted) {
+                        this.resourcePickup.play();
+                    }
                     this.resourceInventory.addResource(nearbyFactory.resourceType);
                 }
                 this.prevUpdateClickedAndStation = true;
@@ -501,7 +503,9 @@ export class MainScene extends Phaser.Scene {
                 console.log('Fulfilled demand at station', station.index, 'and resource', resources[i]);
                 this.resourceInventory.removeResource(i);
                 this.demandCount -= 1;
-                this.resourceDelivery.play();
+                if (!this.muted) {
+                    this.resourceDelivery.play();
+                }
                 return 1;
             }
         }
