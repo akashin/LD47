@@ -34,6 +34,7 @@ export class MainScene extends Phaser.Scene {
     private factories: Factory[];
     private player: Player;
     private demandCount: number;
+    private demandOverflowTicks: number;
     private resourceInventory: Inventory;
 
     // Containers
@@ -106,6 +107,7 @@ export class MainScene extends Phaser.Scene {
         this.factories = [];
         this.lastKeyDetected = 0;
         this.demandCount = 0;
+        this.demandOverflowTicks = 0;
     }
 
     // Creates game objects.
@@ -324,9 +326,14 @@ export class MainScene extends Phaser.Scene {
             CONST.minDemandPeriod);
         if ((this.tickCounter % demandPeriod) == 1) {
             if (!this.addDemand()) {
-                console.log('You\'re dead!')
-                this.backgroundMusic.stop();
-                this.scene.start("EndScene", { score: this.scoreBoard.score});
+                this.demandOverflowTicks += 1;
+                if (this.demandOverflowTicks > CONST.endGameThreshold) {
+                    console.log('You\'re dead!')
+                    this.backgroundMusic.stop();
+                    this.scene.start("EndScene", { score: this.scoreBoard.score});
+                }
+            } else {
+                this.demandOverflowTicks = 0;
             }
         }
     }

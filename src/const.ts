@@ -22,6 +22,8 @@ export let CONST = {
     // period = baseDemandPeriod - score * scoreSpeedMultiplier
     scoreSpeedupMultiplier: 4,
 
+    endGameThreshold: 50,
+
     // Train
     trainMinSpeed: 2,
     trainMaxSpeed: 10,
