@@ -6,6 +6,7 @@ export class EndScene extends Phaser.Scene {
     private startKey: Phaser.Input.Keyboard.Key;
     private gameNameText: Phaser.GameObjects.Text;
     private score: number;
+    private muted: boolean;
 
     constructor() {
         super({
@@ -21,6 +22,7 @@ export class EndScene extends Phaser.Scene {
     // Initializes game state.
     init(data): void {
         this.score = data.score;
+        this.muted = data.muted;
         this.startKey = this.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
@@ -43,7 +45,7 @@ export class EndScene extends Phaser.Scene {
     // Called periodically to update game state.
     update(time: number, delta: number): void {
         if (this.startKey.isDown || this.input.activePointer.isDown) {
-            this.scene.start("MainScene");
+            this.scene.start("MainScene", {muted: this.muted});
         }
     }
 }

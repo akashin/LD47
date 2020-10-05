@@ -22,12 +22,13 @@ export class MainScene extends Phaser.Scene {
 
     // Inputs.
     private takeResourceKey: Phaser.Input.Keyboard.Key;
+    private muteKey: Phaser.Input.Keyboard.Key;
+    // True if in the previous update() call user was pressing space AND was near a factory.
+    private prevUpdateClickedAndStation: boolean;
 
     // Game time.
     private msSinceLastTick: number;
     private tickCounter: integer;
-    // True if in the previous update() call user was pressing space AND was near a factory.
-    private prevUpdateClickedAndStation: boolean;
 
     // Game objects.
     private gameMap: GameMap;
@@ -37,6 +38,9 @@ export class MainScene extends Phaser.Scene {
     private demandCount: number;
     private demandOverflowTicks: number;
     private resourceInventory: Inventory;
+
+    // Logic.
+    private muted: boolean;
 
     // Containers
     private buildingsContainer: Phaser.GameObjects.Container;
@@ -107,10 +111,17 @@ export class MainScene extends Phaser.Scene {
 
 
     // Initializes game state.
-    init(): void {
+    init(data): void {
         this.takeResourceKey = this.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
+        this.muteKey = this.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.M
+        );
+        this.muted = false;
+        if (data.muted) {
+            this.muted = true;
+        }
         this.msSinceLastTick = 0;
         this.tickCounter = 0;
         this.stations = [];
@@ -144,6 +155,9 @@ export class MainScene extends Phaser.Scene {
 
         this.buildingsContainer = new Phaser.GameObjects.Container(this, 0, 0);
 
+        // Help.
+        this.add.text(0.8 * gameWidth, 0.92 * gameHeight, 'Press M to mute');
+
         // Map
         this.gameMap = new GameMap(this, 0, 0);
         this.add.existing(this.gameMap);
@@ -163,11 +177,13 @@ export class MainScene extends Phaser.Scene {
         this.backgroundMusic = this.sound.add("background_track", {
             loop: true,
         });
-        this.backgroundMusic.play();
+        if (!this.muted) {
+            this.backgroundMusic.play();
+        }
 
         // this.debugVisualizeNearTiles();
 
-        // this.cameras.main.startFollow(this.player);
+        // this.cameras.main.startFollow(this.player);@
         // this.cameras.main.setZoom(10);
     }
 
@@ -282,6 +298,11 @@ export class MainScene extends Phaser.Scene {
             this.prevUpdateClickedAndStation = false
         }
 
+        if (this.muteKey.isDown) {
+            this.backgroundMusic.pause();
+            this.muted = true;
+        }
+
         {
             for (let factory of this.factories) {
                 factory.setHighlighted(false);
@@ -352,7 +373,7 @@ export class MainScene extends Phaser.Scene {
                 if (this.demandOverflowTicks > CONST.endGameThreshold) {
                     console.log('You\'re dead!')
                     this.backgroundMusic.stop();
-                    this.scene.start("EndScene", { score: this.scoreBoard.score});
+                    this.scene.start("EndScene", {score: this.scoreBoard.score, muted: this.muted});
                 }
             } else {
                 this.demandOverflowTicks = 0;
