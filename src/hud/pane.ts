@@ -9,7 +9,7 @@ export function createPane(container: Phaser.GameObjects.Container, scene, size:
         container.add(leftEndSprite);
     }
 
-    for (let i = 1; i < CONST.inventorySize - 1; ++i) {
+    for (let i = 1; i < size - 1; ++i) {
         var leftEndSprite = scene.add.sprite(CONST.tileSize * 2 * i, 0, "inventory_body");
         leftEndSprite.setOrigin(0, 0);
         leftEndSprite.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
@@ -17,7 +17,7 @@ export function createPane(container: Phaser.GameObjects.Container, scene, size:
     }
 
     {
-        var rightEndSprite = scene.add.sprite(CONST.tileSize * 2 * (CONST.inventorySize - 1), 0, "inventory_end");
+        var rightEndSprite = scene.add.sprite(CONST.tileSize * 2 * (size - 1), 0, "inventory_end");
         rightEndSprite.flipX = true;
         rightEndSprite.setOrigin(0, 0);
         rightEndSprite.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);

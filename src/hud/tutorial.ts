@@ -1,14 +1,17 @@
 import { ResourceType } from "../objects/factory";
 import { Station } from "../objects/station";
 import { MainScene } from "../scenes/main_scene";
+import { createPane } from "./pane";
 
 export class Tutorial {
     private container: Phaser.GameObjects.Container;
     private station: Station;
     private showedFactoryTip: boolean;
+    private mainScene: MainScene;
 
     constructor(mainScene: MainScene, station: Station) {
-        this.container = new Phaser.GameObjects.Container(mainScene, 0, 0);
+        this.mainScene = mainScene;
+        this.container = new Phaser.GameObjects.Container(mainScene, 350, 200);
         mainScene.add.existing(this.container);
         this.station = station;
         this.showedFactoryTip = false;
@@ -20,13 +23,15 @@ export class Tutorial {
         if (tickCounter == 35) {
             this.station.setDemand(ResourceType.Steel);
             mainScene.demandCount += 1;
-            let text = new Phaser.GameObjects.Text(mainScene, 100, 100, 'A station needs a box of steel! Can you get it some?\nClick to continue.', {color: 'yellow', fontSize: '20pt'});
+            createPane(this.container, this.mainScene, 4);
+            let text = new Phaser.GameObjects.Text(mainScene, 14, 14, 'A station needs steel!\nClick to continue.', {color: 'yellow', fontSize: '20pt'});
             this.container.add(text);
             mainScene.pause();
         }
         let nearbyFactory = mainScene.findNearbyFactory();
         if (!this.showedFactoryTip && nearbyFactory && (nearbyFactory.resourceType == ResourceType.Steel)) {
-            let text = new Phaser.GameObjects.Text(mainScene, 100, 100, 'Look, you are on a station with still! Click anywhere to pick some.', {color: 'yellow', fontSize: '20pt'});
+            createPane(this.container, this.mainScene, 5);
+            let text = new Phaser.GameObjects.Text(mainScene, 14, 14, "You're on a still factory!\nClick anywhere to pick some.", {color: 'yellow', fontSize: '20pt'});
             this.container.add(text);
             mainScene.pause();
             this.showedFactoryTip = true;
