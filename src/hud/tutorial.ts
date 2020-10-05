@@ -35,7 +35,7 @@ export class Tutorial {
         let nearbyFactory = mainScene.findNearbyFactory();
         if (!this.showedFactoryTip && nearbyFactory && (nearbyFactory.resourceType == ResourceType.Steel)) {
             createPane(this.container, this.mainScene, 5);
-            let text = new Phaser.GameObjects.Text(mainScene, 14, 14, "You're on a still factory!\nClick anywhere to pick some.", {color: 'yellow', fontSize: '20pt'});
+            let text = new Phaser.GameObjects.Text(mainScene, 14, 14, "You're on a steel factory!\nClick anywhere to pick some.", {color: 'yellow', fontSize: '20pt'});
             this.container.add(text);
             mainScene.pause();
             this.showedFactoryTip = true;
