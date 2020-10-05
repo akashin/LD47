@@ -1,21 +1,30 @@
 import { CONST } from "../const";
 import { getResourceTextureName, ResourceType } from "../objects/factory";
 
-export class OrderInventory extends Phaser.GameObjects.Container {
-    private orderCountText: Phaser.GameObjects.Text;
+export class Inventory extends Phaser.GameObjects.Container {
+    private resources: Array<ResourceType>;
     private resourceTiles: Phaser.GameObjects.Sprite[];
 
     constructor(scene, x: number, y: number) {
         super(scene, x, y);
 
+        this.resources = [];
         this.resourceTiles = [];
+        this.setResources(this.resources);
+    }
 
-        this.orderCountText = scene.make.text({
-            x: x,
-            y: y,
-        });
-        this.add(this.orderCountText);
-        this.setResources([]);
+    getResources() {
+        return this.resources;
+    }
+
+    addResource(resourceType: ResourceType) {
+        this.resources.push(resourceType);
+        this.setResources(this.resources);
+    }
+
+    removeResource(position: integer) {
+        this.resources.splice(position, 1);
+        this.setResources(this.resources);
     }
 
     setResources(resources: Array<ResourceType>): void {

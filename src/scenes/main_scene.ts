@@ -1,5 +1,4 @@
 import { CONST } from "../const";
-import { OrderManager as DemandManager } from "../core/order";
 import { GameMap, GroundType, RailType } from "../core/map";
 import { Station } from "../objects/station";
 import { Player } from "../core/player";
@@ -7,6 +6,8 @@ import { Position } from "../utils/position";
 import { Direction } from "../utils/direction";
 import { ScoreBoard } from "../hud/score_board";
 import { Factory, ResourceType } from "../objects/factory";
+import { randomInt } from "../utils/math";
+import { Inventory } from "../hud/order_inventory";
 
 var assert = require('assert');
 
@@ -20,7 +21,7 @@ export class MainScene extends Phaser.Scene {
     private backgroundLayer: Phaser.Tilemaps.StaticTilemapLayer;
 
     // Inputs.
-    private takeDemandKey: Phaser.Input.Keyboard.Key;
+    private takeResourceKey: Phaser.Input.Keyboard.Key;
 
     // Game time.
     private msSinceLastTick: number;
@@ -31,8 +32,9 @@ export class MainScene extends Phaser.Scene {
     private gameMap: GameMap;
     private stations: Station[];
     private factories: Factory[];
-    private demandManager: DemandManager;
     private player: Player;
+    private demand_count: number;
+    private resourceInventory: Inventory;
 
     // Containers
     private buildingsContainer: Phaser.GameObjects.Container;
@@ -90,7 +92,7 @@ export class MainScene extends Phaser.Scene {
 
     // Initializes game state.
     init(): void {
-        this.takeDemandKey = this.input.keyboard.addKey(
+        this.takeResourceKey = this.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
         this.msSinceLastTick = 0;
@@ -98,6 +100,7 @@ export class MainScene extends Phaser.Scene {
         this.stations = [];
         this.factories = [];
         this.lastKeyDetected = 0;
+        this.demand_count = 0;
     }
 
     // Creates game objects.
@@ -133,7 +136,8 @@ export class MainScene extends Phaser.Scene {
 
         this.add.existing(this.buildingsContainer);
 
-        this.demandManager = new DemandManager(this, this.stations);
+        this.resourceInventory = new Inventory(this, CONST.inventoryX, CONST.inventoryY);
+        this.add.existing(this.resourceInventory);
         this.scoreBoard = new ScoreBoard(this, 10, 10);
         this.add.existing(this.scoreBoard);
 
@@ -229,18 +233,18 @@ export class MainScene extends Phaser.Scene {
 
         let nearbyStation = this.findNearbyStation();
         if (nearbyStation) {
-            let numFulfilled = this.demandManager.fulfilDemandInStation(nearbyStation);
+            let numFulfilled = this.fulfilDemandInStation(nearbyStation);
             this.scoreBoard.increaseScore(numFulfilled);
         }
         let isReady = (time - this.lastKeyDetected) > CONST.minMsBetweenClicks;
-        if ((this.takeDemandKey.isDown || this.input.activePointer.isDown) && isReady) {
+        if ((this.takeResourceKey.isDown || this.input.activePointer.isDown) && isReady) {
             this.lastKeyDetected = time;
             let nearbyFactory = this.findNearbyFactory();
             if (nearbyFactory) {
-                if (this.demandManager.resourcesInInventory.length >= CONST.inventorySize) {
+                if (this.resourceInventory.getResources().length >= CONST.inventorySize) {
                     console.log('Inventory is full!');
                 } else {
-                    this.demandManager.pickResource(nearbyFactory);
+                    this.resourceInventory.addResource(nearbyFactory.resourceType);
                 }
             }
         }
@@ -310,7 +314,7 @@ export class MainScene extends Phaser.Scene {
             CONST.baseDemandPeriod - CONST.scoreSpeedupMultiplier * this.scoreBoard.score,
             CONST.minDemandPeriod);
         if ((this.tickCounter % demandPeriod) == 1) {
-            if (!this.demandManager.addDemand()) {
+            if (!this.addDemand()) {
                 console.log('You\'re dead!')
                 this.scene.start("EndScene", { score: this.scoreBoard.score});
             }
@@ -345,5 +349,39 @@ export class MainScene extends Phaser.Scene {
                 }
             }
         }
+    }
+
+    addDemand(): boolean {
+        let numStations = this.stations.length;
+        // No more space to create orders.
+        if (this.demand_count >= numStations) {
+            return false;
+        }
+
+        let station_index = randomInt(numStations);
+        // Make sure station does not already have a demand.
+        while (this.stations[station_index].hasDemand()) {
+            station_index = randomInt(numStations);
+        }
+        assert(this.stations[station_index].index == station_index);
+
+        let resource_type = randomInt(CONST.resourceCount);
+        this.stations[station_index].setDemand(resource_type);
+        this.demand_count += 1;
+
+        return true;
+    }
+
+    fulfilDemandInStation(station: Station): number {
+        let resources = this.resourceInventory.getResources();
+        for (let i = 0; i < resources.length; ++i) {
+            if (station.tryFulfilDemand(resources[i])) {
+                console.log('Fulfilled demand at station', station.index, 'and resource', resources[i]);
+                this.resourceInventory.removeResource(i);
+                this.demand_count -= 1;
+                return 1;
+            }
+        }
+        return 0;
     }
 }
