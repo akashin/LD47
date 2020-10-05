@@ -38,7 +38,7 @@ export class EndScene extends Phaser.Scene {
         this.backgroundSprite.setOrigin(0, 0);
         this.backgroundSprite.setDisplaySize(gameWidth, gameHeight);
         this.gameNameText = this.add.text(
-            gameWidth / 2 + gameWidth * 0.03, gameHeight / 2 - gameHeight * 0.06, String(this.score), {color: 'white', fontSize: '28pt'}
+            gameWidth / 2 + gameWidth * 0.113, gameHeight / 2 - gameHeight * 0.16, String(this.score), {color: 'white', fontSize: '48pt'}
         )
     }
 
