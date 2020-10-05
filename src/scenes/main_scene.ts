@@ -207,22 +207,17 @@ export class MainScene extends Phaser.Scene {
         // Add factories (they are objects instead of tiles because that allows to add custom properties to each factory).
         let typeToResourceType = {'Steel': ResourceType.Steel, 'Food': ResourceType.Food, 'Oxygen': ResourceType.Oxygen, 'Water': ResourceType.Water, 'Medicine': ResourceType.Medicine};
         this.tilemap.getObjectLayer('Buildings').objects.forEach(object => {
-            console.log(object)
             // TODO: why -1?
             this.addFactory(Math.round(object.x / 32), Math.round(object.y / 32) - 1, typeToResourceType[object.properties[0].value]);
         });
 
         this.tilemap.getObjectLayer('Decorations').objects.forEach(object => {
-            console.log(object);
             let decorationName = object.properties[0].value;
             let sprite = this.add.sprite(object.x / 32 * CONST.tileSize, (object.y / 32 - 1) * CONST.tileSize, decorationName);
             sprite.setOrigin(0, 0);
             sprite.setDisplaySize(object.width / 32 * CONST.tileSize, object.height / 32 * CONST.tileSize);
         });
 
-        // for (let station of this.stations) {
-        //     this.gameMap.generatePlatform(station.column, station.row);
-        // }
         for (let factory of this.factories) {
             this.gameMap.generatePlatform(factory.column, factory.row);
         }
