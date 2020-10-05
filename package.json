@@ -1,7 +1,7 @@
 {
-  "name": "mygame",
+  "name": "StuckOnMars",
   "version": "1.0.0",
-  "description": "FILL ME",
+  "description": "Game about delivery on Mars.",
   "keywords": [
     "GameDev"
   ],
