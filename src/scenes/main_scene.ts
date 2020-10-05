@@ -178,7 +178,7 @@ export class MainScene extends Phaser.Scene {
             loop: true,
         });
         if (!this.muted) {
-            this.backgroundMusic.play();
+            this.backgroundMusic.play({volume: 0.1});
         }
 
         // this.debugVisualizeNearTiles();
