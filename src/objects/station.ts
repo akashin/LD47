@@ -12,7 +12,7 @@ class Demand extends Phaser.GameObjects.Container {
 
         this.dialogSprite = new Phaser.GameObjects.Sprite(scene, 0, 0, 'dialog');
         this.dialogSprite.setDisplayOrigin(0, this.dialogSprite.height);
-        let scale = 1;
+        let scale = 1.5;
         this.dialogSprite.setDisplaySize(scale * CONST.tileSize * 1.5, scale * CONST.tileSize * 1.5);
         this.add(this.dialogSprite);
 
