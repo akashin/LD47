@@ -15,7 +15,7 @@ export let CONST = {
     inventorySize: 3,  // How many elements fits in the train.
 
     // How often we create a new demand.
-    baseDemandPeriod: 100,
+    baseDemandPeriod: 10,
     // Min period with which new demand will be created.
     minDemandPeriod: 10,
     // The demand period is based on score and is equal:

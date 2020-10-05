@@ -15,7 +15,7 @@ export class EndScene extends Phaser.Scene {
 
     // Preloads game resources.
     preload(): void {
-        this.load.image("titleBackground", "./assets/bckgrnd_7.png");
+        this.load.image("endBackground", "./assets/final_title.png");
     }
 
     // Initializes game state.
@@ -32,39 +32,12 @@ export class EndScene extends Phaser.Scene {
         var gameHeight = this.game.config.height as number;
 
         // Draw background image.
-        {
-            this.backgroundSprite = this.add.sprite(0, 0, "titleBackground");
-            this.backgroundSprite.setOrigin(0, 0);
-            let ratio = this.backgroundSprite.width / this.backgroundSprite.height;
-            this.backgroundSprite.setScale(
-                gameWidth / this.backgroundSprite.height,
-                gameHeight / this.backgroundSprite.height,
-            );
-        }
-        let text = "You lost!\n\n";
-        text += 'Score: ' + String(this.score) + '\n\n';
-        text += "Click to re-start.\n\n\n\n\n";
-        text += "Made by \n";
-        let names = ['Andrey Kashin', 'Marina Tarasova', 'Andrew Osipov', 'Alex Novikov'];
-        this.randomShuffle(names).forEach(name => {
-            text += '  ' + name + '\n';
-        });
-        text += "in no particular order."
+        this.backgroundSprite = this.add.sprite(0, 0, "endBackground");
+        this.backgroundSprite.setOrigin(0, 0);
+        this.backgroundSprite.setDisplaySize(gameWidth, gameHeight);
         this.gameNameText = this.add.text(
-            gameWidth / 2 - 170, gameHeight / 2 - 170, text, {color: 'yellow', fontSize: '20pt'}
+            gameWidth / 2 + gameWidth * 0.03, gameHeight / 2 - gameHeight * 0.06, String(this.score), {color: 'white', fontSize: '28pt'}
         )
-    }
-
-    randomShuffle(arr: Array<String>): Array<String> {
-        var newArr = [];
-        let remaining = arr;
-        let i = 0;
-        while (remaining.length > 0) {
-            let curr = randomInt(remaining.length);
-            newArr.push(remaining[curr]);
-            remaining.splice(curr, 1);
-        }
-        return newArr;
     }
 
     // Called periodically to update game state.
