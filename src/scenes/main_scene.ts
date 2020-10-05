@@ -325,8 +325,6 @@ export class MainScene extends Phaser.Scene {
             this.player.update(delta, this.findNearestFactory()[1], CONST.trainMaxSpeed * (1 + speedBoost / 10));
         }
 
-        this.player.update(delta, this.findNearestFactory()[1], CONST.trainMaxSpeed * (1 + this.scoreBoard.score / 10));
-
         {
             let allHasDemand = true;
             for (let station of this.stations) {
