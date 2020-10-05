@@ -14,8 +14,8 @@ export class TitleScene extends Phaser.Scene {
     // Preloads game resources.
     preload(): void {
         this.load.image("titleBackground", "./assets/title.png");
-
-        this.load.image('resource_oxygen', './assets/resource_oxygen.png');//TMP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        this.load.image('playNow', './assets/play_now.png');
+        this.load.image('tutorial', './assets/tutorial.png');
     }
 
     // Initializes game state.
@@ -35,17 +35,17 @@ export class TitleScene extends Phaser.Scene {
         this.backgroundSprite.setOrigin(0, 0);
         this.backgroundSprite.setDisplaySize(gameWidth, gameHeight);
 
-        let tutorial = new Phaser.GameObjects.Sprite(this, 10 * CONST.tileSize, 10 * CONST.tileSize, 'resource_oxygen');
+        let tutorial = new Phaser.GameObjects.Sprite(this, 6 * CONST.tileSize, 10.5 * CONST.tileSize, 'tutorial');
         this.add.existing(tutorial);
-        tutorial.setDisplaySize(100, 100)
+        tutorial.setScale(0.4);
         tutorial.setInteractive();
         let This = this;
         tutorial.on('pointerdown', function (pointer) {
             This.scene.start("MainScene", {tutorial: true});
         });
-        let playNow = new Phaser.GameObjects.Sprite(this, 15 * CONST.tileSize, 10 * CONST.tileSize, 'resource_oxygen');
+        let playNow = new Phaser.GameObjects.Sprite(this, 15 * CONST.tileSize, 10.5 * CONST.tileSize, 'playNow');
         this.add.existing(playNow);
-        playNow.setDisplaySize(100, 100).setInteractive().on('pointerdown', function (pointer) {
+        playNow.setScale(0.4).setInteractive().on('pointerdown', function (pointer) {
             This.scene.start("MainScene", {tutorial: false});
         });
 
