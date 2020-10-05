@@ -91,6 +91,9 @@ export class MainScene extends Phaser.Scene {
 
         // Decorations.
         this.load.image('krater1', 'krater1.png');
+        this.load.image('krater2', 'krater2.png');
+        this.load.image('krater3', 'krater3.png');
+        this.load.image('raketa1', 'raketa1.png');
         this.load.image('raketa2', 'raketa2.png');
         this.load.image('gorka', 'gorka.png');
         this.load.image('truba1', 'truba1.png');
