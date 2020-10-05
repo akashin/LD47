@@ -216,7 +216,7 @@ export class MainScene extends Phaser.Scene {
         this.tutorial = new Tutorial(this, this.stations[2]);
 
         this.raiting = new Raiting(this, 150, 23);
-        this.add.existing(this.raiting);
+        // this.add.existing(this.raiting);
 
         // this.debugVisualizeNearTiles();
 
