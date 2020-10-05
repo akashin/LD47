@@ -84,6 +84,11 @@ export class MainScene extends Phaser.Scene {
         this.load.image('tram_head_horizontal', 'tram_head_horizontal.png');
         this.load.image('tram_head_vertical', 'tram_head_vertical.png');
 
+        // Decorations.
+        this.load.image('krater1', 'krater1.png');
+        this.load.image('raketa2', 'raketa2.png');
+        this.load.image('gorka', 'gorka.png');
+
         // A useful image to draw squares.
         this.load.image('blank', 'blank.png');
 
@@ -205,6 +210,14 @@ export class MainScene extends Phaser.Scene {
             console.log(object)
             // TODO: why -1?
             this.addFactory(Math.round(object.x / 32), Math.round(object.y / 32) - 1, typeToResourceType[object.properties[0].value]);
+        });
+
+        this.tilemap.getObjectLayer('Decorations').objects.forEach(object => {
+            console.log(object);
+            let decorationName = object.properties[0].value;
+            let sprite = this.add.sprite(object.x / 32 * CONST.tileSize, (object.y / 32 - 1) * CONST.tileSize, decorationName);
+            sprite.setOrigin(0, 0);
+            sprite.setDisplaySize(object.width / 32 * CONST.tileSize, object.height / 32 * CONST.tileSize);
         });
 
         // for (let station of this.stations) {
