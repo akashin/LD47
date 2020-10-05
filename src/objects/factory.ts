@@ -58,8 +58,8 @@ export class Factory extends Phaser.GameObjects.Container {
         // this.add(this.factorySprite);
 
         this.factoryResourceSprite = new Phaser.GameObjects.Sprite(scene, 0, 0, getResourceTextureName(this.resourceType));
+        this.factoryResourceSprite.setOrigin(0.25, 0.25);
         this.factoryResourceSprite.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
-        this.factoryResourceSprite.setDisplayOrigin(CONST.tileSize * 2, CONST.tileSize * 2);
         this.add(this.factoryResourceSprite);
     }
 
