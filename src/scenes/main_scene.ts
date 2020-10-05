@@ -42,6 +42,8 @@ export class MainScene extends Phaser.Scene {
     // Visual elements.
     private scoreBoard: ScoreBoard;
 
+    private backgroundMusic: Phaser.Sound.BaseSound;
+
     constructor() {
         super({
             key: "MainScene"
@@ -87,6 +89,8 @@ export class MainScene extends Phaser.Scene {
         // this.load.atlas("tiles", "./assets/pack/spritesheet.png", "./assets/pack/spritesheet.json");
 
         this.load.tilemapTiledJSON('level', 'big_map.json');
+
+        this.load.audio("background_track", "background.mp3");
     }
 
 
@@ -140,6 +144,9 @@ export class MainScene extends Phaser.Scene {
         this.add.existing(this.resourceInventory);
         this.scoreBoard = new ScoreBoard(this, 10, 10);
         this.add.existing(this.scoreBoard);
+
+        this.backgroundMusic = this.sound.add("background_track");
+        this.backgroundMusic.play();
 
         // this.debugVisualizeNearTiles();
 
