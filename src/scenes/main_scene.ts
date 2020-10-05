@@ -198,7 +198,7 @@ export class MainScene extends Phaser.Scene {
 
         this.resourceInventory = new Inventory(this, CONST.inventoryX, CONST.inventoryY);
         this.add.existing(this.resourceInventory);
-        this.scoreBoard = new ScoreBoard(this, 10, 10);
+        this.scoreBoard = new ScoreBoard(this, 5, 5);
         this.add.existing(this.scoreBoard);
 
         this.backgroundMusic = this.sound.add("background_track", {

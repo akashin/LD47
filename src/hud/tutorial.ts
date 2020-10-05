@@ -26,7 +26,7 @@ export class Tutorial {
         if (!this.showedDemandTip && (Math.abs(playerX - 900) < 100) && (Math.abs(playerY - 72) < 5)) {
             this.station.setDemand(ResourceType.Steel);
             mainScene.demandCount += 1;
-            createPane(this.container, this.mainScene, 4);
+            createPane(this.container, this.mainScene, 4, 1);
             let text = new Phaser.GameObjects.Text(mainScene, 14, 14, 'A station needs steel!\nClick to continue.', {color: 'yellow', fontSize: '20pt'});
             this.container.add(text);
             mainScene.pause();
@@ -34,7 +34,7 @@ export class Tutorial {
         }
         let nearbyFactory = mainScene.findNearbyFactory();
         if (!this.showedFactoryTip && nearbyFactory && (nearbyFactory.resourceType == ResourceType.Steel)) {
-            createPane(this.container, this.mainScene, 5);
+            createPane(this.container, this.mainScene, 5, 1);
             let text = new Phaser.GameObjects.Text(mainScene, 14, 14, "You're on a steel factory!\nClick anywhere to pick some.", {color: 'yellow', fontSize: '20pt'});
             this.container.add(text);
             mainScene.pause();

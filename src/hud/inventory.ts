@@ -12,7 +12,7 @@ export class Inventory extends Phaser.GameObjects.Container {
         this.resources = [];
         this.resourceTiles = [];
         this.setResources(this.resources);
-        createPane(this, this.scene, CONST.inventorySize);
+        createPane(this, this.scene, CONST.inventorySize, 1);
 
         // this.scene.add.sprite(0, 0, "inventory_body");
     }
