@@ -1,5 +1,5 @@
 import { CONST } from "../const";
-import { OrderManager } from "../core/order";
+import { OrderManager as DemandManager } from "../core/order";
 import { GameMap, GroundType, RailType } from "../core/map";
 import { Station } from "../objects/station";
 import { Player } from "../core/player";
@@ -20,7 +20,7 @@ export class MainScene extends Phaser.Scene {
     private backgroundLayer: Phaser.Tilemaps.StaticTilemapLayer;
 
     // Inputs.
-    private takeOrderKey: Phaser.Input.Keyboard.Key;
+    private takeDemandKey: Phaser.Input.Keyboard.Key;
 
     // Game time.
     private msSinceLastTick: number;
@@ -31,7 +31,7 @@ export class MainScene extends Phaser.Scene {
     private gameMap: GameMap;
     private stations: Station[];
     private factories: Factory[];
-    private orderManager: OrderManager;
+    private demandManager: DemandManager;
     private player: Player;
 
     // Containers
@@ -90,7 +90,7 @@ export class MainScene extends Phaser.Scene {
 
     // Initializes game state.
     init(): void {
-        this.takeOrderKey = this.input.keyboard.addKey(
+        this.takeDemandKey = this.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
         this.msSinceLastTick = 0;
@@ -133,7 +133,7 @@ export class MainScene extends Phaser.Scene {
 
         this.add.existing(this.buildingsContainer);
 
-        this.orderManager = new OrderManager(this, this.stations);
+        this.demandManager = new DemandManager(this, this.stations);
         this.scoreBoard = new ScoreBoard(this, 10, 10);
         this.add.existing(this.scoreBoard);
 
@@ -229,18 +229,18 @@ export class MainScene extends Phaser.Scene {
 
         let nearbyStation = this.findNearbyStation();
         if (nearbyStation) {
-            let numFulfilled = this.orderManager.fulfilDemandInStation(nearbyStation);
+            let numFulfilled = this.demandManager.fulfilDemandInStation(nearbyStation);
             this.scoreBoard.increaseScore(numFulfilled);
         }
         let isReady = (time - this.lastKeyDetected) > CONST.minMsBetweenClicks;
-        if ((this.takeOrderKey.isDown || this.input.activePointer.isDown) && isReady) {
+        if ((this.takeDemandKey.isDown || this.input.activePointer.isDown) && isReady) {
             this.lastKeyDetected = time;
             let nearbyFactory = this.findNearbyFactory();
             if (nearbyFactory) {
-                if (this.orderManager.resourcesInInventory.length >= CONST.inventorySize) {
+                if (this.demandManager.resourcesInInventory.length >= CONST.inventorySize) {
                     console.log('Inventory is full!');
                 } else {
-                    this.orderManager.pickResource(nearbyFactory);
+                    this.demandManager.pickResource(nearbyFactory);
                 }
             }
         }
@@ -310,7 +310,7 @@ export class MainScene extends Phaser.Scene {
             CONST.baseDemandPeriod - CONST.scoreSpeedupMultiplier * this.scoreBoard.score,
             CONST.minDemandPeriod);
         if ((this.tickCounter % demandPeriod) == 1) {
-            if (!this.orderManager.addDemand()) {
+            if (!this.demandManager.addDemand()) {
                 console.log('You\'re dead!')
                 this.scene.start("EndScene", { score: this.scoreBoard.score});
             }
