@@ -3,7 +3,7 @@ import { CONST } from "../const";
 export class TitleScene extends Phaser.Scene {
     private backgroundSprite: Phaser.GameObjects.Sprite;
     private startKey: Phaser.Input.Keyboard.Key;
-    private gameNameText: Phaser.GameObjects.Text;
+    // private gameNameText: Phaser.GameObjects.Text;
 
     constructor() {
         super({
@@ -13,7 +13,7 @@ export class TitleScene extends Phaser.Scene {
 
     // Preloads game resources.
     preload(): void {
-        this.load.image("titleBackground", "./assets/bckgrnd_7.png");
+        this.load.image("titleBackground", "./assets/title.png");
     }
 
     // Initializes game state.
@@ -29,22 +29,17 @@ export class TitleScene extends Phaser.Scene {
         var gameHeight = this.game.config.height as number;
 
         // Draw background image.
-        {
-            this.backgroundSprite = this.add.sprite(0, 0, "titleBackground");
-            this.backgroundSprite.setOrigin(0, 0);
-            let ratio = this.backgroundSprite.width / this.backgroundSprite.height;
-            this.backgroundSprite.setScale(
-                gameWidth / this.backgroundSprite.height,
-                gameHeight / this.backgroundSprite.height,
-            );
-        }
-        let text = "Help a Mars colony grow and prosper!\n\n";
-        text += "Pick resources by clicking and\n";
-        text += "deliver it to settlements in need.\n\n";
-        text += "Click anywhere to start.";
-        this.gameNameText = this.add.text(
-            gameWidth / 2 - 250, gameHeight / 2 - 100, text, {color: 'Yellow', fontSize: '20pt'}
-        )
+        this.backgroundSprite = this.add.sprite(0, 0, "titleBackground");
+        this.backgroundSprite.setOrigin(0, 0);
+        this.backgroundSprite.setDisplaySize(gameWidth, gameHeight);
+
+        // let text = "Help a Mars colony grow and prosper!\n\n";
+        // text += "Pick resources by clicking and\n";
+        // text += "deliver it to settlements in need.\n\n";
+        // text += "Click anywhere to start.";
+        // this.gameNameText = this.add.text(
+        //     gameWidth / 2 - 250, gameHeight / 2 - 100, text, {color: 'Yellow', fontSize: '20pt'}
+        // )
     }
 
     // Called periodically to update game state.
