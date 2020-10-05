@@ -9,6 +9,7 @@ import { Factory, ResourceType } from "../objects/factory";
 import { randomInt } from "../utils/math";
 import { Inventory } from "../hud/inventory";
 import { Tutorial } from "../hud/tutorial";
+import { Raiting } from "../hud/rating";
 
 var assert = require('assert');
 
@@ -39,6 +40,7 @@ export class MainScene extends Phaser.Scene {
     public demandCount: number; // UGLY that I have to make it public, but because of tutorial. TODO.
     private demandOverflowTicks: number;
     private resourceInventory: Inventory;
+    private raiting: Raiting;
 
     // Logic.
     private muted: boolean;
@@ -213,6 +215,9 @@ export class MainScene extends Phaser.Scene {
         // Tutorial.
         this.tutorial = new Tutorial(this, this.stations[2]);
 
+        this.raiting = new Raiting(this, 150, 23);
+        this.add.existing(this.raiting);
+
         // this.debugVisualizeNearTiles();
 
         // this.cameras.main.startFollow(this.player);@
@@ -322,10 +327,24 @@ export class MainScene extends Phaser.Scene {
 
         this.player.update(delta, this.findNearestFactory()[1], CONST.trainMaxSpeed * (1 + this.scoreBoard.score / 10));
 
+        {
+            let allHasDemand = true;
+            for (let station of this.stations) {
+                if (!station.hasDemand()) {
+                    allHasDemand = false;
+                    break;
+                }
+            }
+            if (allHasDemand) {
+                this.raiting.decreaseRating(delta);
+            }
+        }
+
         let nearbyStation = this.findNearbyStation();
         if (nearbyStation) {
             let numFulfilled = this.fulfilDemandInStation(nearbyStation);
             this.scoreBoard.increaseScore(numFulfilled);
+            this.raiting.increaseReatingOnDelivery(numFulfilled);
         }
         if (this.takeResourceKey.isDown || this.input.activePointer.isDown) {
             let nearbyFactory = this.findNearbyFactory();

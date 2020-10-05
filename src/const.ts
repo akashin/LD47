@@ -33,4 +33,10 @@ export let CONST = {
 
     // Resources.
     resourceCount: 5,
+
+    // Rating
+    startingRating: 2.5,
+    maxRating: 5,
+    ratingIncreaseOnDelivery: 0.25,
+    ratingDecreasePerSecond: 0.5,
 }
