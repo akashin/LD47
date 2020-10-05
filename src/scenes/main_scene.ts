@@ -307,16 +307,17 @@ export class MainScene extends Phaser.Scene {
 
     // Called periodically to update game state.
     update(time: number, delta: number): void {
-        {
-            let score = this.scoreBoard.score;
-            let speedBoost = Math.min(Math.pow(score, 1.1), 20);
-            this.player.update(delta, this.findNearestFactory()[1], CONST.trainMaxSpeed * (1 + speedBoost / 10));
-        }
         if (this.isPaused) {
             if (this.takeResourceKey.isDown || this.input.activePointer.isDown) {
                 this.isPaused = false;
             }
             return
+        }
+
+        {
+            let score = this.scoreBoard.score;
+            let speedBoost = Math.min(Math.pow(score, 1.1), 20);
+            this.player.update(delta, this.findNearestFactory()[1], CONST.trainMaxSpeed * (1 + speedBoost / 10));
         }
 
         this.player.update(delta, this.findNearestFactory()[1], CONST.trainMaxSpeed * (1 + this.scoreBoard.score / 10));
@@ -414,7 +415,7 @@ export class MainScene extends Phaser.Scene {
     // Called every tickDelta ticks to update game state.
     updateStep(): void {
         if (this.tutorialInProgress) {
-            let tutorialFinished = this.tutorial.updateStep(this.tickCounter, this);
+            let tutorialFinished = this.tutorial.updateStep(this, this.player.x, this.player.y);
             if (tutorialFinished) {
                 this.tutorialInProgress = false;
             }
