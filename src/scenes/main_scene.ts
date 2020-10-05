@@ -52,6 +52,8 @@ export class MainScene extends Phaser.Scene {
     private resourcePickup: Phaser.Sound.BaseSound;
     private resourceDelivery: Phaser.Sound.BaseSound;
 
+    private lastGeneratedResourceType: ResourceType = null;
+
     constructor() {
         super({
             key: "MainScene"
@@ -289,7 +291,11 @@ export class MainScene extends Phaser.Scene {
 
     // Called periodically to update game state.
     update(time: number, delta: number): void {
-        this.player.update(delta, this.findNearestFactory()[1], CONST.trainMaxSpeed * (1 + this.scoreBoard.score / 10));
+        {
+            let score = this.scoreBoard.score;
+            let speedBoost = Math.min(Math.pow(score, 1.1), 20);
+            this.player.update(delta, this.findNearestFactory()[1], CONST.trainMaxSpeed * (1 + speedBoost / 10));
+        }
 
         let nearbyStation = this.findNearbyStation();
         if (nearbyStation) {
@@ -440,7 +446,11 @@ export class MainScene extends Phaser.Scene {
         }
         assert(this.stations[stationIndex].index == stationIndex);
 
-        let resourceType = randomInt(CONST.resourceCount);
+        let resourceType: ResourceType;
+        do {
+            resourceType = randomInt(CONST.resourceCount);
+        } while (resourceType == this.lastGeneratedResourceType)
+
         this.stations[stationIndex].setDemand(resourceType);
         this.demandCount += 1;
 

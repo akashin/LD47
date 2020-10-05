@@ -7,7 +7,7 @@ export let CONST = {
     tileSize: 48,
 
     // Stations.
-    resourcePickupDistance: 1.1,
+    resourcePickupDistance: 1.4,
 
     // Inventory.
     inventoryX: 10,
@@ -17,7 +17,7 @@ export let CONST = {
     // How often we create a new demand.
     baseDemandPeriod: 100,
     // Min period with which new demand will be created.
-    minDemandPeriod: 10,
+    minDemandPeriod: 20,
     // The demand period is based on score and is equal:
     // period = baseDemandPeriod - score * scoreSpeedMultiplier
     scoreSpeedupMultiplier: 4,
