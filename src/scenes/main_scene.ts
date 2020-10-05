@@ -145,7 +145,9 @@ export class MainScene extends Phaser.Scene {
         this.scoreBoard = new ScoreBoard(this, 10, 10);
         this.add.existing(this.scoreBoard);
 
-        this.backgroundMusic = this.sound.add("background_track");
+        this.backgroundMusic = this.sound.add("background_track", {
+            loop: true,
+        });
         this.backgroundMusic.play();
 
         // this.debugVisualizeNearTiles();
@@ -322,6 +324,7 @@ export class MainScene extends Phaser.Scene {
         if ((this.tickCounter % demandPeriod) == 1) {
             if (!this.addDemand()) {
                 console.log('You\'re dead!')
+                this.backgroundMusic.stop();
                 this.scene.start("EndScene", { score: this.scoreBoard.score});
             }
         }
