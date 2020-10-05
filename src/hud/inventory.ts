@@ -1,5 +1,6 @@
 import { CONST } from "../const";
 import { getResourceTextureName, ResourceType } from "../objects/factory";
+import { createPane } from "./pane";
 
 export class Inventory extends Phaser.GameObjects.Container {
     private resources: Array<ResourceType>;
@@ -11,28 +12,7 @@ export class Inventory extends Phaser.GameObjects.Container {
         this.resources = [];
         this.resourceTiles = [];
         this.setResources(this.resources);
-
-        {
-            var leftEndSprite = this.scene.add.sprite(0, 0, "inventory_end");
-            leftEndSprite.setOrigin(0, 0);
-            leftEndSprite.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
-            this.add(leftEndSprite);
-        }
-
-        for (let i = 1; i < CONST.inventorySize - 1; ++i) {
-            var leftEndSprite = this.scene.add.sprite(CONST.tileSize * 2 * i, 0, "inventory_body");
-            leftEndSprite.setOrigin(0, 0);
-            leftEndSprite.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
-            this.add(leftEndSprite);
-        }
-
-        {
-            var rightEndSprite = this.scene.add.sprite(CONST.tileSize * 2 * (CONST.inventorySize - 1), 0, "inventory_end");
-            rightEndSprite.flipX = true;
-            rightEndSprite.setOrigin(0, 0);
-            rightEndSprite.setDisplaySize(CONST.tileSize * 2, CONST.tileSize * 2);
-            this.add(rightEndSprite);
-        }
+        createPane(this, this.scene, CONST.inventorySize);
 
         // this.scene.add.sprite(0, 0, "inventory_body");
     }
