@@ -80,18 +80,6 @@
                  "width":100,
                  "x":32,
                  "y":288
-                }, 
-                {
-                 "gid":18,
-                 "height":80,
-                 "id":14,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":75,
-                 "x":628,
-                 "y":393
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -413,13 +401,13 @@
                 }, 
                 {
                  "id":6,
-                 "image":"E:\/game\/sets\/truba1.png",
+                 "image":"truba1.png",
                  "imageheight":500,
                  "imagewidth":500
                 }, 
                 {
                  "id":7,
-                 "image":"E:\/game\/sets\/truba2.png",
+                 "image":"truba2.png",
                  "imageheight":500,
                  "imagewidth":500
                 }],
