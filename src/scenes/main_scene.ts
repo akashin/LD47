@@ -7,7 +7,7 @@ import { Direction } from "../utils/direction";
 import { ScoreBoard } from "../hud/score_board";
 import { Factory, ResourceType } from "../objects/factory";
 import { randomInt } from "../utils/math";
-import { Inventory } from "../hud/order_inventory";
+import { Inventory } from "../hud/inventory";
 
 var assert = require('assert');
 
