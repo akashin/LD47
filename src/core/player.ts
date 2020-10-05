@@ -92,15 +92,15 @@ export class Player extends Phaser.GameObjects.Container {
         this.reverse();
     }
 
-    update(delta: number, distanceToNearestStation: number): void {
+    update(delta: number, distanceToNearestFactory: number, maxSpeed: number): void {
         let goodDistance = CONST.trainGoodDistanceInTiles * CONST.tileSize;
         let ignoreDistance = CONST.trainIgnoreDistanceInTiles * CONST.tileSize;
 
-        let distance = Math.min(distanceToNearestStation, goodDistance);
+        let distance = Math.min(distanceToNearestFactory, goodDistance);
         distance = Math.max(distance, ignoreDistance);
 
         let ratio = distance / goodDistance;
-        let speed = CONST.trainMinSpeed + (CONST.trainMaxSpeed - CONST.trainMinSpeed) * ratio;
+        let speed = CONST.trainMinSpeed + (maxSpeed - CONST.trainMinSpeed) * ratio;
 
         for (let section of this.tramSections) {
             section.movementState += delta / 1000.0 * speed;

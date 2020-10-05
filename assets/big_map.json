@@ -122,8 +122,18 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "id":10,
+         "image":"",
+         "name":"Decor",
+         "opacity":1,
+         "type":"imagelayer",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":10,
+ "nextlayerid":11,
  "nextobjectid":10,
  "orientation":"orthogonal",
  "renderorder":"right-down",

@@ -238,7 +238,7 @@ export class MainScene extends Phaser.Scene {
 
     // Called periodically to update game state.
     update(time: number, delta: number): void {
-        this.player.update(delta, this.findNearestStation()[1]);
+        this.player.update(delta, this.findNearestFactory()[1], CONST.trainMaxSpeed * (1 + this.scoreBoard.score / 10));
 
         let nearbyStation = this.findNearbyStation();
         if (nearbyStation) {
@@ -290,17 +290,17 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    findNearestStation(): [Station, number] {
-        let nearestStation: Station = null;
+    findNearestFactory(): [Factory, number] {
+        let nearestFactory: Factory = null;
         let nearestDistance: number = 1e6;
-        for (let station of this.stations) {
-            let distance = Phaser.Math.Distance.Between(station.x, station.y, this.player.x, this.player.y);
+        for (let factory of this.factories) {
+            let distance = Phaser.Math.Distance.Between(factory.x, factory.y, this.player.x, this.player.y);
             if (distance < nearestDistance) {
-                nearestStation = station;
+                nearestFactory = factory;
                 nearestDistance = distance;
             }
         }
-        return [nearestStation, nearestDistance];
+        return [nearestFactory, nearestDistance];
     }
 
     findNearbyFactory(): Factory {

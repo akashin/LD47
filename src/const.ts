@@ -23,7 +23,7 @@ export let CONST = {
     scoreSpeedupMultiplier: 4,
 
     // Train
-    trainMinSpeed: 3,
+    trainMinSpeed: 2,
     trainMaxSpeed: 10,
     trainGoodDistanceInTiles: 5,
     trainIgnoreDistanceInTiles: 1,
