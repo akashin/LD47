@@ -38,10 +38,10 @@ export class Station extends Phaser.GameObjects.Container {
         this.row = params.row;
         this.index = Station.stationCount++;
 
-        this.stationSprite = scene.add.sprite(0, 0, 'station_tile');
-        this.stationSprite.setOrigin(0, 0);
-        this.stationSprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
-        this.add(this.stationSprite);
+        // this.stationSprite = scene.add.sprite(0, 0, 'station_tile');
+        // this.stationSprite.setOrigin(0, 0);
+        // this.stationSprite.setDisplaySize(CONST.tileSize, CONST.tileSize);
+        // this.add(this.stationSprite);
 
         this.demand = null;
     }
