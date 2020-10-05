@@ -104,7 +104,7 @@ export class Player extends Phaser.GameObjects.Container {
 
         for (let section of this.tramSections) {
             section.movementState += delta / 1000.0 * speed;
-            if (section.movementState >= 1.0) {
+            while (section.movementState >= 1.0) {
                 section.movementState -= 1.0;
 
                 section.mapPosition = section.mapPosition.add(section.movementDirection);
