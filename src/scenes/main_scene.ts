@@ -198,7 +198,7 @@ export class MainScene extends Phaser.Scene {
 
         // Add factories (they are objects instead of tiles because that allows to add custom properties to each factory).
         let typeToResourceType = {'Steel': ResourceType.Steel, 'Food': ResourceType.Food, 'Oxygen': ResourceType.Oxygen, 'Water': ResourceType.Water, 'Medicine': ResourceType.Medicine};
-        this.backgroundLayer.tilemap.objects[0].objects.forEach(object => {
+        this.tilemap.getObjectLayer('Buildings').objects.forEach(object => {
             console.log(object)
             // TODO: why -1?
             this.addFactory(Math.round(object.x / 32), Math.round(object.y / 32) - 1, typeToResourceType[object.properties[0].value]);
