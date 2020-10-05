@@ -366,6 +366,12 @@
                  "height":43.3333333333334,
                  "id":30,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"image_name",
+                         "type":"string",
+                         "value":"krater3"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -478,8 +484,8 @@
                  "type":"",
                  "visible":true,
                  "width":60.0000000000001,
-                 "x":512.666666666667,
-                 "y":510
+                 "x":416,
+                 "y":416
                 }, 
                 {
                  "gid":18,
