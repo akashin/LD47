@@ -339,7 +339,7 @@ export class MainScene extends Phaser.Scene {
                 }
             }
             if (allHasDemand) {
-                this.raiting.decreaseRating(delta);
+                // this.raiting.decreaseRating(delta);
             }
         }
 
@@ -389,6 +389,8 @@ export class MainScene extends Phaser.Scene {
             this.tickCounter += 1;
             this.updateStep();
         }
+
+        this.raiting.update(delta);
     }
 
     findNearbyStation(): Station {
@@ -465,6 +467,10 @@ export class MainScene extends Phaser.Scene {
         for (let station of this.stations) {
             if (station.hasDemand()) {
                 station.update(this.tickCounter);
+                if (station.isDemandExpired()) {
+                    station.removeDemand();
+                    this.raiting.decreaseRatingOnExpiration();
+                }
             }
         }
     }

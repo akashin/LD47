@@ -1,29 +1,64 @@
 import { CONST } from "../const";
+import { randomInt } from "../utils/math";
 import { getResourceTextureName, ResourceType } from "./factory";
 
 class Demand extends Phaser.GameObjects.Container {
     resourceType: ResourceType;
     resourceSprite: Phaser.GameObjects.Sprite;
-    dialogSprite: Phaser.GameObjects.Sprite;
+    private dialogSpriteBackground: Phaser.GameObjects.Sprite;
+    private dialogSprite: Phaser.GameObjects.Sprite;
+    private duration: number;
+    expired: boolean;
+
+    private static readonly lastTicks: number = 50;
+    private static readonly veryLastTicks: number = 20;
 
     constructor(scene: Phaser.Scene, resourceType: ResourceType) {
         super(scene, 0, 0);
         this.resourceType = resourceType;
 
+        let scale = 1.5;
+
+        this.dialogSpriteBackground = new Phaser.GameObjects.Sprite(scene, 0, 0, 'dialog');
+        this.dialogSpriteBackground.setDisplayOrigin(0, this.dialogSpriteBackground.height);
+        this.dialogSpriteBackground.setDisplaySize(scale * CONST.tileSize * 1.5, scale * CONST.tileSize * 1.5);
+        this.dialogSpriteBackground.setTint(0x00ffff);
+        this.add(this.dialogSpriteBackground);
+
         this.dialogSprite = new Phaser.GameObjects.Sprite(scene, 0, 0, 'dialog');
         this.dialogSprite.setDisplayOrigin(0, this.dialogSprite.height);
-        let scale = 1.5;
         this.dialogSprite.setDisplaySize(scale * CONST.tileSize * 1.5, scale * CONST.tileSize * 1.5);
+        this.dialogSprite.setTint(0x00aacc);
+
         this.add(this.dialogSprite);
 
         this.resourceSprite = new Phaser.GameObjects.Sprite(scene, scale * CONST.tileSize * 0.75, scale * CONST.tileSize * -0.85, getResourceTextureName(resourceType));
-        // this.resourceSprite.setDisplayOrigin(0, this.resourceSprite.height);
         this.resourceSprite.setDisplaySize(scale * CONST.tileSize, scale * CONST.tileSize);
         this.add(this.resourceSprite);
+
+        this.duration = Demand.lastTicks + 50 + randomInt(100);
     }
 
-    setPercentage(percentage: number) {
-        this.dialogSprite.setTint(0x00ffff);
+    setPercentage(ticksPassed: number) {
+        ticksPassed = Math.min(ticksPassed, this.duration);
+        if (ticksPassed >= this.duration) {
+            this.expired = true;
+        }
+
+        if (ticksPassed >= this.duration - Demand.veryLastTicks) {
+            this.dialogSprite.setTint(0xff0000);
+        } else if (ticksPassed >= this.duration - Demand.lastTicks) {
+            let left: integer = this.duration - ticksPassed;
+            if (left % 10 > 5) {
+                this.dialogSprite.setTint(0xff0000);
+            } else {
+                this.dialogSprite.setTint(0x00aacc);
+            }
+        }
+
+        let percentage = ticksPassed / this.duration;
+        let height = this.dialogSprite.height * percentage;
+        this.dialogSprite.setCrop(0, this.dialogSprite.height - height, this.dialogSprite.width, height);
     }
 }
 
@@ -98,5 +133,9 @@ export class Station extends Phaser.GameObjects.Container {
         }
 
         this.demand.setPercentage(timeNow - this.demandStartTime);
+    }
+
+    isDemandExpired(): boolean {
+        return this.demand.expired;
     }
 }
