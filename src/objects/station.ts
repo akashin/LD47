@@ -91,7 +91,7 @@ export class Station extends Phaser.GameObjects.Container {
     }
 
     setDemand(resourceType: ResourceType, timeNow: number, currentScore: number = 0): void {
-        let additionalDuration = Math.max(0, 20 - currentScore) * 4;
+        let additionalDuration = Math.max(0, 30 - currentScore) * 4;
 
         this.demand = new Demand(this.scene, resourceType, additionalDuration);
         this.add(this.demand);
