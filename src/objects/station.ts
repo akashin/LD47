@@ -21,6 +21,10 @@ class Demand extends Phaser.GameObjects.Container {
         this.resourceSprite.setDisplaySize(scale * CONST.tileSize, scale * CONST.tileSize);
         this.add(this.resourceSprite);
     }
+
+    setPercentage(percentage: number) {
+        this.dialogSprite.setTint(0x00ffff);
+    }
 }
 
 export class Station extends Phaser.GameObjects.Container {
@@ -31,6 +35,7 @@ export class Station extends Phaser.GameObjects.Container {
 
     stationSprite: Phaser.GameObjects.Sprite;
     demand: Demand;
+    demandStartTime: number;
 
     constructor(scene, params) {
         super(scene, params.x, params.y);
@@ -50,14 +55,16 @@ export class Station extends Phaser.GameObjects.Container {
         return Math.max(Math.abs(column - this.column), Math.abs(row - this.row)) <= CONST.resourcePickupDistance;
     }
 
-    setDemand(resourceType: ResourceType): void {
+    setDemand(resourceType: ResourceType, timeNow: number): void {
         this.demand = new Demand(this.scene, resourceType);
         this.add(this.demand);
+        this.demandStartTime = timeNow;
     }
 
     removeDemand(): void {
         this.remove(this.demand)
         this.demand = null;
+        this.demandStartTime = null;
     }
 
     hasDemand(): boolean {
@@ -78,5 +85,18 @@ export class Station extends Phaser.GameObjects.Container {
             return true;
         }
         return false;
+    }
+
+    update(timeNow: number) {
+        if (!this.hasDemand()) {
+            return;
+        }
+
+        // Ignore the tutorial.
+        if (timeNow < this.demandStartTime) {
+            return;
+        }
+
+        this.demand.setPercentage(timeNow - this.demandStartTime);
     }
 }

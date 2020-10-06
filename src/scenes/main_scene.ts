@@ -445,7 +445,7 @@ export class MainScene extends Phaser.Scene {
             CONST.baseDemandPeriod - CONST.scoreSpeedupMultiplier * this.scoreBoard.score,
             CONST.minDemandPeriod);
         if ((this.tickCounter % demandPeriod) == 1) {
-            if (!this.addDemand()) {
+            if (!this.addDemand(this.tickCounter)) {
                 this.demandOverflowTicks += 1;
                 if (this.demandOverflowTicks > CONST.endGameThreshold) {
                     console.log('You\'re dead!')
@@ -454,6 +454,12 @@ export class MainScene extends Phaser.Scene {
                 }
             } else {
                 this.demandOverflowTicks = 0;
+            }
+        }
+
+        for (let station of this.stations) {
+            if (station.hasDemand()) {
+                station.update(this.tickCounter);
             }
         }
     }
@@ -488,7 +494,7 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    addDemand(): boolean {
+    addDemand(timeNow: number): boolean {
         let numStations = this.stations.length;
         // No more space to create demands.
         if (this.demandCount >= numStations) {
@@ -507,7 +513,7 @@ export class MainScene extends Phaser.Scene {
             resourceType = randomInt(CONST.resourceCount);
         } while (resourceType == this.lastGeneratedResourceType)
 
-        this.stations[stationIndex].setDemand(resourceType);
+        this.stations[stationIndex].setDemand(resourceType, timeNow);
         this.demandCount += 1;
 
         return true;

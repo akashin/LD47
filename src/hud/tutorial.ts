@@ -24,7 +24,7 @@ export class Tutorial {
         // Returns if tutorial is finished.
         this.container.removeAll();
         if (!this.showedDemandTip && (Math.abs(playerX - 900) < 100) && (Math.abs(playerY - 72) < 5)) {
-            this.station.setDemand(ResourceType.Steel);
+            this.station.setDemand(ResourceType.Steel, 1e9);
             mainScene.demandCount += 1;
             createPane(this.container, this.mainScene, 4, 1);
             let text = new Phaser.GameObjects.Text(mainScene, 14, 14, 'A station needs steel!\nClick to continue.', {color: 'yellow', fontSize: '20pt'});
