@@ -116,6 +116,11 @@ export class MainScene extends Phaser.Scene {
         this.load.image('inventory_end', 'inventar_1.png');
         this.load.image('inventory_body', 'inventar_2.png');
 
+        // Rating
+        this.load.image('star_empty', 'star_empty.png');
+        this.load.image('star_half', 'star_half.png');
+        this.load.image('star_full', 'star_full.png');
+
         // A useful image to draw squares.
         this.load.image('blank', 'blank.png');
 
@@ -215,8 +220,8 @@ export class MainScene extends Phaser.Scene {
         // Tutorial.
         this.tutorial = new Tutorial(this, this.stations[2]);
 
-        this.raiting = new Raiting(this, 150, 23);
-        // this.add.existing(this.raiting);
+        this.raiting = new Raiting(this, 130, 5);
+        this.add.existing(this.raiting);
 
         // this.debugVisualizeNearTiles();
 
