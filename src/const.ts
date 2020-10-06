@@ -37,9 +37,9 @@ export let CONST = {
     // Rating
     startingRating: 2.5,
     maxRating: 5,
-    ratingIncreaseOnDeliveryMin: 0.25,
-    ratingIncreaseOnDeliveryMax: 0.5,
+    ratingIncreaseOnDeliveryMin: 0.1,
+    ratingIncreaseOnDeliveryMax: 0.2,
     ratingDecreaseOnExpirationMin: 0.5,
-    ratingDecreaseOnExpirationMax: 0.75,
+    ratingDecreaseOnExpirationMax: 1.0,
     ratingDecreasePerSecond: 0.5,
 }

@@ -13,7 +13,7 @@ class Demand extends Phaser.GameObjects.Container {
     private static readonly lastTicks: number = 50;
     private static readonly veryLastTicks: number = 20;
 
-    constructor(scene: Phaser.Scene, resourceType: ResourceType) {
+    constructor(scene: Phaser.Scene, resourceType: ResourceType, additionalDuration: number) {
         super(scene, 0, 0);
         this.resourceType = resourceType;
 
@@ -36,7 +36,7 @@ class Demand extends Phaser.GameObjects.Container {
         this.resourceSprite.setDisplaySize(scale * CONST.tileSize, scale * CONST.tileSize);
         this.add(this.resourceSprite);
 
-        this.duration = Demand.lastTicks + 50 + randomInt(100);
+        this.duration = Demand.lastTicks + randomInt(100) + additionalDuration;
     }
 
     setPercentage(ticksPassed: number) {
@@ -90,8 +90,10 @@ export class Station extends Phaser.GameObjects.Container {
         return Math.max(Math.abs(column - this.column), Math.abs(row - this.row)) <= CONST.resourcePickupDistance;
     }
 
-    setDemand(resourceType: ResourceType, timeNow: number): void {
-        this.demand = new Demand(this.scene, resourceType);
+    setDemand(resourceType: ResourceType, timeNow: number, currentScore: number = 0): void {
+        let additionalDuration = Math.max(0, 20 - currentScore) * 4;
+
+        this.demand = new Demand(this.scene, resourceType, additionalDuration);
         this.add(this.demand);
         this.demandStartTime = timeNow;
     }

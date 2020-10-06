@@ -61,8 +61,6 @@ export class MainScene extends Phaser.Scene {
     private resourcePickup: Phaser.Sound.BaseSound;
     private resourceDelivery: Phaser.Sound.BaseSound;
 
-    private lastGeneratedResourceType: ResourceType = null;
-
     constructor() {
         super({
             key: "MainScene"
@@ -452,16 +450,23 @@ export class MainScene extends Phaser.Scene {
             CONST.baseDemandPeriod - CONST.scoreSpeedupMultiplier * this.scoreBoard.score,
             CONST.minDemandPeriod);
         if ((this.tickCounter % demandPeriod) == 1) {
-            if (!this.addDemand(this.tickCounter)) {
-                this.demandOverflowTicks += 1;
-                if (this.demandOverflowTicks > CONST.endGameThreshold) {
-                    console.log('You\'re dead!')
-                    this.backgroundMusic.stop();
-                    this.scene.start("EndScene", {score: this.scoreBoard.score, muted: this.muted});
-                }
-            } else {
-                this.demandOverflowTicks = 0;
-            }
+            this.addDemand(this.tickCounter);
+            // if (!this.addDemand(this.tickCounter)) {
+            //     this.demandOverflowTicks += 1;
+            //     if (this.demandOverflowTicks > CONST.endGameThreshold) {
+            //         console.log('You\'re dead!')
+            //         this.backgroundMusic.stop();
+            //         this.scene.start("EndScene", {score: this.scoreBoard.score, muted: this.muted});
+            //     }
+            // } else {
+            //     this.demandOverflowTicks = 0;
+            // }
+        }
+
+        if (this.raiting.isZero()) {
+            console.log('You\'re dead!')
+            this.backgroundMusic.stop();
+            this.scene.start("EndScene", {score: this.scoreBoard.score, muted: this.muted});
         }
 
         for (let station of this.stations) {
@@ -470,6 +475,7 @@ export class MainScene extends Phaser.Scene {
                 if (station.isDemandExpired()) {
                     station.removeDemand();
                     this.raiting.decreaseRatingOnExpiration();
+                    --this.demandCount;
                 }
             }
         }
@@ -519,12 +525,23 @@ export class MainScene extends Phaser.Scene {
         }
         assert(this.stations[stationIndex].index == stationIndex);
 
-        let resourceType: ResourceType;
-        do {
+        if (this.demandCount == CONST.resourceCount) {
+            return false;
+        }
+        let resourceType: ResourceType = null;
+        while (resourceType == null) {
             resourceType = randomInt(CONST.resourceCount);
-        } while (resourceType == this.lastGeneratedResourceType)
 
-        this.stations[stationIndex].setDemand(resourceType, timeNow);
+            for (let station of this.stations) {
+                if (station.hasDemand() && station.getDemand().resourceType == resourceType) {
+                    resourceType = null;
+                    break;
+                }
+            }
+        }
+        assert(resourceType != null);
+
+        this.stations[stationIndex].setDemand(resourceType, timeNow, this.scoreBoard.score);
         this.demandCount += 1;
 
         return true;

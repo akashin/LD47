@@ -85,4 +85,8 @@ export class Raiting extends Phaser.GameObjects.Container {
 
         this.updateTextAndStars();
     }
+
+    isZero(): boolean {
+        return this.rating < 0.001;
+    }
 }
