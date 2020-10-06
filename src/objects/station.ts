@@ -12,8 +12,12 @@ class Demand extends Phaser.GameObjects.Container {
 
     private static readonly lastTicks: number = 50;
     private static readonly veryLastTicks: number = 20;
+    private static readonly defaultColor: integer = 0x00aacc;
+    // private static readonly alertColor: integer = 0x341C3B;
+    // private static readonly alertColor: integer = 0x880000;
+    private static readonly alertColor: integer = 0xE11C3B;
 
-    constructor(scene: Phaser.Scene, resourceType: ResourceType, additionalDuration: number) {
+    constructor(scene: Phaser.Scene, resourceType: ResourceType, additionalDuration: number, randomDuration: number) {
         super(scene, 0, 0);
         this.resourceType = resourceType;
 
@@ -28,7 +32,7 @@ class Demand extends Phaser.GameObjects.Container {
         this.dialogSprite = new Phaser.GameObjects.Sprite(scene, 0, 0, 'dialog');
         this.dialogSprite.setDisplayOrigin(0, this.dialogSprite.height);
         this.dialogSprite.setDisplaySize(scale * CONST.tileSize * 1.5, scale * CONST.tileSize * 1.5);
-        this.dialogSprite.setTint(0x00aacc);
+        this.dialogSprite.setTint(Demand.defaultColor);
 
         this.add(this.dialogSprite);
 
@@ -36,7 +40,7 @@ class Demand extends Phaser.GameObjects.Container {
         this.resourceSprite.setDisplaySize(scale * CONST.tileSize, scale * CONST.tileSize);
         this.add(this.resourceSprite);
 
-        this.duration = Demand.lastTicks + randomInt(100) + additionalDuration;
+        this.duration = Demand.lastTicks + randomInt(randomDuration) + additionalDuration;
     }
 
     setPercentage(ticksPassed: number) {
@@ -46,13 +50,13 @@ class Demand extends Phaser.GameObjects.Container {
         }
 
         if (ticksPassed >= this.duration - Demand.veryLastTicks) {
-            this.dialogSprite.setTint(0xff0000);
+            this.dialogSprite.setTint(Demand.alertColor);
         } else if (ticksPassed >= this.duration - Demand.lastTicks) {
             let left: integer = this.duration - ticksPassed;
             if (left % 10 > 5) {
-                this.dialogSprite.setTint(0xff0000);
+                this.dialogSprite.setTint(Demand.alertColor);
             } else {
-                this.dialogSprite.setTint(0x00aacc);
+                this.dialogSprite.setTint(Demand.defaultColor);
             }
         }
 
@@ -91,9 +95,10 @@ export class Station extends Phaser.GameObjects.Container {
     }
 
     setDemand(resourceType: ResourceType, timeNow: number, currentScore: number = 0): void {
-        let additionalDuration = Math.max(0, 30 - currentScore) * 4;
+        let additionalDuration = Math.max(0, 30 - currentScore) * 4 + 15;
+        let randomDuration = Math.round(Math.max(40, 100 - currentScore / 4));
 
-        this.demand = new Demand(this.scene, resourceType, additionalDuration);
+        this.demand = new Demand(this.scene, resourceType, additionalDuration, randomDuration);
         this.add(this.demand);
         this.demandStartTime = timeNow;
     }
